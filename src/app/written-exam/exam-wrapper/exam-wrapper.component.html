@@ -1,0 +1,33 @@
+<div class="container exam-wrap">
+<!--     {{ screenControl | json }}
+ -->   
+    @if (screenControl.center) {
+    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo}"
+        (onClickNextToVerify)="registerDevice($event)" />
+    }
+    @else if (screenControl.verify) {
+    <app-verify />
+    <button (click)="captureFinger()">Retry</button>
+    }
+    @else if (screenControl.userDetails) {
+    <app-user-details [readUserProfile]="{profileDetails: readUserProfile}" />
+    }
+    @else if (screenControl.survey) {
+    <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
+    }
+    @else if (screenControl.exam && examQuestions) {
+    <app-exam [examInputs]="{questions: examQuestions}" />
+    }
+    @else {
+
+    }
+
+    
+        
+    <!--    
+         
+        <app-exam />
+        <app-summary />
+        <app-result />  
+    -->
+</div>

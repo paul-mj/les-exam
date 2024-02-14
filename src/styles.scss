@@ -1,1 +1,129 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import "./assets/fonts/font-file.scss";
+
+
+
+$open-sans-typography: mat.define-typography-config($font-family: '"Poppins", sans-serif');
+
+@include mat.typography-hierarchy($open-sans-typography);
+
+$app-theme: mat.define-light-theme((typography: $open-sans-typography));
+
+@include mat.all-component-themes($app-theme);
+
+body {
+    margin: 0;
+    font-weight: 300;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif !important;
+    background-image: url('./assets/images/main-bg.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+h4.primary-heading {
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+
+p.info-paragraph {
+    font-size: 0.7rem;
+}
+
+.font-ar {
+    font-family: "NotoKufiArabic,Roboto-medium,sans-serif" !important;
+}
+
+h4.highlight-value {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+h5.label {
+    font-size: 0.8rem;
+    color: #686868;
+    font-weight: 400;
+}
+
+p.field-value {
+    color: #000;
+    font-weight: 400;
+}
+
+
+
+.loading-container {
+
+    div.line {
+        position: relative;
+        background-color: rgb(251 209 209);
+        display: inline-block;
+        height: 0px;
+        border-radius: 5px;
+        width: 10px;
+        margin: 10px;
+        animation: line linear infinite 0.9s;
+    }
+
+    div.d1 {
+        animation-delay: 0.15s;
+    }
+
+    div.d2 {
+        animation-delay: 0.3s;
+    }
+
+    div.d3 {
+        animation-delay: 0.45s;
+    }
+
+    div.d4 {
+        animation-delay: 0.6s;
+    }
+
+    div.d5 {
+        animation-delay: 0.75s;
+    }
+
+    div.d6 {
+        animation-delay: 0.9s;
+    }
+
+}
+
+@keyframes line {
+    0% {
+        height: 0px;
+        margin-top: 60px;
+    }
+
+    50% {
+        height: 50px;
+        margin-top: 10px;
+    }
+
+    100% {
+        height: 0px;
+        margin-top: 60px;
+    }
+}
+
+
+::-webkit-scrollbar-track {
+    background-color: #eeeeee;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #eeeeee;
+}
+
+::-webkit-scrollbar-thumb {
+    // background-color: var(--les-light-bg);
+    background-color: #c5c5c5;
+    border-radius: 15px;
+}
+

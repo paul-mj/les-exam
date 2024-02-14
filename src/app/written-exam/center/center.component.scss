@@ -1,0 +1,68 @@
+.center-card {
+    background: #e7ebff;
+    padding: 3rem 0;
+    border-radius: 5px;
+
+}
+
+.search-box {
+    position: relative;
+
+    input.search-input {
+        padding: 0.8rem;
+        border-radius: 5px;
+        border: 1px solid #9c9c9c;
+        font-weight: 400;
+        background-color: #fff;
+
+        &:focus {
+            outline: none;
+        }
+
+        &.has-error {
+            border-color: rgb(246, 0, 0) !important;
+            background: #ffe5e5 !important;
+        }
+    }
+
+    span.arrow-icon {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        border-radius: 3px;
+        padding: 2px;
+    }
+}
+
+.search-list {
+    height: 300px;
+    border-radius: 5px;
+    /* border: 1px solid #9c9c9c; */
+    background-color: #fff;
+
+    ul {
+        li {
+            padding: 15px 25px;
+            transition: all 0.3s ease-in;
+
+            &:hover {
+                background: #003a5d;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            &.activeItem {
+                background: #003a5d;
+                color: #fff;
+            }
+        }
+    }
+
+}
+
+.next-button button {
+    background: #003a5d;
+    padding: 0 3rem;
+    font-weight: 400;
+    color: #fff !important;
+}

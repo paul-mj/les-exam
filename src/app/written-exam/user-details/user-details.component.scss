@@ -1,0 +1,106 @@
+.box-card {
+    border-radius: 5px;
+    background-color: #fff;
+    min-height: 100px;
+
+    .user-img-wrap {
+        justify-content: center;
+        width: 120px;
+        padding: 6px;
+        height: 120px;
+        box-sizing: content-box;
+
+        img {
+            color: transparent;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            text-align: center;
+            text-indent: 10000px;
+            border-radius: 50%;
+        }
+
+    }
+
+    .user-header {
+        background: #d3efed;
+        border-radius: 5px;
+    }
+
+    .loader-content {
+        font-size: 1rem;
+        color: #252525; 
+        overflow: hidden; 
+        /* border-right: .15em solid orange;  */
+        white-space: nowrap; 
+        margin: 0 auto; 
+        letter-spacing: .15em; 
+        animation:
+            typing 3.5s steps(40, end) infinite, 
+    }
+
+
+    @keyframes typing {
+        from {
+            width: 0
+        }
+
+        to {
+            width: 100%
+        }
+    }
+
+}
+
+
+.question-loader {
+    img.dab-img {
+        width: 55px;
+        height: auto;
+    }
+
+    img.sys-img {
+        width: 60px;
+        height: auto;
+    }
+
+    
+    div.dot {
+        display: inline-block;
+        margin: 0px;
+        padding: 0px;
+        animation: dot 1s infinite linear;
+        font-size: 2rem;
+        color: #000000;
+    }
+
+    div.dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    div.dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    div.dot:nth-child(4) {
+        animation-delay: 0.6s;
+    }
+
+    div.dot:nth-child(5) {
+        animation-delay: 0.8s;
+    }
+
+    @keyframes dot {
+
+        0%,
+        100% {
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+ 
+
+}

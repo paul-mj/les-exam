@@ -1,0 +1,17 @@
+{
+    "lesApp": "http://91.74.99.146/les_new/ver2/login",
+    "apiUrl": "http://91.74.99.146/les_new/core_service",
+    "apiTest": "http://91.74.99.146/les_new/core_api",
+    "localUrl": "http://localhost:5150",
+    "uploadFileSize": 2,
+    "jpgExtensions": [
+        "jpg",
+        "jpeg"
+    ],
+    "pngExtensions": [
+        "png"
+    ],
+    "pdfExtensions": [
+        "pdf"
+    ]
+}

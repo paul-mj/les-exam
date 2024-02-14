@@ -1,0 +1,102 @@
+<div class="center-wrap text-center mt-5">
+    <div>
+        <h4 class="primary-heading">Assessment Center</h4>
+    </div>
+    <div class="row justify-content-center align-items-center h-100 mt-5">
+        @if(userData) {
+        <div class="col-sm-8 col-sm-offset-4">
+            <div class="box-card p-3">
+                <div class="row align-items-center g-0 user-header p-2">
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <div class="user-img-wrap">
+                                <img src="assets/images/user-pic.jpg" class="img-fluid" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row align-items-center text-start">
+                            <span class="user-type">Driver</span>
+                            <h4 class="highlight-value">{{ userData.DRIVER_NAME_EN }}</h4>
+                            <h4 class="highlight-value text-end font-ar">{{ userData.DRIVER_NAME_AR }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center g-0 mt-3 p-2">
+                    <div class="col-md-12 text-start">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Passport Number</h5>
+                                <h5 class="label font-ar">رقم الجواز</h5>
+                                <p class="field-value">{{ userData.DRIVER_PASSPORT_NO }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Permit Number</h5>
+                                <h5 class="label font-ar">رقم التصريح</h5>
+                                <p class="field-value">{{ userData.PERMIT_NO }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Licence Number</h5>
+                                <h5 class="label font-ar">رقم الرخصة</h5>
+                                <p class="field-value">{{ userData.LICENSE_NO }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Vehicle Type</h5>
+                                <h5 class="label font-ar">نوع المركبة</h5>
+                                <p class="field-value">{{ userData.VEHICLE_TYPE }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Franchise</h5>
+                                <h5 class="label font-ar">الشركة</h5>
+                                <p class="field-value">{{ userData.FRANCHISE_NAME }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Date Of Birth</h5>
+                                <h5 class="label font-ar">تاريخ الميلاد</h5>
+                                <p class="field-value">{{ userData.DRIVER_DOB | date: 'dd/MM/yyyy' }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Permit Expiry</h5>
+                                <h5 class="label font-ar">تاريخ انتهاء التصريح</h5>
+                                <p class="field-value">{{ userData.PERMIT_EXPIRY_DATE | date: 'dd/MM/yyyy' }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Licence Expiry</h5>
+                                <h5 class="label font-ar">انتهاء الترخيص</h5>
+                                <p class="field-value">{{ userData.LICENSE_EXPIRY_DATE | date: 'dd/MM/yyyy' }}</p>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <h5 class="label m-0">Service Type</h5>
+                                <h5 class="label font-ar">نوع الخدمة</h5>
+                                <p class="field-value">{{ userData.SERVICE_TYPE }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="label m-0">Mobile Number</h5>
+                                <h5 class="label font-ar">رقم الهاتف المتحرك</h5>
+                                <p class="field-value">{{ userData.DRIVER_MOBILE_NO }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-card mt-2">
+                <div class="d-flex g-0 align-items-center justify-content-center question-loader p-3">
+                    <img class="dab-img" src="assets/images/database.png" />
+                    <div class="py-3 px-4">
+                        <div class="dot">.</div>
+                        <div class="dot">.</div>
+                        <div class="dot">.</div>
+                        <div class="dot">.</div>
+                        <div class="dot">.</div>
+                    </div>
+                    <img class="sys-img" src="assets/images/system.png" />
+                </div>
+                <div class="py-3 loader-content">
+                    Please Wait, Preparing your Exam Questions
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
