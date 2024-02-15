@@ -80,12 +80,19 @@ export interface IAnswer {
     ANSWER_NAME: string
     GRADE_NAME: string
     GRADE_NAME_AR: string
-    MAP_POINTS: string
+    MAP_POINTS: string,
     WEIGHTAGE: number
     FILE_EXTENSION: any
     HAS_IMAGE: number
+    points?:MapPoints
     selected?: boolean
     image?: string
+}
+export interface MapPoints {
+    type: string;
+    x: number;
+    y: number;
+    spatialReference: number;
 }
 
 export interface BlobResponse {

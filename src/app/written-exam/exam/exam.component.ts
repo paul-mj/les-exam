@@ -3,13 +3,15 @@ import { Component, Input } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { IExamChildInput, IFinalQUestionResponse, IQuestion } from '../../core/interfaces/exam-interface';
+import { IAnswer, IExamChildInput, IFinalQUestionResponse, IQuestion, MapPoints } from '../../core/interfaces/exam-interface';
 import { FormsModule } from '@angular/forms';
+import { EsriMapComponent } from '../esri-map/esri-map.component';
 
+const componets = [EsriMapComponent]
 @Component({
     selector: 'app-exam',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatCheckboxModule, MatMenuModule, FormsModule],
+    imports: [CommonModule, MatButtonModule, MatCheckboxModule, MatMenuModule, FormsModule, EsriMapComponent],
     templateUrl: './exam.component.html',
     styleUrl: './exam.component.scss'
 })
@@ -23,12 +25,26 @@ export class ExamComponent {
 
     @Input() set examInputs(value: IExamChildInput) {
         if (value) {
-            this.questions = value.questions;
+            this.questions =  value.questions.map((qstn: IQuestion) => {
+                return {
+                    ...qstn, Answers: qstn.Answers.map((ans: IAnswer, i: number) => {
+                        return { ...ans, points: !!ans.MAP_POINTS ? this.getMapPoints(ans.MAP_POINTS): undefined};
+                    })
+                }
+            });
+            console.log(this.questions)
             this.questionMaxCount = value.questions.length;
             this.timer(5);
         }
     }
-
+    getMapPoints(pointString: string): MapPoints {
+        const [x, y, spatialReference] = pointString.split(',').map(Number);
+        return {
+            x, y,
+            spatialReference,
+            type: 'point',
+        }
+    }
     previousQuestion(item: IQuestion, i: number): void {
         this.questions.map((list: IQuestion, index: number) => {
             list.isShow = index === i - 1 ? true : false;
@@ -50,8 +66,7 @@ export class ExamComponent {
     }
 
     optionSelect(currentOptions: any, selectedOption: any, question: IQuestion): void {
-        currentOptions.map((x: any) => { x.selected = false; });
-        currentOptions.map((x: any) => { x.isAnswered = false; });
+        currentOptions.map((x: any) => { x.selected = x.isAnswered = false; });
         selectedOption.selected = true;
         question.isAnswered = true;
     }
@@ -64,7 +79,7 @@ export class ExamComponent {
 
     toggleReview($event: any, question: any): void {
         console.log($event, 'event')
-        console.log(question, 'question') 
+        console.log(question, 'question')
     }
 
     reviewMyAnswers(): void {

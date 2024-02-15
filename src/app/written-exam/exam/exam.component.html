@@ -103,7 +103,7 @@
                 <ng-container *ngIf="question.IS_MAP || question.HAS_IMAGE">
                     <div class="col-md-6">
                         @if(question.IS_MAP) {
-                        MAP
+                        <app-esri-map [answers] = "question.Answers"/>
                         } @else {
                         <div class="ques-img" [style.background-image]="'url(' + question.image + ')'"> </div>
                         }
