@@ -49,9 +49,8 @@
                 </div>
                 <div class="col-md-5 text-end">
                     <section class="example-section">
-                        <mat-checkbox class="example-margin" 
-                        [checked]="question.isReview"
-                        [(ngModel)]="question.isReview" >
+                        <mat-checkbox class="example-margin" [checked]="question.isReview"
+                            [(ngModel)]="question.isReview">
                             Add to Review
                         </mat-checkbox>
                     </section>
@@ -103,7 +102,7 @@
                 <ng-container *ngIf="question.IS_MAP || question.HAS_IMAGE">
                     <div class="col-md-6">
                         @if(question.IS_MAP) {
-                        <app-esri-map [answers] = "question.Answers"/>
+                        <app-esri-map [answers]="question.Answers" />
                         } @else {
                         <div class="ques-img" [style.background-image]="'url(' + question.image + ')'"> </div>
                         }
@@ -123,9 +122,9 @@
             <div class="progg mx-4">
                 <div class="progress-bar">
                     <!-- <span class="start-question">0</span> -->
-                    <div class="progress-done" [ngStyle]="{'width': ((100 * (i + 1)) / questionMaxCount) + '%'}">
+                    <div class="progress-done" [ngStyle]="{'width': completionPercentage(i) + '%'}">
                         <!-- <span class="progress-pointer"></span> -->
-                        <span class="completed-ques"><span>{{ ((100 * (i + 1)) / questionMaxCount) + '%'
+                        <span class="completed-ques"><span>{{ completionPercentage(i) + '%'
                                 }}</span></span>
                     </div>
                     <!-- <span class="final-question">{{ questionMaxCount }}</span> -->

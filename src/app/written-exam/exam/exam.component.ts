@@ -114,5 +114,8 @@ export class ExamComponent {
         }, 1000);
     }
 
+    completionPercentage(i: number): any {
+        return Math.round(((100 * (i + 1)) / this.questionMaxCount))
+    }
 
 }
