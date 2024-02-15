@@ -23,10 +23,10 @@ export class ExamComponent {
     questionMaxCount: number = 0;
     countDownTimer!: string;
     timeOutSubmit!: boolean;
-    constructor(private signal: SignalService) { 
+    constructor(private signal: SignalService) {
         effect(() => {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
-          })
+        })
     }
     @Input() set examInputs(value: IExamChildInput) {
         if (value) {
@@ -43,16 +43,19 @@ export class ExamComponent {
     }
     set updatePointsFromSignal(value: any) {
         if (value) {
-          const { item, isFromMap } = value;
-          this.questions.forEach(qstn => {
-            qstn.Answers.forEach(ans => {
-                if(ans.points && JSON.stringify(ans.points) === JSON.stringify(item)){
-                    this.changeSelectOption(qstn.Answers,ans,qstn);
-                }
-            });
-          })
+            const selectedQus = this.questions.find((qus => qus.isShow))
+            if(selectedQus){
+                const { item, isFromMap } = value[selectedQus.QUESTION_ID];
+                this.questions.forEach(qstn => {
+                    qstn.Answers.forEach(ans => {
+                        if (ans.points && JSON.stringify(ans.points) === JSON.stringify(item)) {
+                            this.changeSelectOption(qstn.Answers, ans, qstn);
+                        }
+                    });
+                })
+            }
         }
-      }
+    }
     getMapPoints(pointString: string): MapPoints {
         const [x, y, spatialReference] = pointString.split(',').map(Number);
         return {
@@ -80,7 +83,7 @@ export class ExamComponent {
             });
         }
     }
-    changeSelectOption(currentOptions: any, selectedOption: any, question: IQuestion):void{
+    changeSelectOption(currentOptions: any, selectedOption: any, question: IQuestion): void {
         currentOptions.map((x: any) => { x.selected = x.isAnswered = false; });
         selectedOption.selected = true;
         question.isAnswered = true;
@@ -88,7 +91,12 @@ export class ExamComponent {
     optionSelect(currentOptions: any, selectedOption: any, question: IQuestion): void {
         this.changeSelectOption(currentOptions, selectedOption, question);
         if (selectedOption.points) {
-            this.signal.selectedMapPoint = { item: selectedOption.points, isFromMap: true };
+            this.signal.selectedMapPoint = {
+                ...this.signal.selectedMapPoint ?? {},
+                [selectedOption.QUESTION_ID]: {
+                    item: selectedOption.points, isFromMap: true
+                }
+            };
         }
     }
 

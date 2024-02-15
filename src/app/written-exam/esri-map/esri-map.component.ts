@@ -16,11 +16,12 @@ const options = { version: '4.15', css: true };
 })
 export class EsriMapComponent {
   @Input() set answers(value: IAnswer[]) {
-    if (value) {
+    if (value && value.length) {
       this.points = value.filter((ans: IAnswer) => !!ans.points).map((ans: IAnswer) => ans.points) as MapPoints[];
-      console.log(this.points)
+      this.questionID = value[0].QUESTION_ID;
     }
   }
+  questionID!: number;
   selectedPoint: any;
   esriPointSelectForm!: FormGroup;
   defaultCenterLat = 24.4539;
@@ -56,8 +57,8 @@ export class EsriMapComponent {
     })
   }
   set updatePointsFromSignal(value: any) {
-    if (value) {
-      const { item, isFromMap } = value;
+    if (value && value[this.questionID]) {
+      const { item, isFromMap } = value[this.questionID];
       this.updatePoints(item, isFromMap);
     }
   }
@@ -108,7 +109,12 @@ export class EsriMapComponent {
                 return results.some(({ graphic: { attributes: { mark } } }: any) => JSON.stringify(item) === JSON.stringify(mark))
               });
               if (found) {
-                this.signal.selectedMapPoint = { item:found, isFromMap: false };
+                this.signal.selectedMapPoint = {
+                  ...this.signal.selectedMapPoint ?? {},
+                  [this.questionID]: {
+                    item: found, isFromMap: false
+                  }
+                };
               }
             }
           })
