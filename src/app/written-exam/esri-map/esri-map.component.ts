@@ -71,7 +71,7 @@ export class EsriMapComponent {
       if (found && goTo) {
         this.view.goTo({
           center: [element.geometry.longitude, element.geometry.latitude],
-          zoom: 12
+          zoom: 15
         });
       }
     });
