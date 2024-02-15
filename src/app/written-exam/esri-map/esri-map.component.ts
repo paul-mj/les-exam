@@ -96,7 +96,7 @@ export class EsriMapComponent {
           center: [this.defaultCenterLon, this.defaultCenterLat],
           zoom: 12,
         });
-        /* Click On Map */
+  
         this.view.on("click", (event: any) => {
 
           const screenPoint = {
