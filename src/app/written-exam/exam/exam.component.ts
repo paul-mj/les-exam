@@ -108,7 +108,7 @@ export class ExamComponent {
 
     toggleReview($event: any, question: any): void {
         console.log($event, 'event')
-        console.log(question, 'question')
+        // console.log(question, 'question')
     }
 
     reviewMyAnswers(): void {
