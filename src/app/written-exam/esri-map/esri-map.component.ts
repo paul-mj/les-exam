@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { loadModules } from 'esri-loader';
 import { IAnswer, MapPoints } from '../../core/interfaces/exam-interface';
+import { SignalService } from '../../core/services/signal/signal.service';
 const options = { version: '4.15', css: true };
 
 @Component({
@@ -48,8 +49,17 @@ export class EsriMapComponent {
   pointButtons = this.points.map((elem: any) => {
     return { item: elem, selected: false }
   });
-  constructor() {
+  constructor(private signal: SignalService) {
     this.loadEsri();
+    effect(() => {
+      this.updatePointsFromSignal = this.signal.selectedMapPoint;
+    })
+  }
+  set updatePointsFromSignal(value: any) {
+    if (value) {
+      const { item, isFromMap } = value;
+      this.updatePoints(item, isFromMap);
+    }
   }
   updatePoints(row: any, goTo = true) {
     const old = this.graphicsLayer.graphics;
@@ -64,10 +74,6 @@ export class EsriMapComponent {
         });
       }
     });
-    this.pointButtons.forEach(element => {
-      element.selected = false;
-    });
-    row.selected = true;
   }
   loadEsri() {
     loadModules([
@@ -98,11 +104,11 @@ export class EsriMapComponent {
           };
           this.view.hitTest(screenPoint).then(({ results }: any) => {
             if (results.length) {
-              const found = this.points.find(( item : any) => {
+              const found = this.points.find((item: any) => {
                 return results.some(({ graphic: { attributes: { mark } } }: any) => JSON.stringify(item) === JSON.stringify(mark))
               });
               if (found) {
-                this.updatePoints(found, false);
+                this.signal.selectedMapPoint = { item:found, isFromMap: false };
               }
             }
           })

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, effect } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { IAnswer, IExamChildInput, IFinalQUestionResponse, IQuestion, MapPoints } from '../../core/interfaces/exam-interface';
 import { FormsModule } from '@angular/forms';
 import { EsriMapComponent } from '../esri-map/esri-map.component';
+import { SignalService } from '../../core/services/signal/signal.service';
 
 const componets = [EsriMapComponent]
 @Component({
@@ -22,21 +23,36 @@ export class ExamComponent {
     questionMaxCount: number = 0;
     countDownTimer!: string;
     timeOutSubmit!: boolean;
-
+    constructor(private signal: SignalService) { 
+        effect(() => {
+            this.updatePointsFromSignal = this.signal.selectedMapPoint;
+          })
+    }
     @Input() set examInputs(value: IExamChildInput) {
         if (value) {
-            this.questions =  value.questions.map((qstn: IQuestion) => {
+            this.questions = value.questions.map((qstn: IQuestion) => {
                 return {
                     ...qstn, Answers: qstn.Answers.map((ans: IAnswer, i: number) => {
-                        return { ...ans, points: !!ans.MAP_POINTS ? this.getMapPoints(ans.MAP_POINTS): undefined};
+                        return { ...ans, points: !!ans.MAP_POINTS ? this.getMapPoints(ans.MAP_POINTS) : undefined };
                     })
                 }
             });
-            console.log(this.questions)
             this.questionMaxCount = value.questions.length;
             this.timer(5);
         }
     }
+    set updatePointsFromSignal(value: any) {
+        if (value) {
+          const { item, isFromMap } = value;
+          this.questions.forEach(qstn => {
+            qstn.Answers.forEach(ans => {
+                if(ans.points && JSON.stringify(ans.points) === JSON.stringify(item)){
+                    this.optionSelect(qstn.Answers,ans,qstn);
+                }
+            });
+          })
+        }
+      }
     getMapPoints(pointString: string): MapPoints {
         const [x, y, spatialReference] = pointString.split(',').map(Number);
         return {
@@ -69,6 +85,9 @@ export class ExamComponent {
         currentOptions.map((x: any) => { x.selected = x.isAnswered = false; });
         selectedOption.selected = true;
         question.isAnswered = true;
+        if (selectedOption.points) {
+            this.signal.selectedMapPoint = { item: selectedOption.points, isFromMap: true };
+        }
     }
 
     switchToEditAnswer(editQuestion: any): void {
