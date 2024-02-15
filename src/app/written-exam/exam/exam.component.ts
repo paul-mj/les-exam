@@ -47,7 +47,7 @@ export class ExamComponent {
           this.questions.forEach(qstn => {
             qstn.Answers.forEach(ans => {
                 if(ans.points && JSON.stringify(ans.points) === JSON.stringify(item)){
-                    this.optionSelect(qstn.Answers,ans,qstn);
+                    this.changeSelectOption(qstn.Answers,ans,qstn);
                 }
             });
           })
@@ -80,11 +80,13 @@ export class ExamComponent {
             });
         }
     }
-
-    optionSelect(currentOptions: any, selectedOption: any, question: IQuestion): void {
+    changeSelectOption(currentOptions: any, selectedOption: any, question: IQuestion):void{
         currentOptions.map((x: any) => { x.selected = x.isAnswered = false; });
         selectedOption.selected = true;
         question.isAnswered = true;
+    }
+    optionSelect(currentOptions: any, selectedOption: any, question: IQuestion): void {
+        this.changeSelectOption(currentOptions, selectedOption, question);
         if (selectedOption.points) {
             this.signal.selectedMapPoint = { item: selectedOption.points, isFromMap: true };
         }
