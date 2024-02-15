@@ -57,8 +57,8 @@ export class EsriMapComponent {
     })
   }
   set updatePointsFromSignal(value: any) {
-    if (value) {
-      const { item, isFromMap } = value[this.questionID] ?? {};
+    if (value && value[this.questionID]) {
+      const { item, isFromMap } = value[this.questionID];
       this.updatePoints(item, isFromMap);
     }
   }
