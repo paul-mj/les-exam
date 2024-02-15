@@ -2,5 +2,5 @@
 @for (item of pointButtons;let i = $index; track i) {
   <button (click)="updatePoints(item)" [ngStyle]="{'color': item.selected ? 'blue': 'white'}">click</button>
 } @empty {
-  <li> There are no items. </li>
+  <!-- <li> There are no items. </li> -->
 }
