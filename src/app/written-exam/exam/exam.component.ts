@@ -7,14 +7,15 @@ import { IAnswer, IExamChildInput, IFinalQUestionResponse, IQuestion, MapPoints 
 import { FormsModule } from '@angular/forms';
 import { EsriMapComponent } from '../esri-map/esri-map.component';
 import { SignalService } from '../../core/services/signal/signal.service';
+import { CircularProgressComponent } from "../circular-progress/circular-progress.component";
 
 const componets = [EsriMapComponent]
 @Component({
     selector: 'app-exam',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatCheckboxModule, MatMenuModule, FormsModule, EsriMapComponent],
     templateUrl: './exam.component.html',
-    styleUrl: './exam.component.scss'
+    styleUrl: './exam.component.scss',
+    imports: [CommonModule, MatButtonModule, MatCheckboxModule, MatMenuModule, FormsModule, EsriMapComponent, CircularProgressComponent]
 })
 
 export class ExamComponent {
@@ -23,6 +24,9 @@ export class ExamComponent {
     questionMaxCount: number = 0;
     countDownTimer!: string;
     timeOutSubmit!: boolean;
+    completeQuesPercentage: number = 0;
+
+
     constructor(private signal: SignalService) {
         effect(() => {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
@@ -44,7 +48,8 @@ export class ExamComponent {
     set updatePointsFromSignal(value: any) {
         if (value) {
             const selectedQus = this.questions.find((qus => qus.isShow))
-            if(selectedQus){
+            this.completionPercentage();
+            if (selectedQus) {
                 const { item, isFromMap } = value[selectedQus.QUESTION_ID];
                 this.questions.forEach(qstn => {
                     qstn.Answers.forEach(ans => {
@@ -68,6 +73,7 @@ export class ExamComponent {
         this.questions.map((list: IQuestion, index: number) => {
             list.isShow = index === i - 1 ? true : false;
         });
+         
     }
 
     /* Next Click */
@@ -77,6 +83,7 @@ export class ExamComponent {
             this.reviewMyAnswers();
             return;
         }
+        
         if (this.questionMaxCount - 1 >= i + 1) {
             this.questions.map((list: IQuestion, index: number) => {
                 list.isShow = index === i + 1 ? true : false;
@@ -88,8 +95,10 @@ export class ExamComponent {
         selectedOption.selected = true;
         question.isAnswered = true;
     }
+
     optionSelect(currentOptions: any, selectedOption: any, question: IQuestion): void {
         this.changeSelectOption(currentOptions, selectedOption, question);
+        this.completionPercentage();
         if (selectedOption.points) {
             this.signal.selectedMapPoint = {
                 ...this.signal.selectedMapPoint ?? {},
@@ -143,8 +152,14 @@ export class ExamComponent {
         }, 1000);
     }
 
-    completionPercentage(i: number): any {
+    questionProgress(i: number): any {
         return Math.round(((100 * (i + 1)) / this.questionMaxCount))
+    }
+
+
+    completionPercentage(): any { 
+        const ansLength = this.questions.filter((x: IQuestion) => x.isAnswered)?.length;
+        this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount));
     }
 
 }

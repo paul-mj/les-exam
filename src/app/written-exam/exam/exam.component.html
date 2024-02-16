@@ -1,6 +1,6 @@
-<div class="container-fluid exam-wrapp">
+<div class="container-fluid p-container exam-wrapp mt-4">
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9">
             <div class="exam-header">
                 <div class="row g-0 align-items-center justify-content-between h-100 px-3">
                     <div class="col-md-6">
@@ -21,13 +21,6 @@
                             <div class="timer mx-5 mt-1"> <img src="assets/images/google-icons/timer.svg" />{{
                                 countDownTimer }}
                             </div>
-                            <div class="mx-3">
-                                <button mat-mini-fab class="answered-ques" [matMenuTriggerFor]="menu"
-                                    aria-label="toolbox">
-                                    <img src="assets/images/google-icons/more-vert.svg" />
-
-                                </button>
-                            </div>
                             <div>
                                 <button mat-mini-fab class="viewquestion">
                                     <img src="assets/images/google-icons/eye.svg" />
@@ -44,7 +37,7 @@
             @if(question.isShow) {
             <div class="exam-body my-3">
                 <div>
-                    <div class="d-flex align-items-center title-bar px-4">
+                    <div class="d-flex align-items-center title-bar p-4">
                         <div class="col-md-5">
                             <span class="cat-name">{{ question.category.OBJECT_NAME }}</span>
                         </div>
@@ -61,6 +54,15 @@
                         </div>
                     </div>
                     <div class="row g-0 h-100">
+                        <ng-container *ngIf="question.IS_MAP || question.HAS_IMAGE">
+                            <div class="col-md-6">
+                                @if(question.IS_MAP) {
+                                <app-esri-map [answers]="question.Answers" />
+                                } @else {
+                                <div class="ques-img" [style.background-image]="'url(' + question.image + ')'"> </div>
+                                }
+                            </div>
+                        </ng-container>
                         <div [ngClass]="!(question.IS_MAP || question.HAS_IMAGE) ? 'col-md-12' : 'col-md-6'"
                             class="question-scroll postion-relative">
                             <div class="row justify-content-center">
@@ -104,15 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                        <ng-container *ngIf="question.IS_MAP || question.HAS_IMAGE">
-                            <div class="col-md-6">
-                                @if(question.IS_MAP) {
-                                <app-esri-map [answers]="question.Answers" />
-                                } @else {
-                                <div class="ques-img" [style.background-image]="'url(' + question.image + ')'"> </div>
-                                }
-                            </div>
-                        </ng-container>
+
                     </div>
                 </div>
             </div>
@@ -127,9 +121,9 @@
                     <div class="progg mx-4">
                         <div class="progress-bar">
                             <!-- <span class="start-question">0</span> -->
-                            <div class="progress-done" [ngStyle]="{'width': completionPercentage(i) + '%'}">
+                            <div class="progress-done" [ngStyle]="{'width': questionProgress(i) + '%'}">
                                 <!-- <span class="progress-pointer"></span> -->
-                                <span class="completed-ques"><span>{{ completionPercentage(i) + '%'
+                                <span class="completed-ques"><span>{{ completeQuesPercentage + '%'
                                         }}</span></span>
                             </div>
                             <!-- <span class="final-question">{{ questionMaxCount }}</span> -->
@@ -157,24 +151,34 @@
             } -->
 
         </div>
+        <div class="col-md-1">
+            <div class="d-flex align-items-center justify-content-center direction-column dire h-100">
+                <button class="prev-bttn">
+                    <img src="assets/images/google-icons/east.svg" />
+                </button>
+                <button class="nxt-bttn">
+                    <img src="assets/images/google-icons/east.svg" />
+                </button>
+            </div>
+        </div>
         <div class="col-md-2">
-            <div class="menu-box-numbers">
-                @for (question of questions; track question.ID; let i = $index) {
-                <div class="num" [ngClass]="question.isAnswered ? 'answered' : ''"
-                    (click)="switchToEditAnswer(question)"> {{
-                    i+1 }} </div>
-                }
+            <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                <div class="complete-percent text-center p-3">
+                    <h4>Compelted Questions</h4>
+                    <app-circular-progress [quesPercentage]="completeQuesPercentage" />
+                </div>
+                <div class="menu-box-wrap">
+                    <div class="bg-blk h-100">
+                        <div class="menu-box-numbers">
+                            @for (question of questions; track question.ID; let i = $index) {
+                            <div class="num" [ngClass]="question.isAnswered ? 'answered' : ''"
+                                (click)="switchToEditAnswer(question)"> {{
+                                i+1 }} </div>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
-
-<mat-menu #menu="matMenu" class="q-no-list">
-    <div class="menu-box-numbers">
-        @for (question of questions; track question.ID; let i = $index) {
-        <div class="num" [ngClass]="question.isAnswered ? 'answered' : ''" (click)="switchToEditAnswer(question)"> {{
-            i+1 }} </div>
-        }
-    </div>
-</mat-menu>
