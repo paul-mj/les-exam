@@ -2,14 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PingService } from './core/services/ping/ping.service';
+import { HeaderComponent } from "./shared/header/header.component";
 
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+    styleUrl: './app.component.scss',
+    imports: [RouterOutlet, HeaderComponent]
 })
 export class AppComponent {
 

@@ -1,4 +1,4 @@
-<div class="container exam-wrap">
+<div class="exam-wrapper">
 <!--     {{ screenControl | json }}
  -->   
     @if (screenControl.center) {
@@ -17,7 +17,7 @@
     }
     @else if (screenControl.exam && examQuestions) {
     <app-exam [examInputs]="{questions: examQuestions}" />
-    }
+    } 
     @else {
 
     }
