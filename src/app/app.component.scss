@@ -1,5 +1,13 @@
-
 .exam-nav {
-    /* background-color: #fff; */
-    background-color: transparent;
+    background-color: #fff;
+    height: 80px;
+
+    img.logo {
+        width: 225px;
+    }
+}
+
+.body-block {
+    height: 100vh;
+    padding-top: 80px;
 }

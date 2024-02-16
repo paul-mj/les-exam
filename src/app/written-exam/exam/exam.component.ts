@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, effect } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { IAnswer, IExamChildInput, IFinalQUestionResponse, IQuestion, MapPoints } from '../../core/interfaces/exam-interface';
 import { FormsModule } from '@angular/forms';
 import { EsriMapComponent } from '../esri-map/esri-map.component';
+import { SignalService } from '../../core/services/signal/signal.service';
+import { CircularProgressComponent } from "../circular-progress/circular-progress.component";
 
 const componets = [EsriMapComponent]
 @Component({
     selector: 'app-exam',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatCheckboxModule, MatMenuModule, FormsModule, EsriMapComponent],
     templateUrl: './exam.component.html',
-    styleUrl: './exam.component.scss'
+    styleUrl: './exam.component.scss',
+    imports: [CommonModule, MatButtonModule, MatCheckboxModule, MatMenuModule, FormsModule, EsriMapComponent, CircularProgressComponent]
 })
 
 export class ExamComponent {
@@ -22,19 +24,41 @@ export class ExamComponent {
     questionMaxCount: number = 0;
     countDownTimer!: string;
     timeOutSubmit!: boolean;
+    completeQuesPercentage: number = 0;
 
+
+    constructor(private signal: SignalService) {
+        effect(() => {
+            this.updatePointsFromSignal = this.signal.selectedMapPoint;
+        })
+    }
     @Input() set examInputs(value: IExamChildInput) {
         if (value) {
-            this.questions =  value.questions.map((qstn: IQuestion) => {
+            this.questions = value.questions.map((qstn: IQuestion) => {
                 return {
                     ...qstn, Answers: qstn.Answers.map((ans: IAnswer, i: number) => {
-                        return { ...ans, points: !!ans.MAP_POINTS ? this.getMapPoints(ans.MAP_POINTS): undefined};
+                        return { ...ans, points: !!ans.MAP_POINTS ? this.getMapPoints(ans.MAP_POINTS) : undefined };
                     })
                 }
             });
-            console.log(this.questions)
             this.questionMaxCount = value.questions.length;
             this.timer(5);
+        }
+    }
+    set updatePointsFromSignal(value: any) {
+        if (value) {
+            const selectedQus = this.questions.find((qus => qus.isShow))
+            this.completionPercentage();
+            if (selectedQus) {
+                const { item, isFromMap } = value[selectedQus.QUESTION_ID];
+                this.questions.forEach(qstn => {
+                    qstn.Answers.forEach(ans => {
+                        if (ans.points && JSON.stringify(ans.points) === JSON.stringify(item)) {
+                            this.changeSelectOption(qstn.Answers, ans, qstn);
+                        }
+                    });
+                })
+            }
         }
     }
     getMapPoints(pointString: string): MapPoints {
@@ -49,6 +73,7 @@ export class ExamComponent {
         this.questions.map((list: IQuestion, index: number) => {
             list.isShow = index === i - 1 ? true : false;
         });
+         
     }
 
     /* Next Click */
@@ -58,17 +83,30 @@ export class ExamComponent {
             this.reviewMyAnswers();
             return;
         }
+        
         if (this.questionMaxCount - 1 >= i + 1) {
             this.questions.map((list: IQuestion, index: number) => {
                 list.isShow = index === i + 1 ? true : false;
             });
         }
     }
-
-    optionSelect(currentOptions: any, selectedOption: any, question: IQuestion): void {
+    changeSelectOption(currentOptions: any, selectedOption: any, question: IQuestion): void {
         currentOptions.map((x: any) => { x.selected = x.isAnswered = false; });
         selectedOption.selected = true;
         question.isAnswered = true;
+    }
+
+    optionSelect(currentOptions: any, selectedOption: any, question: IQuestion): void {
+        this.changeSelectOption(currentOptions, selectedOption, question);
+        this.completionPercentage();
+        if (selectedOption.points) {
+            this.signal.selectedMapPoint = {
+                ...this.signal.selectedMapPoint ?? {},
+                [selectedOption.QUESTION_ID]: {
+                    item: selectedOption.points, isFromMap: true
+                }
+            };
+        }
     }
 
     switchToEditAnswer(editQuestion: any): void {
@@ -114,5 +152,14 @@ export class ExamComponent {
         }, 1000);
     }
 
+    questionProgress(i: number): any {
+        return Math.round(((100 * (i + 1)) / this.questionMaxCount))
+    }
+
+
+    completionPercentage(): any { 
+        const ansLength = this.questions.filter((x: IQuestion) => x.isAnswered)?.length;
+        this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount));
+    }
 
 }
