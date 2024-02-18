@@ -294,6 +294,7 @@ span.outof {
             justify-content: center;
             font-weight: 500;
             font-size: 1.1rem;
+            cursor: pointer;
 
             &.answered {
                 background: linear-gradient(310deg, #0d542a, #09ff1b) !important;
