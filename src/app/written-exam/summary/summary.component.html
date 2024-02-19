@@ -1,1 +1,33 @@
-<p>summary works!</p>
+<h2 mat-dialog-title>
+    <h4>Review</h4>
+    <div>
+        <button mat-button (click)="accordion.openAll()">Expand All</button>
+        <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+    </div>
+</h2>
+<mat-dialog-content class="mat-typography">
+
+    <mat-accordion class="example-headers-align" multi>
+        @for(item of groupedData; let i = $index; track i) {
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ item[0].category.OBJECT_NAME }}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            @for(question of item; let j = $index; track j) {
+            <div (click)="onClickToQuestion(question)">
+                {{question.QUESTION_NAME}}
+            </div>
+            }
+
+        </mat-expansion-panel>
+        } @empty { }
+
+    </mat-accordion>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions>

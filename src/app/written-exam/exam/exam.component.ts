@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, effect } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -8,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { EsriMapComponent } from '../esri-map/esri-map.component';
 import { SignalService } from '../../core/services/signal/signal.service';
 import { CircularProgressComponent } from "../circular-progress/circular-progress.component";
+import { SummaryComponent } from '../summary/summary.component';
 
 const componets = [EsriMapComponent]
 @Component({
@@ -27,7 +29,10 @@ export class ExamComponent {
     completeQuesPercentage: number = 0;
 
 
-    constructor(private signal: SignalService) {
+    constructor(
+        private signal: SignalService,
+        public dialog: MatDialog
+    ) {
         effect(() => {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
         })
@@ -73,7 +78,7 @@ export class ExamComponent {
         this.questions.map((list: IQuestion, index: number) => {
             list.isShow = index === i - 1 ? true : false;
         });
-         
+
     }
 
     /* Next Click */
@@ -83,7 +88,7 @@ export class ExamComponent {
             this.reviewMyAnswers();
             return;
         }
-        
+
         if (this.questionMaxCount - 1 >= i + 1) {
             this.questions.map((list: IQuestion, index: number) => {
                 list.isShow = index === i + 1 ? true : false;
@@ -157,9 +162,22 @@ export class ExamComponent {
     }
 
 
-    completionPercentage(): any { 
+    completionPercentage(): any {
         const ansLength = this.questions.filter((x: IQuestion) => x.isAnswered)?.length;
         this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount));
     }
 
+    onClickToReviewExam(): void {
+        const dialogRef = this.dialog.open(SummaryComponent, {
+            data: this.questions,
+        });
+
+        dialogRef.afterClosed().subscribe(result => { 
+            if(!result.isComplete) {
+                console.log(result.question, 'result.question')
+                this.switchToEditAnswer(result.question);
+            }
+        });
+    }
+    
 }
