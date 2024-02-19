@@ -12,12 +12,13 @@
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    {{ item[0].category.OBJECT_NAME }}
+                    {{ item[0].category.OBJECT_NAME }} - 
+                    {{ item?.length }}
                 </mat-panel-title>
             </mat-expansion-panel-header>
 
             @for(question of item; let j = $index; track j) {
-            <div (click)="onClickToQuestion(question)">
+            <div (click)="onClickToQuestion(question)" [class.Answerd]="question.isAnswered">
                 {{question.QUESTION_NAME}}
             </div>
             }
@@ -28,6 +29,6 @@
     </mat-accordion>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+    <button mat-button (click)="dialogClose()">Cancel</button>
+    <button mat-button >Install</button>
 </mat-dialog-actions>

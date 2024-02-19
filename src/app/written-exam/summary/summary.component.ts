@@ -53,7 +53,10 @@ export class SummaryComponent {
 
 
     onClickToQuestion(question: any) {
-        this.dialogRef.close({question, close: true, isComplete: false})
+        this.dialogRef.close({toQuestion: true, dialogClose: true,  question})
     }
 
+    dialogClose() {
+        this.dialogRef.close({toQuestion: false, dialogClose: true})
+    }
 }
