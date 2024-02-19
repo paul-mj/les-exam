@@ -132,3 +132,48 @@ p.field-value {
 .p-container {
     padding: 0 5rem;
 }
+
+// table styles
+
+.table-wrapper {
+    width: 100%;
+
+    .table-outer {
+        display: flex;
+        flex-direction: column;
+
+        .table-header {
+            border: 1px solid #d2d2d2;
+            border-bottom: 0;
+            display: flex;
+            width: 100%;
+
+            .element {
+                border-right: 1px solid #d2d2d2;
+                font-size: 13px;
+                font-weight: 500;
+                padding: 10px;
+            }
+        }
+
+        .table-body {
+            border: 1px solid #d2d2d2;
+            border-bottom: 0;
+            display: flex;
+            width: 100%;
+
+            .element {
+                align-items: center;
+                border-right: 1px solid #d2d2d2;
+                display: flex;
+                justify-content: flex-start;
+                padding: 3px;
+            }
+        }
+    }
+}
+
+.table-wrapper .table-outer .table-body:last-child {
+    border-bottom: 1px solid #d2d2d2;
+}
+
