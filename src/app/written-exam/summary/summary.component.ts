@@ -41,7 +41,7 @@ export class SummaryComponent {
 
     groupDataByCategory(data: any) {
         const groupedDataMap: any = {};
-        data.forEach((item: any) => {
+        data?.forEach((item: any) => {
             const categoryId = item.category.CATEGORY_ID;
             if (!groupedDataMap[categoryId]) {
                 groupedDataMap[categoryId] = [];
