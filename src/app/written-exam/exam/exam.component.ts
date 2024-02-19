@@ -170,12 +170,14 @@ export class ExamComponent {
     onClickToReviewExam(): void {
         const dialogRef = this.dialog.open(SummaryComponent, {
             data: this.questions,
+            disableClose: false
         });
 
         dialogRef.afterClosed().subscribe(result => { 
-            if(!result.isComplete) {
-                console.log(result.question, 'result.question')
+            if(result.toQuestion) { 
                 this.switchToEditAnswer(result.question);
+            } else {
+
             }
         });
     }
