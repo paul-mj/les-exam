@@ -134,8 +134,8 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        /* this.loadQuestions__Test(); */
-        this.pingChecking();
+        this.loadQuestions__Test();
+        /* this.pingChecking(); */
     }
 
     pingChecking(): void {

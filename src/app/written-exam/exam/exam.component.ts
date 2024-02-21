@@ -39,7 +39,7 @@ export class ExamComponent {
         effect(() => {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
             const userTransReadLine: TransLine = this.signal.getUserTypeTransLine;
-            if (userTransReadLine.EXTRA_TIME) { 
+            if (userTransReadLine?.EXTRA_TIME) { 
                 this.examDefaultTimer += Number(userTransReadLine.EXTRA_TIME);
                 this.updateTimer();
             }
@@ -63,7 +63,7 @@ export class ExamComponent {
                 }
             });
             this.questionMaxCount = value.questions.length;
-            this.examDefaultTimer = value.examConfig.ASSESSMENT_DURATION_TIMER;
+            this.examDefaultTimer = value.examConfig?.ASSESSMENT_DURATION_TIMER || 1;
             this.timer(this.examDefaultTimer);
         }
     }
@@ -86,7 +86,7 @@ export class ExamComponent {
             }
         }
     }
-    
+
     getMapPoints(pointString: string): MapPoints {
         const [x, y, spatialReference] = pointString.split(',').map(Number);
         return {
@@ -97,14 +97,12 @@ export class ExamComponent {
     }
 
     prevQuesButton() {
-        if (this.currentQuestionIndex > 1) {
-            console.log(this.currentQuestionIndex, 'prev click');
+        if (this.currentQuestionIndex > 1) { 
             this.previousQuestion(this.currentQuestionIndex);
         }
     }
 
-    nextQuesButton() {
-        console.log(this.currentQuestionIndex, 'next click');
+    nextQuesButton() { 
         this.nextQuestion(this.currentQuestionIndex);
     }
 
@@ -152,7 +150,13 @@ export class ExamComponent {
 
     switchToEditAnswer(editQuestion: any): void {
         this.questions.map((list, index) => {
-            list.isShow = list?.QUESTION_ID === editQuestion?.QUESTION_ID ? true : false;
+            /* list.isShow = (list?.QUESTION_ID === editQuestion?.QUESTION_ID) ? true : false; */
+            if(list?.QUESTION_ID === editQuestion?.QUESTION_ID) {
+                this.currentQuestionIndex = index + 1; 
+                list.isShow = true;
+            } else {
+                list.isShow = false;
+            }
         });
     }
 

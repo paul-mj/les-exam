@@ -20,7 +20,7 @@
                         <div class="d-flex align-items-center justify-content-end">
                             <div class="timer mx-5 mt-1"> <img src="assets/images/google-icons/timer.svg" />{{
                                 countDownTimer }}
-                            </div> 
+                            </div>
                             <div>
                                 <button mat-mini-fab class="viewquestion" (click)="onClickToReviewExam()">
                                     <img src="assets/images/google-icons/eye.svg" />
@@ -146,23 +146,23 @@
 
         </div>
         <div class="col-md-1">
-            <div class="d-flex align-items-center justify-content-center direction-column dire h-100">
-
-                <button class="prev-bttn" (click)="prevQuesButton()" [disabled]="(currentQuestionIndex > 1)">
-                    <img src="assets/images/google-icons/east.svg" />
-                </button>
-
-                @if((questionMaxCount + 1) > currentQuestionIndex) {
-                @if((questionMaxCount) === currentQuestionIndex) {
-                <button class="nxt-bttn" (click)="completeExam()">
-                    Complete Exam
-                </button>
-                } @else {
-                <button class="nxt-bttn" (click)="nextQuesButton()">
-                    <img src="assets/images/google-icons/east.svg" />
-                </button>
+            <div class="d-flex align-items-center justify-content-center direction-column dire h-100"> 
+                @if(currentQuestionIndex > 1) {
+                    <button class="prev-bttn" (click)="prevQuesButton()">
+                        <img src="assets/images/google-icons/east.svg" />
+                    </button>
                 }
+                @if(questionMaxCount > currentQuestionIndex) {
+                    <button class="nxt-bttn" (click)="nextQuesButton()">
+                        <img src="assets/images/google-icons/east.svg" />
+                    </button>
                 }
+                @if(questionMaxCount === currentQuestionIndex) {
+                    <button class="nxt-bttn">
+                        Complete Exam
+                    </button>
+                }
+
             </div>
         </div>
         <div class="col-md-2">
