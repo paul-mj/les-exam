@@ -14,6 +14,7 @@
   .section-wrapper {
     padding-top: 2rem;
     width: 60rem;
+    min-height: 45rem;
 
     .heading-section {
       display: flex;
@@ -26,10 +27,26 @@
 
   .pop-up-heading {
     font-size: 1.25rem;
+    font-weight: 500;
   }
 
   .question-name-sec {
     display: flex;
     width: 100%;
     justify-content: space-between;
+  }
+
+  .answer-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+    margin-bottom: 15px;
+
+    .ques-no {
+      min-width: 1em;
+    }
+
+    .ans {
+
+    }
   }

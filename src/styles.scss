@@ -153,6 +153,8 @@ p.field-value {
                 font-size: 13px;
                 font-weight: 500;
                 padding: 10px;
+                height: 4rem;
+                text-align: center;
             }
         }
 
@@ -167,7 +169,8 @@ p.field-value {
                 border-right: 1px solid #d2d2d2;
                 display: flex;
                 justify-content: flex-start;
-                padding: 3px;
+                padding: 20px;
+                height: 4rem;
             }
         }
     }

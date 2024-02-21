@@ -22,7 +22,14 @@
 
                 @for(question of item; let j = $index; track j) {
                 <div (click)="onClickToQuestion(question)" [class.Answerd]="question.isAnswered">
-                    {{j+1}} {{question.QUESTION_NAME}}
+                    <div class="answer-wrapper">
+                        <div class="ques-no">
+                            {{j+1}}
+                        </div>
+                        <div class="ans">
+                            {{question.QUESTION_NAME}}
+                        </div>
+                    </div>
                 </div>
                 }
 

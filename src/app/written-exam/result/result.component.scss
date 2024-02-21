@@ -144,7 +144,9 @@
     border-radius: 5px;
     padding: 15px ;
     background-color: white;
-    width: 30%;
+    display: flex;
+    justify-content: center;
+    // width: 30%;
 
     .sec-wrapper {
         // display: flex;
@@ -185,9 +187,8 @@
 
 .user-img-wrap {
     justify-content: center;
-    width: 107px;
-    // padding: 6px;
-    height: 107px;
+    width: 150px;
+    height: 150px;
     box-sizing: content-box;
 
     img {
@@ -197,7 +198,7 @@
         object-fit: cover;
         text-align: center;
         text-indent: 10000px;
-        border-radius: 5px;
+        border-radius: 50%;
     }
 
 }
@@ -216,4 +217,11 @@
 .labels {
     font-size: 1rem;
     font-weight: 600;
+}
+
+.first-half {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 29%;
 }
