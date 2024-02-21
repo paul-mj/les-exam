@@ -1,34 +1,47 @@
-<h2 mat-dialog-title>
-    <h4>Review</h4>
-    <div>
-        <button mat-button (click)="accordion.openAll()">Expand All</button>
-        <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+<div class="section-wrapper">
+    <div class="heading-section">
+        <div class="pop-up-heading">Review</div>
+        <div>
+            <button mat-button (click)="accordion.openAll()" class="btn-class mr-4">Expand All</button>
+            <button mat-button (click)="accordion.closeAll()" class="btn-class">Collapse All</button>
+        </div>
     </div>
-</h2>
-<mat-dialog-content class="mat-typography">
+    <mat-dialog-content class="mat-typography">
 
-    <mat-accordion class="example-headers-align" multi>
-        @for(item of groupedData; let i = $index; track i) {
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    {{ item[0].category.OBJECT_NAME }} - 
-                    {{ item?.length }}
-                </mat-panel-title>
-            </mat-expansion-panel-header>
+        <mat-accordion class="example-headers-align" multi>
+            @for(item of groupedData; let i = $index; track i) {
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <div class="question-name-sec">
+                            <div class="name"> {{ item[0].category.OBJECT_NAME }} </div>
+                            <div class="count"> No of questions - {{ item?.length }}</div>
+                        </div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
 
-            @for(question of item; let j = $index; track j) {
-            <div (click)="onClickToQuestion(question)" [class.Answerd]="question.isAnswered">
-                {{question.QUESTION_NAME}}
-            </div>
-            }
+                @for(question of item; let j = $index; track j) {
+                <div (click)="onClickToQuestion(question)" [class.Answerd]="question.isAnswered">
+                    <div class="answer-wrapper">
+                        <div class="ques-no">
+                            {{j+1}}
+                        </div>
+                        <div class="ans">
+                            {{question.QUESTION_NAME}}
+                        </div>
+                    </div>
+                </div>
+                }
 
-        </mat-expansion-panel>
-        } @empty { }
+            </mat-expansion-panel>
+            } @empty { }
 
-    </mat-accordion>
-</mat-dialog-content>
+        </mat-accordion>
+    </mat-dialog-content>
+</div>
 <mat-dialog-actions align="end">
-    <button mat-button (click)="dialogClose()">Cancel</button>
-    <button mat-button >Install</button>
+    <div class="footer-wrapper">
+        <button mat-button (click)="dialogClose()">Cancel</button>
+        <button mat-button>Install</button>
+    </div>
 </mat-dialog-actions>
