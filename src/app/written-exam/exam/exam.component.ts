@@ -10,6 +10,7 @@ import { EsriMapComponent } from '../esri-map/esri-map.component';
 import { SignalService } from '../../core/services/signal/signal.service';
 import { CircularProgressComponent } from "../circular-progress/circular-progress.component";
 import { SummaryComponent } from '../summary/summary.component';
+import { TransLine } from '../../core/interfaces/exam-wrap.interface';
 
 const componets = [EsriMapComponent]
 @Component({
@@ -25,9 +26,11 @@ export class ExamComponent {
     questions!: IFinalQUestionResponse;
     questionMaxCount: number = 0;
     countDownTimer!: string;
+    examDefaultTimer!: number;
     timeOutSubmit!: boolean;
     completeQuesPercentage: number = 0;
-
+    currentQuestionIndex: number = 1;
+    resetTimer: any;
 
     constructor(
         private signal: SignalService,
@@ -35,8 +38,21 @@ export class ExamComponent {
     ) {
         effect(() => {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
-        })
+            const userTransReadLine: TransLine = this.signal.getUserTypeTransLine;
+            if (userTransReadLine.EXTRA_TIME) { 
+                this.examDefaultTimer += Number(userTransReadLine.EXTRA_TIME);
+                this.updateTimer();
+            }
+        });
     }
+
+    updateTimer(): void {
+        clearInterval(this.resetTimer);
+        this.timer(this.examDefaultTimer);
+    }
+
+
+
     @Input() set examInputs(value: IExamChildInput) {
         if (value) {
             this.questions = value.questions.map((qstn: IQuestion) => {
@@ -47,9 +63,13 @@ export class ExamComponent {
                 }
             });
             this.questionMaxCount = value.questions.length;
-            this.timer(5);
+            this.examDefaultTimer = value.examConfig.ASSESSMENT_DURATION_TIMER;
+            this.timer(this.examDefaultTimer);
         }
     }
+
+
+
     set updatePointsFromSignal(value: any) {
         if (value) {
             const selectedQus = this.questions.find((qus => qus.isShow))
@@ -66,6 +86,7 @@ export class ExamComponent {
             }
         }
     }
+    
     getMapPoints(pointString: string): MapPoints {
         const [x, y, spatialReference] = pointString.split(',').map(Number);
         return {
@@ -74,27 +95,42 @@ export class ExamComponent {
             type: 'point',
         }
     }
-    previousQuestion(item: IQuestion, i: number): void {
-        this.questions.map((list: IQuestion, index: number) => {
-            list.isShow = index === i - 1 ? true : false;
-        });
 
+    prevQuesButton() {
+        if (this.currentQuestionIndex > 1) {
+            console.log(this.currentQuestionIndex, 'prev click');
+            this.previousQuestion(this.currentQuestionIndex);
+        }
     }
 
-    /* Next Click */
-    nextQuestion(item: IQuestion, i: number): void {
-        /* 30 === 30 */
-        if (i + 1 === this.questionMaxCount) {
+    nextQuesButton() {
+        console.log(this.currentQuestionIndex, 'next click');
+        this.nextQuestion(this.currentQuestionIndex);
+    }
+
+    previousQuestion(i: number): void {
+        if (i > 1) {
+            this.currentQuestionIndex = i - 1;
+            this.questions.map((list: IQuestion, index: number) => {
+                list.isShow = index === i - 2 ? true : false; // Adjusted index
+            });
+        }
+    }
+
+    nextQuestion(i: number): void {
+        this.currentQuestionIndex = i + 1;
+        if (i === this.questionMaxCount) {
             this.reviewMyAnswers();
             return;
         }
 
-        if (this.questionMaxCount - 1 >= i + 1) {
+        if (this.questionMaxCount >= i + 1) {
             this.questions.map((list: IQuestion, index: number) => {
-                list.isShow = index === i + 1 ? true : false;
+                list.isShow = index === i ? true : false; // Adjusted index
             });
         }
     }
+
     changeSelectOption(currentOptions: any, selectedOption: any, question: IQuestion): void {
         currentOptions.map((x: any) => { x.selected = x.isAnswered = false; });
         selectedOption.selected = true;
@@ -129,12 +165,17 @@ export class ExamComponent {
 
     }
 
-    timer(minute: number): any {
-        let seconds: number = minute * 60;
+    timer(minutes: number): void {
+        console.log(minutes)
+        if(this.resetTimer){
+            clearInterval(this.resetTimer);
+        }
+        let seconds: number = (minutes * 60);
         let textSec: any = '0';
         let statSec = 60;
-        const prefix = minute < 10 ? '0' : '';
-        const timer = setInterval(() => {
+        const prefix = minutes < 10 ? '0' : '';
+
+        this.resetTimer = setInterval(() => {
             seconds--;
             if (statSec !== 0) {
                 statSec--;
@@ -152,15 +193,20 @@ export class ExamComponent {
                 setTimeout(() => {
                     console.log(this.countDownTimer, 'countDownTimer emit')
                 }, 5000);
-                clearInterval(timer);
+                clearInterval(this.resetTimer);
             }
         }, 1000);
     }
+
+
 
     questionProgress(i: number): any {
         return Math.round(((100 * (i + 1)) / this.questionMaxCount))
     }
 
+    add_remove_Review(question: any) {
+        question.isReview = !question.isReview;
+    }
 
     completionPercentage(): any {
         const ansLength = this.questions.filter((x: IQuestion) => x.isAnswered)?.length;
@@ -173,13 +219,18 @@ export class ExamComponent {
             disableClose: false
         });
 
-        dialogRef.afterClosed().subscribe(result => { 
-            if(result.toQuestion) { 
+        dialogRef.afterClosed().subscribe(result => {
+            if (result.toQuestion) {
                 this.switchToEditAnswer(result.question);
             } else {
 
             }
         });
     }
-    
+
+    completeExam(): void {
+
+    }
+
 }
+

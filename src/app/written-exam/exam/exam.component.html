@@ -20,7 +20,7 @@
                         <div class="d-flex align-items-center justify-content-end">
                             <div class="timer mx-5 mt-1"> <img src="assets/images/google-icons/timer.svg" />{{
                                 countDownTimer }}
-                            </div>
+                            </div> 
                             <div>
                                 <button mat-mini-fab class="viewquestion" (click)="onClickToReviewExam()">
                                     <img src="assets/images/google-icons/eye.svg" />
@@ -31,8 +31,6 @@
                 </div>
             </div>
 
-            <!-- 
-            @defer () { -->
             @for (question of questions; track question.ID; let i = $index) {
             @if(question.isShow) {
             <div class="exam-body my-3">
@@ -45,11 +43,16 @@
                             <span class="outof">{{i+1}} - {{questionMaxCount}}</span>
                         </div>
                         <div class="col-md-5 text-end">
-                            <section class="example-section">
-                                <mat-checkbox class="example-margin" [checked]="question.isReview"
-                                    [(ngModel)]="question.isReview">
-                                    Add to Review
-                                </mat-checkbox>
+                            <section class="review-bttn-wrapper d-flex justify-content-end align-items-center">
+                                <button (click)="add_remove_Review(question)"
+                                    class="review-bttn d-flex align-items-center px-3">
+                                    <p class="mb-0">Add to review</p>
+                                    @if (question.isReview) {
+                                    <img src="assets/images/star-active.png" />
+                                    } @else {
+                                    <img src="assets/images/star.png" />
+                                    }
+                                </button>
                             </section>
                         </div>
                     </div>
@@ -115,7 +118,7 @@
                     <div class="prev">
                         @if(question.isPrevious) {
                         <button mat-button class="prev-ques-button w-100"
-                            (click)="previousQuestion(question, i)">Previous</button>
+                            (click)="previousQuestion(i)">Previous</button>
                         }
                     </div>
                     <div class="progg mx-4">
@@ -131,7 +134,7 @@
                     </div>
                     <div class="next text-end">
                         @if(question.isNext) {
-                        <button mat-button class="next-ques-button w-100" (click)="nextQuestion(question, i)"> Next
+                        <button mat-button class="next-ques-button w-100" (click)="nextQuestion(i)"> Next
                             <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-4" />
                         </button>
                         }
@@ -140,25 +143,26 @@
             </div>
             }
             }
-            <!-- } @placeholder (minimum 1000ms) {
-            <div class="exam-body my-3">
-            </div>
-            <div class="exam-footer"></div>
-            } @loading {
-            Loading...
-            } @error {
-            Something went wrong :
-            } -->
 
         </div>
         <div class="col-md-1">
             <div class="d-flex align-items-center justify-content-center direction-column dire h-100">
-                <button class="prev-bttn">
+
+                <button class="prev-bttn" (click)="prevQuesButton()" [disabled]="(currentQuestionIndex > 1)">
                     <img src="assets/images/google-icons/east.svg" />
                 </button>
-                <button class="nxt-bttn">
+
+                @if((questionMaxCount + 1) > currentQuestionIndex) {
+                @if((questionMaxCount) === currentQuestionIndex) {
+                <button class="nxt-bttn" (click)="completeExam()">
+                    Complete Exam
+                </button>
+                } @else {
+                <button class="nxt-bttn" (click)="nextQuesButton()">
                     <img src="assets/images/google-icons/east.svg" />
                 </button>
+                }
+                }
             </div>
         </div>
         <div class="col-md-2">

@@ -324,3 +324,22 @@ button.nxt-bttn {
 button.prev-bttn {
     transform: rotate(180deg);
 }
+
+
+.review-bttn-wrapper {
+    font-size: 1.1rem;
+
+    button.review-bttn {
+        height: 3rem; 
+        border-radius: 5px;
+        border: 1px solid #c4c4c4;
+        background: transparent;
+
+        img {
+            height: 2.5rem;
+            width: auto;
+            margin-left: 1rem;
+        }
+    }
+}
+

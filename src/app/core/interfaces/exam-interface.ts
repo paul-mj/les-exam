@@ -1,3 +1,4 @@
+import { IConfiguration } from "./exam-wrap.interface"
 
 export interface IExamResponse {
     Categories: ICategory[]
@@ -101,5 +102,6 @@ export interface BlobResponse {
 
 
 export interface IExamChildInput {
-    questions: IFinalQUestionResponse
+    questions: IFinalQUestionResponse,
+    examConfig: IConfiguration
 }

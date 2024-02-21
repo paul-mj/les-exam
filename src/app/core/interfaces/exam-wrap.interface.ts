@@ -333,3 +333,4 @@ export interface ISaveStatusResponse {
     HasValueParam: boolean
     HasMessageParam: boolean
 }
+
