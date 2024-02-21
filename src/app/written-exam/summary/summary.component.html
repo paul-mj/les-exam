@@ -2,8 +2,8 @@
     <div class="heading-section">
         <div class="pop-up-heading">Review</div>
         <div>
-            <button mat-button (click)="accordion.openAll()">Expand All</button>
-            <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+            <button mat-button (click)="accordion.openAll()" class="btn-class mr-4">Expand All</button>
+            <button mat-button (click)="accordion.closeAll()" class="btn-class">Collapse All</button>
         </div>
     </div>
     <mat-dialog-content class="mat-typography">
@@ -40,6 +40,8 @@
     </mat-dialog-content>
 </div>
 <mat-dialog-actions align="end">
-    <button mat-button (click)="dialogClose()">Cancel</button>
-    <button mat-button>Install</button>
+    <div class="footer-wrapper">
+        <button mat-button (click)="dialogClose()">Cancel</button>
+        <button mat-button>Install</button>
+    </div>
 </mat-dialog-actions>
