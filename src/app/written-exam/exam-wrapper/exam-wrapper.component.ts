@@ -173,7 +173,7 @@ export class ExamWrapperComponent {
             };
         };
         this.api
-            .httpPost({ url: "Assessment/getObjects", data: getData(objList) })
+            .httpPost({ url: API.Assessment.getObjects, data: getData(objList) })
             .subscribe((response: ICenter[]) => {
                 this.centerList = response;
             });
@@ -191,7 +191,7 @@ export class ExamWrapperComponent {
 
     verifyIsDeviceIsRegistered(): void {
         this.api
-            .httpGet({ url: `Assessment/verifyDevice?key=${this.deviceInfo.BiosId}` })
+            .httpGet({ url: `${API.Assessment.verifyDevice}?key=${this.deviceInfo.BiosId}` })
             .subscribe((response: IVerifyDeviceResponse) => {
                 if (!response.Valid) {
                     //this.registerDevice();
@@ -216,7 +216,7 @@ export class ExamWrapperComponent {
     registerDevice($event: IRegisterDevice) {
         this.api
             .httpPost<IRegisterDevice>({
-                url: `Assessment/registerDevice`,
+                url: API.Assessment.registerDevice,
                 data: $event,
             })
             .subscribe((response: any) => {
@@ -250,14 +250,14 @@ export class ExamWrapperComponent {
             CultureId: 0,
         };
         return this.api.httpPost<IReadDeviceLinePayload>({
-            url: `Assessment/readDeviceLine`,
+            url: API.Assessment.readDeviceLine,
             data,
         });
     }
 
     verifyAfterNewDeviceRegister(): void {
         this.api
-            .httpGet({ url: `Assessment/verifyDevice?key=${this.deviceInfo.BiosId}` })
+            .httpGet({ url: `${API.Assessment.verifyDevice}?key=${this.deviceInfo.BiosId}` })
             .subscribe((response: IVerifyDeviceResponse) => {
                 if (response.Valid) {
                     this.verifiedDeviceData = response.Data;
@@ -270,7 +270,7 @@ export class ExamWrapperComponent {
             DeviceIp: this.deviceInfo.IP4Address,
             DeviceKey: this.deviceInfo.BiosId,
         };
-        this.api.httpPost<IUpdateAddress>({ url: `Assessment/updateAddress`, data })
+        this.api.httpPost<IUpdateAddress>({ url: API.Assessment.updateAddress, data })
             .subscribe;
     }
 
@@ -288,14 +288,14 @@ export class ExamWrapperComponent {
             DeviceKey: this.deviceInfo.BiosId,
         };
         return this.api.httpPost<IUpdateAddress>({
-            url: `Assessment/saveDeviceStatus`,
+            url: API.Assessment.saveDeviceStatus,
             data,
         });
     }
 
     readConfig(): void {
         this.api
-            .httpGet({ url: `Assessment/readConfig` })
+            .httpGet({ url: API.Assessment.readConfig })
             .subscribe((response: IConfigResponse) => {
                 if (response.Valid) {
                     this.configuration = response.Data;
@@ -319,7 +319,7 @@ export class ExamWrapperComponent {
 
     initScanner(): void {
         this.api
-            .httpLocalGet({ url: "scanner/discoverScanners" })
+            .httpLocalGet({ url: API.scanner.discoverScanners })
             .subscribe((response: IScannerResponse) => {
                 if (response.Valid) {
                     this.scannerDetails = response.Scanners[0];
@@ -333,7 +333,7 @@ export class ExamWrapperComponent {
     captureFinger(): void {
         this.api
             .httpLocalGet({
-                url: `scanner/captureFinger?scannerId=${this.scannerDetails.ScannerId}`,
+                url: `${API.scanner.captureFinger}?scannerId=${this.scannerDetails.ScannerId}`,
             })
             .subscribe((response: ICaptureResponse) => {
                 this.captureResponse = response;
@@ -344,7 +344,7 @@ export class ExamWrapperComponent {
     getEnrolledList(): void {
         this.api
             .httpGet({
-                url: `assessment/getEnrolledList?centreId=${this.verifiedDeviceData.CENTRE_ID}`,
+                url: `${API.assessment.getEnrolledList}?centreId=${this.verifiedDeviceData.CENTRE_ID}`,
             })
             .subscribe((response: IEnrolledResponse) => {
                 if (response.Valid) {
@@ -415,21 +415,21 @@ export class ExamWrapperComponent {
 
     readImpression(impressionPayload: IReadImpressionPayload): Observable<any> {
         return this.api.httpPost<IReadImpressionPayload>({
-            url: "assessment/readImpressions",
+            url: API.assessment.readImpressions,
             data: impressionPayload,
         });
     }
 
     verifyImpression(verifyPayload: IVerifyPayload): Observable<any> {
         return this.api.httpLocalPost<IVerifyPayload>({
-            url: "scanner/verifyImpression",
+            url: API.scanner.verifyImpression,
             data: verifyPayload,
         });
     }
 
 
     saveStatus(): Observable<any> {
-        return this.api.httpPost<any>({ url: "Assessment/saveStatus", data: this.assessmentStatusInfo });
+        return this.api.httpPost<any>({ url: API.Assessment.saveStatus, data: this.assessmentStatusInfo });
     }
 
     isSurveyOrExam(deviceLineResponse: IDeviceLine): void {
@@ -472,9 +472,9 @@ export class ExamWrapperComponent {
             } else {
                 this.readUserTypeTransLine(deviceLineData).subscribe((userTypeTransResponse: ITranslineResponse) => {
                     /* This if only for testing need to remove after fixing extra time update */
-                    if (deviceLineResponse.LINE_STATUS === deviceStatusEnum.Extend) {
+                    /* if (deviceLineResponse.LINE_STATUS === deviceStatusEnum.Extend) {
                         userTypeTransResponse.Data.EXTRA_TIME = 1;
-                    }
+                    } */
                     this.signal.userTypeTransLineData(userTypeTransResponse.Data);
                     this.userTransData = userTypeTransResponse.Data;
 
@@ -566,7 +566,7 @@ export class ExamWrapperComponent {
         if (this.userTransData.LINE_ID > 0) {
             const total = this.extraTime + this.configuration.ASSESSMENT_DURATION_TIMER;
             const timeSecond = total * 60
-            this.showTime();
+            /* this.showTime(); */
         }
     }
 
@@ -583,7 +583,7 @@ export class ExamWrapperComponent {
             CultureId: 0,
             UserType: this.assessmentStatusInfo.UserType,
         };
-        return this.api.httpPost<any>({ url: "Assessment/readProfile", data: profilePayload });
+        return this.api.httpPost<any>({ url: API.Assessment.readProfile, data: profilePayload });
     }
 
     readUserTypeTransLine(deviceLineData: IDeviceLine): Observable<any> {
@@ -592,7 +592,7 @@ export class ExamWrapperComponent {
             CultureId: 0,
             UserType: this.assessmentStatusInfo.UserType,
         };
-        return this.api.httpPost<any>({ url: "Assessment/readUserTypeTransLine", data: profilePayload });
+        return this.api.httpPost<any>({ url: API.Assessment.readUserTypeTransLine, data: profilePayload });
     }
 
     loadQuestions(): void {
@@ -605,7 +605,7 @@ export class ExamWrapperComponent {
                     ExamType: examTypeEnum.Written,
                 };
 
-                this.api.httpPost<IQuesSettingsPayload>({ url: 'Assessment/readData', data: payload }).pipe(
+                this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).pipe(
                     switchMap((response: IExamResponse) => {
                         if (response.Valid && response.Categories && response.Questions) {
                             this.examQuestionApiResponse = response;
@@ -624,12 +624,12 @@ export class ExamWrapperComponent {
 
                             questionsWithCategory.forEach((question: any) => {
                                 if (!!question.HAS_IMAGE) {
-                                    fileArray.push({ id: question.QUESTION_ID, url: `assessment/getQuestionImage?questionid=${question.QUESTION_ID}`, blob: null });
+                                    fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, blob: null });
                                 }
                                 // Check for HAS_IMAGE in answers and push file download tasks if present
                                 question.Answers.forEach((answer: IAnswer) => {
                                     if (!!answer.HAS_IMAGE) {
-                                        fileArray.push({ id: answer.ID, url: `assessment/getAnswerImage?answerid=${answer.ID}`, blob: null });
+                                        fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, blob: null });
                                     }
                                     answer.selected = false;
                                 });
@@ -706,11 +706,11 @@ export class ExamWrapperComponent {
             UserType: this.assessmentStatusInfo.UserType,
             ExamType: examTypeEnum.Written,
         };
-        return this.api.httpPost<any>({ url: "Assessment/readSetting", data: payloadSettings });
+        return this.api.httpPost<any>({ url: API.Assessment.readSetting, data: payloadSettings });
     }
 
     readSurveyData(): Observable<any> {
-        return this.api.httpGet({ url: `Assessment/readSurvey?lineId=${this.verifiedUserData.LINE_ID}` });
+        return this.api.httpGet({ url: `${API.Assessment.readSurvey}?lineId=${this.verifiedUserData.LINE_ID}` });
     }
 
     toggleScreen(screenName: keyof IScreenControls): void {
@@ -719,27 +719,7 @@ export class ExamWrapperComponent {
                 this.screenControl[key as keyof IScreenControls] = key === screenName;
             }
         }
-    }
-
-    showTime(): void {
-        /* TimeSpan value = tsDuration.Subtract(tsCurrent);
-        if (value.TotalSeconds > 0)
-        {
-            string format = string.Empty;
-            if (value.Days >= 1)
-            {
-                format = "d'.'h':'mm':'ss";
-            }
-            else {
-                format = value.Hours >= 1 ? "h':'mm':'ss" : "m':'ss";
-            }
-            //format = value.Days >= 1 ? "d'.'hh':'mm':'mm" : "mm':'ss";
-            lblTime.Content = string.Format("{0}", value.ToString(format));
-        }
-        else {
-            lblTime.Content = "00:00";
-        } */
-    }
+    } 
 
     loadQuestions__Test() {
         const payload: IQuesSettingsPayload = {
@@ -850,7 +830,7 @@ export class ExamWrapperComponent {
             InspectMark: $event.selectedOption.WEIGHTAGE,
             Remarks: ''
         }
-        this.api.httpPost<IOptionSaveParam>({ url: `assessment/writeAuditData`, data }).subscribe();
+        this.api.httpPost<IOptionSaveParam>({ url: API.assessment.writeAuditData, data }).subscribe();
     }
 
     onExamComplete($event: IExamCompleteEmitResponse): void {
@@ -929,6 +909,14 @@ export class ExamWrapperComponent {
         return weightage;
     }
 
+
+
+
+
+
+
+
+
     ngOnDestroy(): void {
         this.pingSubscription?.unsubscribe();
         this.deviceUpdateSubscription?.unsubscribe();
@@ -943,17 +931,3 @@ export class ExamWrapperComponent {
     }
 }
 
-/* verifyFinger(): void {
-    const data: IVerifyFinger = {
-        CentreId: this.verifiedDeviceData.CENTRE_ID,
-        Size: this.captureResponse.Size,
-        Impression: this.captureResponse.Impression
-    }
-    this.api.httpPost<IVerifyFinger>({ url: `device/verifyFinger`, data }).subscribe((response: any) => {
-        if (response.Valid) {
-            console.log(response, 'Scanner: Vefiry Finger response')
-        } else {
-
-        }
-    })
-} */
