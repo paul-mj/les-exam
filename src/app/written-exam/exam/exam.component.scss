@@ -8,19 +8,6 @@
         background: #fff;
         border-radius: 10px;
         border: 1px solid #e2e2e2;
-
-        .timer {
-            font-family: 'Orbitron';
-            font-weight: 700;
-            font-size: 30px;
-            min-width: 175px;
-
-            img {
-                height: 30px;
-                margin: 0 10px;
-            }
-        }
-
     }
 
     .exam-body {
@@ -51,6 +38,7 @@
         height: 5px;
         position: relative;
         border-radius: 30px;
+        transition: width 0.3s ease;
 
         &::after {
             content: "";
@@ -84,7 +72,8 @@
     }
 
     .next {
-        width: 110px;
+        /* width: 110px; */
+        width: 200px;
 
         button.next-ques-button {
             background-color: #003a5d;
@@ -229,6 +218,11 @@ span.completed-ques {
         align-items: center;
         justify-content: center;
     }
+
+    img {
+        height: 1.4rem;
+    }
+
 }
 
 .title-bar {
@@ -330,7 +324,7 @@ button.prev-bttn {
     font-size: 1.1rem;
 
     button.review-bttn {
-        height: 3rem; 
+        height: 3rem;
         border-radius: 5px;
         border: 1px solid #c4c4c4;
         background: transparent;
@@ -343,3 +337,24 @@ button.prev-bttn {
     }
 }
 
+.timer {
+    .count-timer {
+        width: 175px;
+        height: 60px;
+        line-height: 53px;
+        padding: 0 10px;
+        text-align: center;
+        border: 1px solid black;
+        border-radius: 5px;
+        background: black;
+        font-family: "Orbitron";
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #fff;
+    }
+
+    img {
+        height: 30px;
+        margin: 0 10px;
+    }
+}

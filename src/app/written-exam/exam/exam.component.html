@@ -1,4 +1,5 @@
 <div class="container-fluid p-container exam-wrapp mt-4">
+    @if(!timeOutSubmit) {
     <div class="row">
         <div class="col-md-9">
             <div class="exam-header">
@@ -18,8 +19,9 @@
                     </div>
                     <div class="col-md-6">
                         <div class="d-flex align-items-center justify-content-end">
-                            <div class="timer mx-5 mt-1"> <img src="assets/images/google-icons/timer.svg" />{{
-                                countDownTimer }}
+                            <div class="timer mx-5 mt-1">
+                                <!-- <img src="assets/images/google-icons/timer.svg" />
+                                    {{ countDownTimer }} -->
                             </div>
                             <div>
                                 <button mat-mini-fab class="viewquestion" (click)="onClickToReviewExam()">
@@ -115,29 +117,32 @@
             </div>
             <div class="exam-footer">
                 <div class="row g-0 align-items-center justify-content-between h-100 px-3">
-                    <div class="prev">
-                        @if(question.isPrevious) {
-                        <button mat-button class="prev-ques-button w-100"
-                            (click)="previousQuestion(i)">Previous</button>
-                        }
-                    </div>
+                    <!-- <div class="prev">
+                            @if(question.isPrevious) {
+                            <button mat-button class="prev-ques-button w-100"
+                                (click)="previousQuestion(i)">Previous</button>
+                            }
+                        </div> -->
                     <div class="progg mx-4">
                         <div class="progress-bar">
-                            <!-- <span class="start-question">0</span> -->
-                            <div class="progress-done" [ngStyle]="{'width': questionProgress(i) + '%'}">
-                                <!-- <span class="progress-pointer"></span> -->
-                                <span class="completed-ques"><span>{{ completeQuesPercentage + '%'
-                                        }}</span></span>
+                            <!--                                 <div class="progress-done" [ngStyle]="{'width': questionProgress(i) + '%'}"> 
+                                    <span class="completed-ques"><span>{{ completeQuesPercentage + '%' }}</span></span>
+                                </div>  -->
+                            <div class="progress-done" [style.width]="elapsedTimePercentage()">
+                                <span class="completed-ques"><span><img src="assets/images/google-icons/timer.svg" /></span></span>
                             </div>
-                            <!-- <span class="final-question">{{ questionMaxCount }}</span> -->
                         </div>
                     </div>
-                    <div class="next text-end">
-                        @if(question.isNext) {
-                        <button mat-button class="next-ques-button w-100" (click)="nextQuestion(i)"> Next
-                            <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-4" />
-                        </button>
-                        }
+                    <div class="next text-end"> 
+                        <div class="timer d-flex align-items-center justify-content-end"> 
+                            <p class="m-0 count-timer text-left"> {{ countDownTimer }}</p>
+                        </div>
+
+                        <!--  @if(question.isNext) {
+                            <button mat-button class="next-ques-button w-100" (click)="nextQuestion(i)"> Next
+                                <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-4" />
+                            </button>
+                            } -->
                     </div>
                 </div>
             </div>
@@ -146,21 +151,21 @@
 
         </div>
         <div class="col-md-1">
-            <div class="d-flex align-items-center justify-content-center direction-column dire h-100"> 
+            <div class="d-flex align-items-center justify-content-center direction-column dire h-100">
                 @if(currentQuestionIndex > 1) {
-                    <button class="prev-bttn" (click)="prevQuesButton()">
-                        <img src="assets/images/google-icons/east.svg" />
-                    </button>
+                <button class="prev-bttn" (click)="prevQuesButton()">
+                    <img src="assets/images/google-icons/east.svg" />
+                </button>
                 }
                 @if(questionMaxCount > currentQuestionIndex) {
-                    <button class="nxt-bttn" (click)="nextQuesButton()">
-                        <img src="assets/images/google-icons/east.svg" />
-                    </button>
+                <button class="nxt-bttn" (click)="nextQuesButton()">
+                    <img src="assets/images/google-icons/east.svg" />
+                </button>
                 }
                 @if(questionMaxCount === currentQuestionIndex) {
-                    <button class="nxt-bttn">
-                        Complete Exam
-                    </button>
+                <button class="nxt-bttn" (click)="completeAlert()">
+                    Complete Exam
+                </button>
                 }
 
             </div>
@@ -185,4 +190,16 @@
             </div>
         </div>
     </div>
+    } @else {
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-md-3 col-md-offset-3 col-sm-12 col-12 p-5 timeout-wrapper">
+                <div class="row align-items-center justify-content-center timeout-Warn mb-4">
+                    <h4 class="mx-4"> Your time is over </h4>
+                </div>
+                <p></p>
+            </div>
+        </div>
+    </div>
+    }
 </div>

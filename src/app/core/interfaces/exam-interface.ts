@@ -102,6 +102,76 @@ export interface BlobResponse {
 
 
 export interface IExamChildInput {
-    questions: IFinalQUestionResponse,
+    questions: IFinalQUestionResponse;
     examConfig: IConfiguration
 }
+
+
+export interface ISummaryDialogResponse {
+    toQuestion: boolean
+    dialogClose: boolean
+    isComplete: boolean
+    question?: IQuestion
+}
+ 
+
+export interface IExamCompleteEmitResponse { 
+    question: IFinalQUestionResponse
+}
+
+export interface IOptionSave {
+    currentOptions: IAnswer[]
+    selectedOption: IAnswer
+    question: IQuestion
+}
+
+
+export interface IOptionSaveParam {
+    LineId: number,
+    DeviceId: number,
+    UserType: number,
+    ExamType: number,
+    QuestionId: number,
+    GradeId: number,
+    InspectMark: number,
+    Remarks: string
+}
+ 
+export interface IExamSave {
+    LineId: number
+    ExamType: number
+    StartTime: string
+    EndTime: string
+    Remarks: string
+    ActualTime: number
+    Weightage: number
+    MinPassMark: number
+    Questiones: ISaveQuestion[]
+    Categories: ISaveCategory[]
+    Images: ISaveImage[]
+  }
+  
+  export interface ISaveQuestion {
+    QUESTION_ID: number
+    INSPECT_MARK: number
+    REMARKS: string
+    WEIGHTAGE: number
+    GRADE_ID: number
+    QUESTION_CAT_ID: number
+  }
+  
+  export interface ISaveCategory {
+    CATEGORY_ID: number
+    WEIGHTAGE: number
+    INSPECT_MARK: number
+    MIN_FOR_PASS: number
+    IS_PASS: number
+    INSPECT_MARK_DEVIATION: number
+    IS_PREV_TEST: number
+  }
+  
+  export interface ISaveImage {
+    QUESTION_ID: number
+    DOC_NAME: string
+  }
+  

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, effect } from '@angular/core';
+import { Component, EventEmitter, Input, Output, effect } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { IAnswer, IExamChildInput, IFinalQUestionResponse, IQuestion, MapPoints } from '../../core/interfaces/exam-interface';
+import { IAnswer, IExamChildInput, IExamCompleteEmitResponse, IFinalQUestionResponse, IOptionSave, IQuestion, ISummaryDialogResponse, MapPoints } from '../../core/interfaces/exam-interface';
 import { FormsModule } from '@angular/forms';
 import { EsriMapComponent } from '../esri-map/esri-map.component';
 import { SignalService } from '../../core/services/signal/signal.service';
@@ -25,12 +25,15 @@ export class ExamComponent {
 
     questions!: IFinalQUestionResponse;
     questionMaxCount: number = 0;
-    countDownTimer!: string;
+    countDownTimer: string = '00:00';
     examDefaultTimer!: number;
     timeOutSubmit!: boolean;
     completeQuesPercentage: number = 0;
     currentQuestionIndex: number = 1;
     resetTimer: any;
+    @Output() onClickExamComplete = new EventEmitter<IExamCompleteEmitResponse>();
+    @Output() onClickOptionSave = new EventEmitter<IOptionSave>();
+
 
     constructor(
         private signal: SignalService,
@@ -39,7 +42,7 @@ export class ExamComponent {
         effect(() => {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
             const userTransReadLine: TransLine = this.signal.getUserTypeTransLine;
-            if (userTransReadLine?.EXTRA_TIME) { 
+            if (userTransReadLine?.EXTRA_TIME) {
                 this.examDefaultTimer += Number(userTransReadLine.EXTRA_TIME);
                 this.updateTimer();
             }
@@ -63,12 +66,10 @@ export class ExamComponent {
                 }
             });
             this.questionMaxCount = value.questions.length;
-            this.examDefaultTimer = value.examConfig?.ASSESSMENT_DURATION_TIMER || 1;
+            this.examDefaultTimer =  value.examConfig?.ASSESSMENT_DURATION_TIMER || 5;
             this.timer(this.examDefaultTimer);
         }
-    }
-
-
+    } 
 
     set updatePointsFromSignal(value: any) {
         if (value) {
@@ -97,12 +98,12 @@ export class ExamComponent {
     }
 
     prevQuesButton() {
-        if (this.currentQuestionIndex > 1) { 
+        if (this.currentQuestionIndex > 1) {
             this.previousQuestion(this.currentQuestionIndex);
         }
     }
 
-    nextQuesButton() { 
+    nextQuesButton() {
         this.nextQuestion(this.currentQuestionIndex);
     }
 
@@ -129,7 +130,7 @@ export class ExamComponent {
         }
     }
 
-    changeSelectOption(currentOptions: any, selectedOption: any, question: IQuestion): void {
+    changeSelectOption(currentOptions: IAnswer[], selectedOption: any, question: IQuestion): void {
         currentOptions.map((x: any) => { x.selected = x.isAnswered = false; });
         selectedOption.selected = true;
         question.isAnswered = true;
@@ -142,17 +143,27 @@ export class ExamComponent {
             this.signal.selectedMapPoint = {
                 ...this.signal.selectedMapPoint ?? {},
                 [selectedOption.QUESTION_ID]: {
-                    item: selectedOption.points, isFromMap: true
+                    item: selectedOption.points,
+                    isFromMap: true
                 }
             };
         }
+        this.saveSelectedOptoin(currentOptions, selectedOption, question);
     }
 
+    saveSelectedOptoin(currentOptions: IAnswer[], selectedOption: any, question: IQuestion): void {
+        this.onClickOptionSave.emit({
+            currentOptions,
+            selectedOption,
+            question
+        })
+    }
+ 
     switchToEditAnswer(editQuestion: any): void {
         this.questions.map((list, index) => {
             /* list.isShow = (list?.QUESTION_ID === editQuestion?.QUESTION_ID) ? true : false; */
-            if(list?.QUESTION_ID === editQuestion?.QUESTION_ID) {
-                this.currentQuestionIndex = index + 1; 
+            if (list?.QUESTION_ID === editQuestion?.QUESTION_ID) {
+                this.currentQuestionIndex = index + 1;
                 list.isShow = true;
             } else {
                 list.isShow = false;
@@ -170,8 +181,7 @@ export class ExamComponent {
     }
 
     timer(minutes: number): void {
-        console.log(minutes)
-        if(this.resetTimer){
+        if (this.resetTimer) {
             clearInterval(this.resetTimer);
         }
         let seconds: number = (minutes * 60);
@@ -195,14 +205,27 @@ export class ExamComponent {
             if (seconds === 0) {
                 this.timeOutSubmit = true;
                 setTimeout(() => {
-                    console.log(this.countDownTimer, 'countDownTimer emit')
+                    this.completeExam()
                 }, 5000);
                 clearInterval(this.resetTimer);
             }
         }, 1000);
     }
 
-
+    /* remainingTimePercentage(): string {
+        const totalSeconds = this.examDefaultTimer * 60;
+        const remainingSeconds = (parseInt(this.countDownTimer.split(':')[0]) * 60) + parseInt(this.countDownTimer.split(':')[1]);
+        const percentage = (remainingSeconds / totalSeconds) * 100;
+        return percentage.toFixed(2) + '%';
+    } */
+    elapsedTimePercentage(): string {
+        const totalSeconds = this.examDefaultTimer * 60;
+        const elapsedSeconds = (totalSeconds) - ((parseInt(this.countDownTimer.split(':')[0]) * 60) + parseInt(this.countDownTimer.split(':')[1]));
+        const percentage = (elapsedSeconds / totalSeconds) * 100;
+        return percentage.toFixed(2) + '%';
+    }
+    
+ 
 
     questionProgress(i: number): any {
         return Math.round(((100 * (i + 1)) / this.questionMaxCount))
@@ -223,17 +246,31 @@ export class ExamComponent {
             disableClose: false
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe((result: ISummaryDialogResponse) => {
             if (result.toQuestion) {
                 this.switchToEditAnswer(result.question);
-            } else {
-
+            } else if (result.isComplete) {
+                this.completeAlert()
             }
         });
     }
 
-    completeExam(): void {
+    completeAlert() {
+        alert('Are you sure you want to complete your exam')
+        this.completeExam();
+    }
 
+    completeExam(): void {
+        if (this.resetTimer) {
+            clearInterval(this.resetTimer);
+            /* this.examDefaultTimer = 0;
+            this.countDownTimer = '00:00';
+            this.completeQuesPercentage = 0;
+            this.currentQuestionIndex = 1; */
+        }
+        this.onClickExamComplete.emit({
+            question: this.questions
+        })
     }
 
 }

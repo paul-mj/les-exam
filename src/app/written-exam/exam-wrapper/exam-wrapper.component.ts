@@ -58,7 +58,7 @@ import {
 } from "rxjs";
 import { ApiService } from "../../core/services/api/api.service";
 import { API } from "../../core/application/api.config";
-import { BlobResponse, IAnswer, ICategory, IExamResponse, IFinalQUestionResponse, IQuestion } from "../../core/interfaces/exam-interface";
+import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IFinalQUestionResponse, IOptionSave, IOptionSaveParam, IQuestion, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
 import { DeviceExamStatus, deviceStatusEnum, examTypeEnum, userTypeEnum } from "../../core/database/app.enums";
 import { SignalService } from "../../core/services/signal/signal.service";
 
@@ -119,6 +119,7 @@ export class ExamWrapperComponent {
     iStatus!: number;
     extraTime!: number;
     examQuestions!: IFinalQUestionResponse;
+    examQuestionApiResponse!: IExamResponse;
 
     pingSubscription!: Subscription;
     deviceUpdateSubscription!: Subscription;
@@ -471,9 +472,9 @@ export class ExamWrapperComponent {
             } else {
                 this.readUserTypeTransLine(deviceLineData).subscribe((userTypeTransResponse: ITranslineResponse) => {
                     /* This if only for testing need to remove after fixing extra time update */
-                    /* if(deviceLineResponse.LINE_STATUS === deviceStatusEnum.Extend) {
-                        userTypeTransResponse.Data.EXTRA_TIME = 5
-                    } */
+                    if (deviceLineResponse.LINE_STATUS === deviceStatusEnum.Extend) {
+                        userTypeTransResponse.Data.EXTRA_TIME = 1;
+                    }
                     this.signal.userTypeTransLineData(userTypeTransResponse.Data);
                     this.userTransData = userTypeTransResponse.Data;
 
@@ -607,6 +608,7 @@ export class ExamWrapperComponent {
                 this.api.httpPost<IQuesSettingsPayload>({ url: 'Assessment/readData', data: payload }).pipe(
                     switchMap((response: IExamResponse) => {
                         if (response.Valid && response.Categories && response.Questions) {
+                            this.examQuestionApiResponse = response;
                             const fileArray: any[] = [];
                             const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
                                 return {
@@ -739,18 +741,6 @@ export class ExamWrapperComponent {
         } */
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     loadQuestions__Test() {
         const payload: IQuesSettingsPayload = {
             Id: 24220,
@@ -761,6 +751,7 @@ export class ExamWrapperComponent {
         this.api.httpPost<IQuesSettingsPayload>({ url: 'Assessment/readData', data: payload }).pipe(
             switchMap((response: IExamResponse) => {
                 if (response.Valid && response.Categories && response.Questions) {
+                    this.examQuestionApiResponse = response;
                     const fileArray: any[] = [];
                     const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
                         return {
@@ -848,9 +839,95 @@ export class ExamWrapperComponent {
         });
     }
 
+    individualAnswerSave($event: IOptionSave) {
+        const data: IOptionSaveParam = {
+            LineId: this.userTransData?.LINE_ID,
+            DeviceId: this.assessmentStatusInfo.DeviceId,
+            UserType: this.assessmentStatusInfo.UserType,
+            ExamType: 31002,
+            QuestionId: $event.question.ID,
+            GradeId: $event.selectedOption.ID,
+            InspectMark: $event.selectedOption.WEIGHTAGE,
+            Remarks: ''
+        }
+        this.api.httpPost<IOptionSaveParam>({ url: `assessment/writeAuditData`, data }).subscribe();
+    }
+
+    onExamComplete($event: IExamCompleteEmitResponse): void {
+        const data: IExamSave = {
+            LineId: 0,
+            ExamType: 0,
+            StartTime: "2024-02-22T05:55:49.649Z",
+            EndTime: "2024-02-22T05:55:49.649Z",
+            Remarks: "string",
+            ActualTime: 0,
+            Weightage: 0,
+            MinPassMark: 0,
+            Questiones: this.formatQuestions($event.question),
+            Categories: this.formatCategories(),
+            Images: this.formatImages($event.question),
+        }
+
+        console.log(data, 'save payload ')
+
+    }
+
+    formatQuestions(question: IQuestion[]): ISaveQuestion[] {
+        return question.map((ques: IQuestion) => ({
+            QUESTION_ID: ques.QUESTION_ID,
+            QUESTION_CAT_ID: ques.QUESTION_CAT_ID,
+            INSPECT_MARK: ques.INSPECT_MARK,
+            REMARKS: ques.REMARKS,
+            WEIGHTAGE: this._selectedAnswerWeightage(ques.Answers) ? this._selectedAnswerWeightage(ques.Answers) : 0,
+            GRADE_ID: this._selectedAnswerId(ques.Answers) ? this._selectedAnswerId(ques.Answers) : -1
+        }));
+    }
+
+    formatCategories(): ISaveCategory[] {
+        return this.examQuestionApiResponse.Categories.map((category: ICategory) => ({
+            CATEGORY_ID: category.CATEGORY_ID,
+            WEIGHTAGE: category.WEIGHTAGE,
+            INSPECT_MARK: category.INSPECT_MARK,
+            MIN_FOR_PASS: category.MIN_PASS_MARK,
+            IS_PASS: category.IS_PASS,
+            IS_PREV_TEST: category.IS_PREV_TEST,
+            INSPECT_MARK_DEVIATION: category.INSPECT_MARK_DEVIATION
+        }));
+    }
 
 
+    formatImages(question: IQuestion[]): ISaveImage[] {
+        let imageArray: ISaveImage[] = [];
+        question.map((ques: IQuestion) => {
+            if (ques.HAS_IMAGE === 1) {
+                imageArray.push({
+                    QUESTION_ID: ques.QUESTION_ID,
+                    DOC_NAME: ques.FILE_EXTENSION
+                });
+            }
+        })
+        return imageArray;
+    }
 
+    _selectedAnswerId(answers: IAnswer[]): number {
+        let GradeId: any;
+        answers.map((answer: IAnswer) => {
+            if (answer.selected) {
+                GradeId = answer.ID;
+            }
+        });
+        return GradeId;
+    }
+
+    _selectedAnswerWeightage(answers: IAnswer[]): number {
+        let weightage: any;
+        answers.map((answer: IAnswer) => {
+            if (answer.selected) {
+                weightage = answer.WEIGHTAGE;
+            }
+        });
+        return weightage;
+    }
 
     ngOnDestroy(): void {
         this.pingSubscription?.unsubscribe();
