@@ -1,12 +1,12 @@
 <div class="section-wrapper">
-    <div class="heading-section">
+    <!-- <div class="heading-section">
         <div class="pop-up-heading">Review</div>
         <div>
             <button mat-button (click)="accordion.openAll()" class="btn-class mr-4">Expand All</button>
             <button mat-button (click)="accordion.closeAll()" class="btn-class">Collapse All</button>
         </div>
-    </div>
-    <mat-dialog-content class="mat-typography">
+    </div> -->
+    <!-- <mat-dialog-content class="mat-typography">
 
         <mat-accordion class="example-headers-align" multi>
             @for(item of groupedData; let i = $index; track i) {
@@ -37,8 +37,62 @@
             } @empty { }
 
         </mat-accordion>
-    </mat-dialog-content>
+    </mat-dialog-content> -->
+
+    <div class="review-section">
+        <div class="first-section">
+            <div class="user-section">
+                <div class="d-flex align-items-center">
+                    <div class="user-img-wrap">
+                        <img src="assets/images/user-pic.jpg" class="img-fluid" />
+                    </div>
+                </div>
+                <div class="name-section">
+                    <div class="col-md-12 mb-2">
+                        <h5 class="label font-sec">Hasanul Banna</h5>
+                        <h5 class="label font-sec font-ar">أشسشىعم لآشىىش</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="title-sec">
+                Categories And Questions
+            </div>
+        </div>
+        <div class="second-section">
+            <div class="custom-accordian">
+                <div class="top-header">
+                    <div class="heading">
+                        Locations
+                    </div>
+                    <div class="count-dropdown">
+                        <div class="count-section">
+                            4/10
+                        </div>
+                        <div class="dropdown" (click)="clicktoggle()">
+                            <img src="assets/images/google-icons/expand.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                @if (accordian) {
+                <div class="each-item-wrapper">
+                    <div class="quest-det">
+                        <div class="each-question">
+                            Question-name
+                        </div>
+                        <div class="visible-eye">
+                            <img src="assets/images/google-icons/eye-filled.svg" alt="">
+                        </div>
+                    </div>
+
+                </div> }
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
 <mat-dialog-actions align="end">
     <div class="footer-wrapper">
         <button mat-button (click)="dialogClose()">Cancel</button>

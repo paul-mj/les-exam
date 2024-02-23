@@ -13,8 +13,9 @@
 
 .section-wrapper {
   // padding-top: 2rem;
-  width: 75rem;
-  min-height: 45rem;
+  width: 100rem;
+  // min-height: 45rem;
+
 
   .heading-section {
     display: flex;
@@ -57,5 +58,116 @@
 }
 
 .footer-wrapper {
-padding: 15px;
+  padding: 15px;
+}
+
+.review-section {
+  display: flex;
+  min-height: 70rem;
+  height: 70rem;
+
+  .first-section {
+    width: 40%;
+    height: 100%;
+    padding: 2rem;
+  }
+
+  .second-section {
+    background-color: #f1f6ff;
+    width: 60%;
+    height: 100%;
+    padding: 2rem;
+  }
+}
+
+.user-img-wrap {
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  box-sizing: content-box;
+
+  img {
+    color: transparent;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    text-align: center;
+    text-indent: 10000px;
+    border-radius: 10px;
+
+  }
+
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.font-sec {
+  font-size: 1.5rem;
+}
+
+.title-sec {
+  font-size: 2.5rem;
+  margin-top: 10rem;
+  line-height: 1.23;
+  font-weight: 600;
+  text-align: center;
+}
+
+.second-section {
+  .custom-accordian {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .each-item-wrapper {
+      padding: 2rem 3rem;
+
+
+      .each-question {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .quest-det {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #ccbfbf;
+        border-radius: 5px;
+        border-left: 10px solid forestgreen !important;
+        height: 4rem;
+        padding: 15px;
+      }
+    }
+
+    .heading {
+      font-size: 1.5em;
+    }
+  }
+
+  .count-dropdown {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+
+    .count-section {
+      background-color: #f1f6ff;
+      width: 5rem;
+      font-size: 1rem;
+      text-align: center;
+      padding: 15px;
+      font-weight: 600;
+      border-radius: 5px;
+    }
+  }
 }

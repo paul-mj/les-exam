@@ -29,6 +29,7 @@ export class SummaryComponent {
 
     @ViewChild(MatAccordion) accordion!: MatAccordion;
     groupedData: any[] = [];
+    accordian: boolean = true;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -62,6 +63,11 @@ export class SummaryComponent {
 
     submitExam() {
         this.dialogRef.close({ toQuestion: false, isComplete: true, dialogClose: true, })
+    }
+
+    clicktoggle() {
+        this.accordian = !this.accordian
+        console.log(this.accordian)
     }
 
 }
