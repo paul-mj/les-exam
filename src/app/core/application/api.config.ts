@@ -4,9 +4,9 @@ export const API = Object.freeze({
         getDeviceInfo: 'scanner/getDeviceInfo',
     },
     scanner: {
-        discoverScanners: 'discoverScanners',
-        captureFinger: 'captureFinger', 
-        verifyImpression: 'verifyImpression'
+        discoverScanners: 'scanner/discoverScanners',
+        captureFinger: 'scanner/captureFinger', 
+        verifyImpression: 'scanner/verifyImpression'
     },
     Assessment: {
         getObjects: 'Assessment/getObjects',
