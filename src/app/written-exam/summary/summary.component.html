@@ -60,14 +60,15 @@
             </div>
         </div>
         <div class="second-section">
+            @for(item of groupedData; let i = $index; track i) {
             <div class="custom-accordian">
                 <div class="top-header">
                     <div class="heading">
-                        Locations
+                        {{ item[0].category.OBJECT_NAME }}
                     </div>
                     <div class="count-dropdown">
                         <div class="count-section">
-                            4/10
+                            4/{{ item?.length }}
                         </div>
                         <div class="dropdown" (click)="clicktoggle()">
                             <img src="assets/images/google-icons/expand.svg" alt="">
@@ -76,17 +77,19 @@
                 </div>
                 @if (accordian) {
                 <div class="each-item-wrapper">
+                    @for(question of item; let j = $index; track j) {
                     <div class="quest-det">
                         <div class="each-question">
-                            Question-name
+                            {{question.QUESTION_NAME}}
                         </div>
                         <div class="visible-eye">
                             <img src="assets/images/google-icons/eye-filled.svg" alt="">
                         </div>
                     </div>
-
+                    }
                 </div> }
             </div>
+            } @empty { }
         </div>
     </div>
 </div>

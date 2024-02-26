@@ -114,7 +114,6 @@
     justify-content: center;
     border-radius: 8px;
     width: 12rem;
-    margin-left: 15px;
 
     .permit-top {
         padding: 10px;
@@ -142,11 +141,8 @@
 
     border: 1px solid #cbcbcb;
     border-radius: 5px;
-    padding: 15px ;
+    padding: 15px;
     background-color: white;
-    display: flex;
-    justify-content: center;
-    // width: 30%;
 
     .sec-wrapper {
         // display: flex;
@@ -183,6 +179,14 @@
         }
     }
 
+}
+
+.heading-section {
+    color: blue;
+    border: 1px solid black;
+    padding: 16px;
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
 }
 
 .user-img-wrap {
@@ -223,5 +227,58 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 29%;
+    width: 39%;
+}
+
+.set-size {
+    font-size: 1.25em;
+    line-height: 1.35;
+}
+
+.license-info {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #222022;
+    justify-content: center;
+    border-radius: 8px;
+
+    .permit-top {
+        padding: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    .permit-bottom {
+        padding: 8px;
+        background-color: #bbc0c4;
+        border-top: 2px solid #222022;
+        text-align: center;
+        border-radius: 8px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+
+        .set-border {
+            border-bottom: 1px solid black;
+            margin-bottom: 20px;
+            margin-top: 17px;
+        }
+
+        .permit-no {
+            font-weight: 700;
+            font-size: 1.25rem;
+            padding-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
+
+.det-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .icon {
+        margin-left: 2rem
+    }
 }
