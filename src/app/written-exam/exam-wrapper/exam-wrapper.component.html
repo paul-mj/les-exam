@@ -1,7 +1,7 @@
 <div class="exam-wrapper">
 <!--     {{ screenControl | json }}
  -->   
-    <!-- @if (screenControl.center) {
+    @if (screenControl.center) {
     <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo}"
         (onClickNextToVerify)="registerDevice($event)" />
     }
@@ -20,7 +20,7 @@
     } 
     @else {
 
-    } -->
+    }
 
     
         
@@ -32,5 +32,5 @@
     -->
     <!-- <app-exam /> -->
 
-    <app-result />  
+    <!-- <app-result />   -->
 </div>

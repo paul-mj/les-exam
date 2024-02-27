@@ -59,6 +59,8 @@
 
 .footer-wrapper {
   padding: 15px;
+  display: flex;
+  gap: 2rem;
 }
 
 .review-section {
@@ -115,7 +117,7 @@
 
 .title-sec {
   font-size: 2.5rem;
-  margin-top: 10rem;
+  margin-top: 24rem;
   line-height: 1.23;
   font-weight: 600;
   text-align: center;
@@ -129,8 +131,10 @@
 
     .top-header {
       display: flex;
+      font-size: 1.25rem;
       align-items: center;
       justify-content: space-between;
+      font-weight: 600;
     }
 
     .each-item-wrapper {
@@ -142,6 +146,7 @@
       .each-question {
         font-size: 1.25rem;
         font-weight: 600;
+        line-height: 1.35;
       }
 
       .quest-det {
@@ -150,7 +155,7 @@
         align-items: center;
         border: 1px solid #ccbfbf;
         border-radius: 5px;
-        border-left: 10px solid forestgreen !important;
+
         height: 4rem;
         padding: 15px;
       }
@@ -176,4 +181,74 @@
       border-radius: 5px;
     }
   }
+}
+
+.cancel-btn {
+
+  font-size: 1.5rem;
+    padding: 2rem;
+    border: 1px solid black;
+    border-radius: 8px;
+}
+
+.icon-section {
+  width: 100%;
+  display: flex;
+  gap: 3rem;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.lang-sec {
+  .language {
+    font-size: 1.65rem;
+    margin-left: 4px;
+    margin-top: 15px;
+    font-weight: 600;
+  }
+}
+
+// .toggleQues {
+//   direction: rtl;
+//   border-right: 10px solid red !important;
+//   border-left: 1px solid #ccbfbf !important;
+// }
+
+// .toggleborder {
+//   border-left: 10px solid red !important;
+
+// }
+
+// .answerd {
+
+// }
+
+.toggleQues {
+  direction: rtl;
+  border-left: 1px solid #ccbfbf !important;
+}
+
+.toggleborder {
+  border-left: 10px solid;
+}
+
+.quest-det.toggleQues {
+  border-right: 10px solid red !important;
+}
+
+.quest-det.toggleborder {
+  border-left: 10px solid red !important;
+}
+
+.quest-det.answerd.toggleQues {
+  border-right: 10px solid forestgreen !important;
+}
+
+.quest-det.answerd.toggleborder {
+  border-left: 10px solid forestgreen !important;
+}
+
+.submit-sec {
+  background-color: #1c3449;
+    color: white !important;
 }
