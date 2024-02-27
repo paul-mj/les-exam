@@ -61,7 +61,7 @@
             .table-section {
                 border: 1px solid #cbcbcb;
                 border-radius: 5px;
-                padding: 15px;
+                padding: 25px;
                 background-color: white;
             }
 
@@ -141,7 +141,7 @@
 
     border: 1px solid #cbcbcb;
     border-radius: 5px;
-    padding: 15px;
+    padding: 25px;
     background-color: white;
 
     .sec-wrapper {
@@ -182,10 +182,11 @@
 }
 
 .heading-section {
-    color: blue;
+    color: #585893;
     border: 1px solid black;
     padding: 16px;
     font-size: 1.25rem;
+    font-weight: 600;
     margin-bottom: 1.25rem;
 }
 
@@ -219,7 +220,7 @@
 }
 
 .labels {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 600;
 }
 
@@ -281,4 +282,35 @@
     .icon {
         margin-left: 2rem
     }
+}
+
+.success-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25em;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5rem;
+}
+
+.success-img {
+    width: 16rem;
+    height: 17rem;
+
+}
+
+.text-sucess {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: forestgreen;
+}
+
+.failed-img {
+    width: 11rem;
+    height: 11rem;
+}
+
+.date-section {
+    font-size: 1.75em;
+    font-weight: 600;
 }
