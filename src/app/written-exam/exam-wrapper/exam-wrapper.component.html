@@ -1,6 +1,19 @@
 <div class="exam-wrapper">
-<!--     {{ screenControl | json }}
- -->   
+    <!--     {{ screenControl | json }}
+ -->
+
+
+    @if (!screenControl.exam && !examQuestions){
+    <nav class="navbar fixed-top exam-nav container-fluid p-container">
+        <div class="d-flex w-100 ">
+            <div class="col-md-2">
+                <img src="assets/images/itc_logo.png" class="img-fluid logo" alt="Itc Logo" />
+            </div>
+        </div>
+    </nav>
+    }
+
+
     @if (screenControl.center) {
     <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo}"
         (onClickNextToVerify)="registerDevice($event)" />
@@ -16,14 +29,15 @@
     <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
     }
     @else if (screenControl.exam && examQuestions) {
-    <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration}" (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)"/>
-    } 
+    <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration}"
+        (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" />
+    }
     @else {
 
     }
 
-    
-        
+
+
     <!--    
          
         <app-exam />

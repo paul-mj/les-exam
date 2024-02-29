@@ -1,4 +1,4 @@
-<div class="container-fluid p-container exam-wrapp mt-4">
+<!-- <div class="container-fluid p-container exam-wrapp mt-4">
     @if(!timeOutSubmit) {
     <div class="row">
         <div class="col-md-9">
@@ -20,8 +20,7 @@
                     <div class="col-md-6">
                         <div class="d-flex align-items-center justify-content-end">
                             <div class="timer mx-5 mt-1">
-                                <!-- <img src="assets/images/google-icons/timer.svg" />
-                                    {{ countDownTimer }} -->
+
                             </div>
                             <div>
                                 <button mat-mini-fab class="viewquestion" (click)="onClickToReviewExam()">
@@ -117,17 +116,9 @@
             </div>
             <div class="exam-footer">
                 <div class="row g-0 align-items-center justify-content-between h-100 px-3">
-                    <!-- <div class="prev">
-                            @if(question.isPrevious) {
-                            <button mat-button class="prev-ques-button w-100"
-                                (click)="previousQuestion(i)">Previous</button>
-                            }
-                        </div> -->
+
                     <div class="progg mx-4">
                         <div class="progress-bar">
-                            <!--                                 <div class="progress-done" [ngStyle]="{'width': questionProgress(i) + '%'}"> 
-                                    <span class="completed-ques"><span>{{ completeQuesPercentage + '%' }}</span></span>
-                                </div>  -->
                             <div class="progress-done" [style.width]="elapsedTimePercentage()">
                                 <span class="completed-ques"><span><img src="assets/images/google-icons/timer.svg" /></span></span>
                             </div>
@@ -138,11 +129,6 @@
                             <p class="m-0 count-timer text-left"> {{ countDownTimer }}</p>
                         </div>
 
-                        <!--  @if(question.isNext) {
-                            <button mat-button class="next-ques-button w-100" (click)="nextQuestion(i)"> Next
-                                <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-4" />
-                            </button>
-                            } -->
                     </div>
                 </div>
             </div>
@@ -202,4 +188,353 @@
         </div>
     </div>
     }
+</div> -->
+
+
+<div class="exam-sec-wrapper">
+    <div class="exam-user-deatils">
+        <div class="top-section">
+            <div class="d-flex mt-2 justify-content-start align-items-center set-gap">
+                <div class="user-section">
+                    <div class="d-flex align-items-center">
+                        <div class="user-img-wrap">
+                            <img src="assets/images/user-pic.jpg" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+                <div class="name-section">
+                    <div class="col-md-12 mb-2">
+                        <h5 class="label font-sec">Hasanul Banna</h5>
+                        <h5 class="label font-sec font-ar">أشسشىعم لآشىىش</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-percent">80% Complete</div>
+            <div class="progress-section">
+                <div [class.progress-bar]="true"></div>
+            </div>
+        </div>
+        <div class="categories-section">
+            <div class="each-catgory">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="topic">
+                        <div class="arrow">
+                            <img src="/assets/images/google-icons/arrow-right.svg" alt="">
+                        </div>
+                        <div class="heaing-section">
+                            MDT
+                        </div>
+                    </div>
+                    <div class="answered-section">
+                        <div class="count">
+                            6/6
+                        </div>
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-catgory">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="topic">
+                        <div class="arrow">
+                            <img src="/assets/images/google-icons/arrow-right.svg" alt="">
+                        </div>
+                        <div class="heaing-section">
+                            MDT
+                        </div>
+                    </div>
+                    <div class="answered-section">
+                        <div class="count">
+                            6/6
+                        </div>
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-catgory">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="topic">
+                        <div class="arrow">
+                            <img src="/assets/images/google-icons/arrow-right.svg" alt="">
+                        </div>
+                        <div class="heaing-section">
+                            MDT
+                        </div>
+                    </div>
+                    <div class="answered-section">
+                        <div class="count">
+                            6/6
+                        </div>
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-catgory">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="topic">
+                        <div class="arrow">
+                            <img src="/assets/images/google-icons/arrow-right.svg" alt="">
+                        </div>
+                        <div class="heaing-section">
+                            MDT
+                        </div>
+                    </div>
+                    <div class="answered-section">
+                        <div class="count">
+                            6/6
+                        </div>
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="number-section">
+            <div class="number-wrap">
+                <div class="card">
+                    <div class="number">
+                        1
+                    </div>
+                </div>
+                <div class="card" [class.selected]="true">
+                    <div class="number">
+                        2
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        3
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        4
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        5
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        6
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        7
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        8
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        9
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        10
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        11
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        12
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        13
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        14
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        15
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        16
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        17
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        18
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        19
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        20
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        21
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        22
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        23
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        24
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        25
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        26
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        27
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        28
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        29
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="number">
+                        30
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="exam-details">
+        <div class="timer-section">
+            <img src="assets/images/itc_logo.png" class="img-fluid logo" alt="Itc Logo" />
+            <div class="next text-end">
+                <div class="timer d-flex align-items-center justify-content-end">
+                    <p class="m-0 count-timer text-left"> {{ countDownTimer }}</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="question-wrapper">
+            <div class="question-section">
+
+                <div class="question-heading">
+                    <div class="cat-tab">
+                        Location
+                    </div>
+                    <div class="language">
+
+                    </div>
+                    <div class="add-review">
+                        <div class="review-txt">
+                            Add to Review
+                        </div>
+                        <div class="star">
+                            <img src="assets/images/google-icons/star.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="question-section">
+                    <div class="quest-count">
+                        4 of 30
+                    </div>
+                    <div class="question">
+                        How does the Sales Consultanct explain that the rear passangers will nvere be left out when they
+                        are at the back of the pilot?
+                    </div>
+
+                    <div class="options">
+                        <div class="each-option">
+                            <div class="checkbox">
+                                <img src="assets/images/google-icons/square-box-tick.svg" />
+                            </div>
+                            <div class="answer">
+                                Because we have 3rd row passangers and 2nd row passengers
+                            </div>
+                        </div>
+                        <div class="each-option">
+                            <div class="checkbox">
+                                <img src="assets/images/google-icons/square-box-tick.svg" />
+                            </div>
+                            <div class="answer">
+                                Because we have Cabin Watch system and an entertainment unit 
+                            </div>
+                        </div>
+                        <div class="each-option">
+                            <div class="checkbox">
+                                <img src="assets/images/google-icons/square-box-tick.svg" />
+                            </div>
+                            <div class="answer">
+                                Because we have Cabin Talk System and headphones available 
+                            </div>
+                        </div>
+                        <div class="each-option">
+                            <div class="checkbox">
+                                <img src="assets/images/google-icons/square-box-tick.svg" />
+                            </div>
+                            <div class="answer">
+                                Because we have Cabin Talk System and entertainmentunit available for the passengers
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="navigate-review">
+                <div class="review">
+                    <button class="viewquestion" (click)="onClickToReviewExam()">
+                        <img src="assets/images/google-icons/eye.svg" />
+                    </button>
+                </div>
+                <div class="arrow-section">
+                    <div class="arrow-next-wrap">
+                        <img src="assets/images/google-icons/arrow-next.svg" alt="">
+                    </div>
+                    <div class="arrow-prev-wrap">
+                        <img src="assets/images/google-icons/arrow-prev.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
