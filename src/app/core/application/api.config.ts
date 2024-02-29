@@ -4,9 +4,9 @@ export const API = Object.freeze({
         getDeviceInfo: 'scanner/getDeviceInfo',
     },
     scanner: {
-        discoverScanners: 'discoverScanners',
-        captureFinger: 'captureFinger', 
-        verifyImpression: 'verifyImpression'
+        discoverScanners: 'scanner/discoverScanners',
+        captureFinger: 'scanner/captureFinger', 
+        verifyImpression: 'scanner/verifyImpression'
     },
     Assessment: {
         getObjects: 'Assessment/getObjects',
@@ -24,11 +24,11 @@ export const API = Object.freeze({
         readSurvey: 'Assessment/readSurvey',
     },
     assessment: {
-        getEnrolledList: 'getEnrolledList',
-        readImpressions: 'readImpressions',
-        getQuestionImage: 'getQuestionImage',
-        getAnswerImage: 'getAnswerImage',
-        writeAuditData: 'writeAuditData',
+        getEnrolledList: 'assessment/getEnrolledList',
+        readImpressions: 'assessment/readImpressions',
+        getQuestionImage: 'assessment/getQuestionImage',
+        getAnswerImage: 'assessment/getAnswerImage',
+        writeAuditData: 'assessment/writeAuditData',
     }
     
 });

@@ -22,7 +22,9 @@ const componets = [EsriMapComponent]
 })
 
 export class ExamComponent {
-
+    timerunner: any;
+    timerExipiry!: number;
+    updatedTimeDistance!: number;
     questions!: IFinalQUestionResponse;
     questionMaxCount: number = 0;
     countDownTimer: string = '00:00';
@@ -44,14 +46,26 @@ export class ExamComponent {
             const userTransReadLine: TransLine = this.signal.getUserTypeTransLine;
             if (userTransReadLine?.EXTRA_TIME) {
                 this.examDefaultTimer += Number(userTransReadLine.EXTRA_TIME);
-                this.updateTimer();
+                // this.updateTimer();
+                this.updateTimerV2(userTransReadLine.EXTRA_TIME);
             }
         });
     }
 
-    updateTimer(): void {
-        clearInterval(this.resetTimer);
-        this.timer(this.examDefaultTimer);
+    // updateTimer(): void {
+    //     clearInterval(this.resetTimer);
+    //     this.timer(this.examDefaultTimer);
+    // }
+    initTimer(min = 2){        
+        this.timerExipiry = new Date().setMinutes(new Date().getMinutes() + min);
+        this.timerV2();
+    }
+    updateTimerV2(min: number): void {
+        const existingMin = new Date().getMinutes();
+        const t1 = new Date(new Date().setMinutes(existingMin + min)).getTime();
+        this.timerExipiry = new Date().setTime(t1+Number(this.updatedTimeDistance ?? 0));
+        clearInterval(this.timerunner);
+        this.timerV2();
     }
 
 
@@ -66,10 +80,11 @@ export class ExamComponent {
                 }
             });
             this.questionMaxCount = value.questions.length;
-            this.examDefaultTimer =  value.examConfig?.ASSESSMENT_DURATION_TIMER || 5;
-            this.timer(this.examDefaultTimer);
+            this.examDefaultTimer = value.examConfig?.ASSESSMENT_DURATION_TIMER || 5;
+            // this.timer(this.examDefaultTimer);
+            this.initTimer(value.examConfig?.ASSESSMENT_DURATION_TIMER)
         }
-    } 
+    }
 
     set updatePointsFromSignal(value: any) {
         if (value) {
@@ -158,7 +173,7 @@ export class ExamComponent {
             question
         })
     }
- 
+
     switchToEditAnswer(editQuestion: any): void {
         this.questions.map((list, index) => {
             /* list.isShow = (list?.QUESTION_ID === editQuestion?.QUESTION_ID) ? true : false; */
@@ -180,37 +195,37 @@ export class ExamComponent {
 
     }
 
-    timer(minutes: number): void {
-        if (this.resetTimer) {
-            clearInterval(this.resetTimer);
-        }
-        let seconds: number = (minutes * 60);
-        let textSec: any = '0';
-        let statSec = 60;
-        const prefix = minutes < 10 ? '0' : '';
+    // timer(minutes: number): void {
+    //     if (this.resetTimer) {
+    //         clearInterval(this.resetTimer);
+    //     }
+    //     let seconds: number = (minutes * 60);
+    //     let textSec: any = '0';
+    //     let statSec = 60;
+    //     const prefix = minutes < 10 ? '0' : '';
 
-        this.resetTimer = setInterval(() => {
-            seconds--;
-            if (statSec !== 0) {
-                statSec--;
-            } else {
-                statSec = 59;
-            }
-            if (statSec < 10) {
-                textSec = '0' + statSec;
-            } else {
-                textSec = statSec;
-            }
-            this.countDownTimer = `${prefix}${Math.floor(seconds / 60)}:${textSec}`;
-            if (seconds === 0) {
-                this.timeOutSubmit = true;
-                setTimeout(() => {
-                    this.completeExam()
-                }, 5000);
-                clearInterval(this.resetTimer);
-            }
-        }, 1000);
-    }
+    //     this.resetTimer = setInterval(() => {
+    //         seconds--;
+    //         if (statSec !== 0) {
+    //             statSec--;
+    //         } else {
+    //             statSec = 59;
+    //         }
+    //         if (statSec < 10) {
+    //             textSec = '0' + statSec;
+    //         } else {
+    //             textSec = statSec;
+    //         }
+    //         this.countDownTimer = `${prefix}${Math.floor(seconds / 60)}:${textSec}`;
+    //         if (seconds === 0) {
+    //             this.timeOutSubmit = true;
+    //             setTimeout(() => {
+    //                 this.completeExam()
+    //             }, 5000);
+    //             clearInterval(this.resetTimer);
+    //         }
+    //     }, 1000);
+    // }
 
     /* remainingTimePercentage(): string {
         const totalSeconds = this.examDefaultTimer * 60;
@@ -224,8 +239,8 @@ export class ExamComponent {
         const percentage = (elapsedSeconds / totalSeconds) * 100;
         return percentage.toFixed(2) + '%';
     }
-    
- 
+
+
 
     questionProgress(i: number): any {
         return Math.round(((100 * (i + 1)) / this.questionMaxCount))
@@ -272,6 +287,43 @@ export class ExamComponent {
             question: this.questions
         })
     }
+    // -----------------Timer-------------
+    get distance() {
+        const days = Math.floor(this.updatedTimeDistance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((this.updatedTimeDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((this.updatedTimeDistance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((this.updatedTimeDistance % (1000 * 60)) / 1000);
+        return {
+            days, hours, minutes, seconds
+        }
+    }
+    timerV2() {
+        if (!this.timerExipiry) {
+            return;
+        }
 
+        const padWithLeadingZeros = (num: number, totalLength: number) => {
+            return String(num).padStart(totalLength, '0');
+        }
+        if (this.timerunner) {
+            clearInterval(this.timerunner);
+        }
+        this.timerunner = setInterval(() => {
+            const now = new Date().getTime();
+            this.updatedTimeDistance = this.timerExipiry - now;
+
+
+            const hrs = this.distance.hours ? `${padWithLeadingZeros(this.distance.hours, 2)}:` : '';
+            this.countDownTimer = `${hrs}${padWithLeadingZeros(this.distance.minutes, 2)}:${padWithLeadingZeros(this.distance.seconds, 2)}`;
+            if (this.updatedTimeDistance < 0) {
+                clearInterval(this.timerunner);
+                this.countDownTimer = "00:00";
+                this.timeOutSubmit = true;
+                setTimeout(() => {
+                    this.completeExam()
+                }, 5000);
+            }
+        }, 1000);
+    }
 }
 
