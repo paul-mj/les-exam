@@ -23,6 +23,8 @@ const componets = [EsriMapComponent]
 
 export class ExamComponent {
     timerunner: any;
+    answeredCounts: any = [];
+    categoryList: any;
     timerExipiry!: number;
     updatedTimeDistance!: number;
     questions!: IFinalQUestionResponse;
@@ -50,20 +52,22 @@ export class ExamComponent {
                 this.updateTimerV2(userTransReadLine.EXTRA_TIME);
             }
         });
+
+
     }
 
     // updateTimer(): void {
     //     clearInterval(this.resetTimer);
     //     this.timer(this.examDefaultTimer);
     // }
-    initTimer(min = 2){        
+    initTimer(min = 2) {
         this.timerExipiry = new Date().setMinutes(new Date().getMinutes() + min);
         this.timerV2();
     }
     updateTimerV2(min: number): void {
         const existingMin = new Date().getMinutes();
         const t1 = new Date(new Date().setMinutes(existingMin + min)).getTime();
-        this.timerExipiry = new Date().setTime(t1+Number(this.updatedTimeDistance ?? 0));
+        this.timerExipiry = new Date().setTime(t1 + Number(this.updatedTimeDistance ?? 0));
         clearInterval(this.timerunner);
         this.timerV2();
     }
@@ -79,10 +83,12 @@ export class ExamComponent {
                     })
                 }
             });
+            console.log(this.questions)
             this.questionMaxCount = value.questions.length;
             this.examDefaultTimer = value.examConfig?.ASSESSMENT_DURATION_TIMER || 5;
             // this.timer(this.examDefaultTimer);
             this.initTimer(value.examConfig?.ASSESSMENT_DURATION_TIMER)
+            this.getcategoriesList();
         }
     }
 
@@ -164,6 +170,7 @@ export class ExamComponent {
             };
         }
         this.saveSelectedOptoin(currentOptions, selectedOption, question);
+        this.getcategoriesList()
     }
 
     saveSelectedOptoin(currentOptions: IAnswer[], selectedOption: any, question: IQuestion): void {
@@ -324,6 +331,31 @@ export class ExamComponent {
                 }, 5000);
             }
         }, 1000);
+    }
+
+
+
+    getcategoriesList() {
+        console.log(this.questions)
+        const groupedDataMap: any = {};
+        this.questions?.forEach((item: any) => {
+            const categoryId = item.category.CATEGORY_ID;
+            if (!groupedDataMap[categoryId]) {
+                groupedDataMap[categoryId] = [];
+            }
+            groupedDataMap[categoryId].push(item);
+        });
+        this.categoryList = Object.values(groupedDataMap);
+        console.log(this.categoryList)
+
+        this.categoryList.forEach((category: any[]) => {
+            // Count the number of objects where 'isAnswered' is true
+            const answeredCount = category.filter(item => item.isAnswered).length;
+            // Append the count to the list
+            console.log(answeredCount)
+            category.forEach(item => item.answeredCount = answeredCount);
+        });
+        console.log(this.categoryList)
     }
 }
 

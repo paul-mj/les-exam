@@ -120,12 +120,13 @@
                     <div class="progg mx-4">
                         <div class="progress-bar">
                             <div class="progress-done" [style.width]="elapsedTimePercentage()">
-                                <span class="completed-ques"><span><img src="assets/images/google-icons/timer.svg" /></span></span>
+                                <span class="completed-ques"><span><img
+                                            src="assets/images/google-icons/timer.svg" /></span></span>
                             </div>
                         </div>
                     </div>
-                    <div class="next text-end"> 
-                        <div class="timer d-flex align-items-center justify-content-end"> 
+                    <div class="next text-end">
+                        <div class="timer d-flex align-items-center justify-content-end">
                             <p class="m-0 count-timer text-left"> {{ countDownTimer }}</p>
                         </div>
 
@@ -215,6 +216,7 @@
             </div>
         </div>
         <div class="categories-section">
+            @for(item of categoryList; let i = $index; track i) {
             <div class="each-catgory">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="topic">
@@ -222,224 +224,32 @@
                             <img src="/assets/images/google-icons/arrow-right.svg" alt="">
                         </div>
                         <div class="heaing-section">
-                            MDT
+                            {{ item[0].category.OBJECT_NAME }}
                         </div>
                     </div>
                     <div class="answered-section">
                         <div class="count">
-                            6/6
+                            {{item[0].answeredCount}}/{{ item?.length }}
                         </div>
-                        <div class="circle"></div>
+                        <div class="circle" [class.green-colour] = "item[0].answeredCount === item?.length"></div>
                     </div>
                 </div>
             </div>
-            <div class="each-catgory">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <div class="topic">
-                        <div class="arrow">
-                            <img src="/assets/images/google-icons/arrow-right.svg" alt="">
-                        </div>
-                        <div class="heaing-section">
-                            MDT
-                        </div>
-                    </div>
-                    <div class="answered-section">
-                        <div class="count">
-                            6/6
-                        </div>
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="each-catgory">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <div class="topic">
-                        <div class="arrow">
-                            <img src="/assets/images/google-icons/arrow-right.svg" alt="">
-                        </div>
-                        <div class="heaing-section">
-                            MDT
-                        </div>
-                    </div>
-                    <div class="answered-section">
-                        <div class="count">
-                            6/6
-                        </div>
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="each-catgory">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <div class="topic">
-                        <div class="arrow">
-                            <img src="/assets/images/google-icons/arrow-right.svg" alt="">
-                        </div>
-                        <div class="heaing-section">
-                            MDT
-                        </div>
-                    </div>
-                    <div class="answered-section">
-                        <div class="count">
-                            6/6
-                        </div>
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
+            }
+
         </div>
         <div class="number-section">
             <div class="number-wrap">
-                <div class="card">
+                @for (question of questions; track question.ID; let i = $index) {
+                <div class="card" (click)="switchToEditAnswer(question)"
+                    [ngClass]="question.isAnswered ? 'selected' : ''">
+                    @if (question.isReview) {
+                    <img src="assets/images/star-active.png" class="review-star" />
+                    }
                     <div class="number">
-                        1
+                        {{ i+1 }}
                     </div>
-                </div>
-                <div class="card" [class.selected]="true">
-                    <div class="number">
-                        2
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        3
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        4
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        5
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        6
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        7
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        8
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        9
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        10
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        11
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        12
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        13
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        14
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        15
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        16
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        17
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        18
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        19
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        20
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        21
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        22
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        23
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        24
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        25
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        26
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        27
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        28
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        29
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="number">
-                        30
-                    </div>
-                </div>
+                </div>}
             </div>
         </div>
     </div>
@@ -454,72 +264,74 @@
             </div>
         </div>
         <div class="question-wrapper">
+            @for (question of questions; track question.ID; let i = $index) {
+            @if(question.isShow) {
             <div class="question-section">
 
                 <div class="question-heading">
                     <div class="cat-tab">
-                        Location
+                        {{ question.category.OBJECT_NAME }}
                     </div>
                     <div class="language">
 
                     </div>
-                    <div class="add-review">
+                    <div class="add-review" (click)="add_remove_Review(question)">
                         <div class="review-txt">
                             Add to Review
                         </div>
                         <div class="star">
-                            <img src="assets/images/google-icons/star.svg" />
+                            <!-- <img src="assets/images/google-icons/star.svg" /> -->
+                            @if (question.isReview) {
+                            <img src="assets/images/star-active.png" />
+                            } @else {
+                            <img src="assets/images/star.png" />
+                            }
                         </div>
                     </div>
                 </div>
-                <div class="question-section">
-                    <div class="quest-count">
-                        4 of 30
+
+                <div class="d-flex">
+
+                    @if(question.IS_MAP) {
+                    <div class="map-section">
+                        <app-esri-map [answers]="question.Answers" />
                     </div>
-                    <div class="question">
-                        How does the Sales Consultanct explain that the rear passangers will nvere be left out when they
-                        are at the back of the pilot?
+                    } @else {
+                    <div class="ques-img" [style.background-image]="'url(' + question.image + ')'"> </div>
+                    }
+
+                    <div class="question-section">
+                        <div class="quest-count">
+                            {{i+1}} of {{ questions.length }}
+                        </div>
+                        <div class="question">
+                            {{ question.QUESTION_NAME }}
+                        </div>
+
+                        <div class="options">
+                            @for (options of question.Answers; track options.ID; let j = $index) {
+                            <div class="each-option" (click)="optionSelect(question.Answers, options, question)">
+                                <div class="checkbox">
+                                    @if(options.selected) {
+                                    <img src="assets/images/google-icons/square-box-tick.svg" />
+                                    } @else {
+                                    <img src="assets/images/google-icons/square-box.svg" />
+                                    }
+                                </div>
+                                <div class="answer">
+                                    {{ options.GRADE_NAME }}
+                                </div>
+                            </div>}
+                        </div>
+
                     </div>
 
-                    <div class="options">
-                        <div class="each-option">
-                            <div class="checkbox">
-                                <img src="assets/images/google-icons/square-box-tick.svg" />
-                            </div>
-                            <div class="answer">
-                                Because we have 3rd row passangers and 2nd row passengers
-                            </div>
-                        </div>
-                        <div class="each-option">
-                            <div class="checkbox">
-                                <img src="assets/images/google-icons/square-box-tick.svg" />
-                            </div>
-                            <div class="answer">
-                                Because we have Cabin Watch system and an entertainment unit 
-                            </div>
-                        </div>
-                        <div class="each-option">
-                            <div class="checkbox">
-                                <img src="assets/images/google-icons/square-box-tick.svg" />
-                            </div>
-                            <div class="answer">
-                                Because we have Cabin Talk System and headphones available 
-                            </div>
-                        </div>
-                        <div class="each-option">
-                            <div class="checkbox">
-                                <img src="assets/images/google-icons/square-box-tick.svg" />
-                            </div>
-                            <div class="answer">
-                                Because we have Cabin Talk System and entertainmentunit available for the passengers
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
-
 
             </div>
+            }
+            }
             <div class="navigate-review">
                 <div class="review">
                     <button class="viewquestion" (click)="onClickToReviewExam()">
@@ -527,12 +339,21 @@
                     </button>
                 </div>
                 <div class="arrow-section">
-                    <div class="arrow-next-wrap">
+                    @if(questionMaxCount > currentQuestionIndex) {
+                    <div class="arrow-next-wrap" (click)="nextQuesButton()">
                         <img src="assets/images/google-icons/arrow-next.svg" alt="">
                     </div>
-                    <div class="arrow-prev-wrap">
+                    }
+                    @if(currentQuestionIndex > 1) {
+                    <div class="arrow-prev-wrap" (click)="prevQuesButton()">
                         <img src="assets/images/google-icons/arrow-prev.svg" alt="">
                     </div>
+                    }
+                    @if(questionMaxCount === currentQuestionIndex) {
+                    <button class="nxt-bttn" (click)="completeAlert()">
+                        Complete Exam
+                    </button>
+                    }
                 </div>
             </div>
         </div>
