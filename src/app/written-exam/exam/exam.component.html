@@ -209,7 +209,12 @@
                     </div>
                 </div>
             </div>
-            <div class="progress-percent">80% Complete</div>
+            <div class="d-flex justify-content-between w-100">
+                <div class="progress-percent">80% Complete</div>
+                <div class="timer-small d-flex align-items-center justify-content-end">
+                    <p class="m-0 count-timer text-left"> {{ countDownTimer }}</p>
+                </div>
+            </div>
             <div class="progress-section">
                 <div [class.progress-bar]="true"></div>
             </div>
@@ -495,7 +500,7 @@
                                 <img src="assets/images/google-icons/square-box-tick.svg" />
                             </div>
                             <div class="answer">
-                                Because we have Cabin Watch system and an entertainment unit 
+                                Because we have Cabin Watch system and an entertainment unit
                             </div>
                         </div>
                         <div class="each-option">
@@ -503,7 +508,7 @@
                                 <img src="assets/images/google-icons/square-box-tick.svg" />
                             </div>
                             <div class="answer">
-                                Because we have Cabin Talk System and headphones available 
+                                Because we have Cabin Talk System and headphones available
                             </div>
                         </div>
                         <div class="each-option">

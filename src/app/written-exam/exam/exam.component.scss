@@ -370,3 +370,21 @@
 
 
 }
+
+
+.timer-small {
+    .count-timer {
+        height: 10px;
+        line-height: 5px;
+        padding: 0 10px;
+        font-family: "Orbitron";
+        font-weight: 600;
+        font-size: 1.35rem;
+        color: black;
+    }
+
+    img {
+        height: 30px;
+        margin: 0 10px;
+    }
+}
