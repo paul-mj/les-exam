@@ -29,6 +29,8 @@ export class SummaryComponent {
 
     @ViewChild(MatAccordion) accordion!: MatAccordion;
     groupedData: any[] = [];
+    accordian: any[] = [];
+    toggleLanguage: boolean = true;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -40,6 +42,7 @@ export class SummaryComponent {
     }
 
     groupDataByCategory(data: any) {
+        console.log(data)
         const groupedDataMap: any = {};
         data?.forEach((item: any) => {
             const categoryId = item.category.CATEGORY_ID;
@@ -47,8 +50,10 @@ export class SummaryComponent {
                 groupedDataMap[categoryId] = [];
             }
             groupedDataMap[categoryId].push(item);
+            this.accordian.push(true);
         });
         this.groupedData = Object.values(groupedDataMap);
+        console.log(this.groupedData)
     }
 
 
@@ -62,6 +67,16 @@ export class SummaryComponent {
 
     submitExam() {
         this.dialogRef.close({ toQuestion: false, isComplete: true, dialogClose: true, })
+    }
+
+    clicktoggle(i: any) {
+        console.log(i)
+        this.accordian[i] = !this.accordian[i];
+        console.log(this.accordian)
+    }
+
+    changeLang() {
+        this.toggleLanguage = !this.toggleLanguage
     }
 
 }

@@ -61,7 +61,7 @@
             .table-section {
                 border: 1px solid #cbcbcb;
                 border-radius: 5px;
-                padding: 15px;
+                padding: 25px;
                 background-color: white;
             }
 
@@ -114,7 +114,6 @@
     justify-content: center;
     border-radius: 8px;
     width: 12rem;
-    margin-left: 15px;
 
     .permit-top {
         padding: 10px;
@@ -142,11 +141,8 @@
 
     border: 1px solid #cbcbcb;
     border-radius: 5px;
-    padding: 15px ;
+    padding: 25px;
     background-color: white;
-    display: flex;
-    justify-content: center;
-    // width: 30%;
 
     .sec-wrapper {
         // display: flex;
@@ -185,6 +181,15 @@
 
 }
 
+.heading-section {
+    color: #585893;
+    border: 1px solid black;
+    padding: 16px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+}
+
 .user-img-wrap {
     justify-content: center;
     width: 150px;
@@ -215,7 +220,7 @@
 }
 
 .labels {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 600;
 }
 
@@ -223,5 +228,89 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 29%;
+    width: 39%;
+}
+
+.set-size {
+    font-size: 1.25em;
+    line-height: 1.35;
+}
+
+.license-info {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #222022;
+    justify-content: center;
+    border-radius: 8px;
+
+    .permit-top {
+        padding: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    .permit-bottom {
+        padding: 8px;
+        background-color: #bbc0c4;
+        border-top: 2px solid #222022;
+        text-align: center;
+        border-radius: 8px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+
+        .set-border {
+            border-bottom: 1px solid black;
+            margin-bottom: 20px;
+            margin-top: 17px;
+        }
+
+        .permit-no {
+            font-weight: 700;
+            font-size: 1.25rem;
+            padding-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
+
+.det-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .icon {
+        margin-left: 2rem
+    }
+}
+
+.success-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25em;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5rem;
+}
+
+.success-img {
+    width: 16rem;
+    height: 17rem;
+
+}
+
+.text-sucess {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: forestgreen;
+}
+
+.failed-img {
+    width: 11rem;
+    height: 11rem;
+}
+
+.date-section {
+    font-size: 1.75em;
+    font-weight: 600;
 }

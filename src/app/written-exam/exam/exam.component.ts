@@ -23,6 +23,9 @@ const componets = [EsriMapComponent]
 
 export class ExamComponent {
     timerunner: any;
+    displayLanguage: string = 'En';
+    answeredCounts: any = [];
+    categoryList: any;
     timerExipiry!: number;
     updatedTimeDistance!: number;
     questions!: IFinalQUestionResponse;
@@ -30,7 +33,7 @@ export class ExamComponent {
     countDownTimer: string = '00:00';
     examDefaultTimer!: number;
     timeOutSubmit!: boolean;
-    completeQuesPercentage: number = 0;
+    completeQuesPercentage: any = 0;
     currentQuestionIndex: number = 1;
     resetTimer: any;
     @Output() onClickExamComplete = new EventEmitter<IExamCompleteEmitResponse>();
@@ -50,20 +53,35 @@ export class ExamComponent {
                 this.updateTimerV2(userTransReadLine.EXTRA_TIME);
             }
         });
+
+
     }
+
+    toggleLanguage: any = [
+        {
+            id: 1,
+            language: 'En',
+            active: true
+        },
+        {
+            id: 2,
+            language: 'Ar',
+            active: false
+        }
+    ]
 
     // updateTimer(): void {
     //     clearInterval(this.resetTimer);
     //     this.timer(this.examDefaultTimer);
     // }
-    initTimer(min = 2){        
+    initTimer(min = 2) {
         this.timerExipiry = new Date().setMinutes(new Date().getMinutes() + min);
         this.timerV2();
     }
     updateTimerV2(min: number): void {
         const existingMin = new Date().getMinutes();
         const t1 = new Date(new Date().setMinutes(existingMin + min)).getTime();
-        this.timerExipiry = new Date().setTime(t1+Number(this.updatedTimeDistance ?? 0));
+        this.timerExipiry = new Date().setTime(t1 + Number(this.updatedTimeDistance ?? 0));
         clearInterval(this.timerunner);
         this.timerV2();
     }
@@ -79,10 +97,12 @@ export class ExamComponent {
                     })
                 }
             });
+            console.log(this.questions)
             this.questionMaxCount = value.questions.length;
             this.examDefaultTimer = value.examConfig?.ASSESSMENT_DURATION_TIMER || 5;
             // this.timer(this.examDefaultTimer);
             this.initTimer(value.examConfig?.ASSESSMENT_DURATION_TIMER)
+            this.getcategoriesList();
         }
     }
 
@@ -164,6 +184,7 @@ export class ExamComponent {
             };
         }
         this.saveSelectedOptoin(currentOptions, selectedOption, question);
+        this.getcategoriesList()
     }
 
     saveSelectedOptoin(currentOptions: IAnswer[], selectedOption: any, question: IQuestion): void {
@@ -252,7 +273,8 @@ export class ExamComponent {
 
     completionPercentage(): any {
         const ansLength = this.questions.filter((x: IQuestion) => x.isAnswered)?.length;
-        this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount));
+        this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount)) + '%';
+        console.log(this.completeQuesPercentage)
     }
 
     onClickToReviewExam(): void {
@@ -324,6 +346,51 @@ export class ExamComponent {
                 }, 5000);
             }
         }, 1000);
+    }
+
+
+
+    getcategoriesList() {
+        console.log(this.questions)
+        const groupedDataMap: any = {};
+        this.questions?.forEach((item: any) => {
+            const categoryId = item.category.CATEGORY_ID;
+            if (!groupedDataMap[categoryId]) {
+                groupedDataMap[categoryId] = [];
+            }
+            groupedDataMap[categoryId].push(item);
+        });
+        this.categoryList = Object.values(groupedDataMap);
+        console.log(this.categoryList)
+
+        this.categoryList.forEach((category: any[]) => {
+            // Count the number of objects where 'isAnswered' is true
+            const answeredCount = category.filter(item => item.isAnswered).length;
+            // Append the count to the list
+            console.log(answeredCount)
+            category.forEach(item => item.answeredCount = answeredCount);
+        });
+        console.log(this.categoryList)
+    }
+
+
+    clickLanguage(code: any) {
+        this.displayLanguage = this.toggleLanguage[code].language;
+        console.log(this.displayLanguage)
+        this.toggleLanguage = this.toggleLanguage.map((item: any, index: any) => {
+            if (code === index) {
+                return {
+                    ...item,
+                    active: true,
+                }
+            }
+            else {
+                return {
+                    ...item,
+                    active: false
+                }
+            }
+        });
     }
 }
 

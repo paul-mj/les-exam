@@ -1,12 +1,12 @@
 <div class="section-wrapper">
-    <div class="heading-section">
+    <!-- <div class="heading-section">
         <div class="pop-up-heading">Review</div>
         <div>
             <button mat-button (click)="accordion.openAll()" class="btn-class mr-4">Expand All</button>
             <button mat-button (click)="accordion.closeAll()" class="btn-class">Collapse All</button>
         </div>
-    </div>
-    <mat-dialog-content class="mat-typography">
+    </div> -->
+    <!-- <mat-dialog-content class="mat-typography">
 
         <mat-accordion class="example-headers-align" multi>
             @for(item of groupedData; let i = $index; track i) {
@@ -37,11 +37,79 @@
             } @empty { }
 
         </mat-accordion>
-    </mat-dialog-content>
+    </mat-dialog-content> -->
+
+    <div class="review-section">
+        <div class="first-section">
+            <div class="user-section">
+                <div class="d-flex align-items-center">
+                    <div class="user-img-wrap">
+                        <img src="assets/images/user-pic.jpg" class="img-fluid" />
+                    </div>
+                </div>
+                <div class="name-section">
+                    <div class="col-md-12 mb-2">
+                        <h5 class="label font-sec">Hasanul Banna</h5>
+                        <h5 class="label font-sec font-ar">أشسشىعم لآشىىش</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="title-sec">
+                Categories And Questions
+            </div>
+        </div>
+
+        <div class="second-section">
+            <div class="icon-section">
+                <div class="lang-sec" (click)="changeLang()">
+                    <img src="assets/images/google-icons/language.svg" alt="">
+                    <div class="language">{{toggleLanguage ? 'En' : 'Ar'}}</div>
+                </div>
+                <img src="assets/images/google-icons/close.svg" alt="" (click)="dialogClose()">
+            </div>
+            @for(item of groupedData; let i = $index; track i) {
+            <div class="custom-accordian">
+                <div class="top-header">
+                    <div class="heading">
+                        {{ item[0].category.OBJECT_NAME }}
+                    </div>
+                    <div class="count-dropdown">
+                        <div class="count-section">
+                            4/{{ item?.length }}
+                        </div>
+                        <div class="dropdown" (click)="clicktoggle(i)">
+                            <img src="assets/images/google-icons/expand.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                @if (accordian[i]) {
+                <div class="each-item-wrapper">
+                    @for(question of item; let j = $index; track j) {
+                    <div class="quest-det" [class.toggleQues]="!toggleLanguage" [class.toggleborder]="toggleLanguage" [class.answerd]="question.isAnswered">
+                        @if (toggleLanguage) { <div class="each-question">
+                            {{question.QUESTION_NAME}}
+                        </div>}
+                        @if (!toggleLanguage) { <div class="each-question">
+                            {{question.QUESTION_NAME_AR}}
+                        </div>}
+                        <div class="visible-eye" (click)="onClickToQuestion(question)">
+                            <img src="assets/images/google-icons/eye-filled.svg" alt="">
+                        </div>
+                    </div>
+                    }
+                </div> }
+            </div>
+            } @empty { }
+        </div>
+    </div>
 </div>
+
+
+
 <mat-dialog-actions align="end">
     <div class="footer-wrapper">
-        <button mat-button (click)="dialogClose()">Cancel</button>
-        <button mat-button (click)="submitExam()">Complete Exam</button>
+        <button mat-button (click)="dialogClose()" class="cancel-btn">Cancel</button>
+        <button mat-button (click)="submitExam()" class="cancel-btn submit-sec">Complete Exam</button>
     </div>
 </mat-dialog-actions>
