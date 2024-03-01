@@ -33,7 +33,7 @@ export class ExamComponent {
     countDownTimer: string = '00:00';
     examDefaultTimer!: number;
     timeOutSubmit!: boolean;
-    completeQuesPercentage: number = 0;
+    completeQuesPercentage: any = 0;
     currentQuestionIndex: number = 1;
     resetTimer: any;
     @Output() onClickExamComplete = new EventEmitter<IExamCompleteEmitResponse>();
@@ -273,7 +273,8 @@ export class ExamComponent {
 
     completionPercentage(): any {
         const ansLength = this.questions.filter((x: IQuestion) => x.isAnswered)?.length;
-        this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount));
+        this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount)) + '%';
+        console.log(this.completeQuesPercentage)
     }
 
     onClickToReviewExam(): void {
