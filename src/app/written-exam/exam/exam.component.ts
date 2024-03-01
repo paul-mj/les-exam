@@ -23,6 +23,7 @@ const componets = [EsriMapComponent]
 
 export class ExamComponent {
     timerunner: any;
+    displayLanguage: string = 'En';
     answeredCounts: any = [];
     categoryList: any;
     timerExipiry!: number;
@@ -55,6 +56,19 @@ export class ExamComponent {
 
 
     }
+
+    toggleLanguage: any = [
+        {
+            id: 1,
+            language: 'En',
+            active: true
+        },
+        {
+            id: 2,
+            language: 'Ar',
+            active: false
+        }
+    ]
 
     // updateTimer(): void {
     //     clearInterval(this.resetTimer);
@@ -356,6 +370,26 @@ export class ExamComponent {
             category.forEach(item => item.answeredCount = answeredCount);
         });
         console.log(this.categoryList)
+    }
+
+
+    clickLanguage(code: any) {
+        this.displayLanguage = this.toggleLanguage[code].language;
+        console.log(this.displayLanguage)
+        this.toggleLanguage = this.toggleLanguage.map((item: any, index: any) => {
+            if (code === index) {
+                return {
+                    ...item,
+                    active: true,
+                }
+            }
+            else {
+                return {
+                    ...item,
+                    active: false
+                }
+            }
+        });
     }
 }
 

@@ -231,7 +231,7 @@
                         <div class="count">
                             {{item[0].answeredCount}}/{{ item?.length }}
                         </div>
-                        <div class="circle" [class.green-colour] = "item[0].answeredCount === item?.length"></div>
+                        <div class="circle" [class.green-colour]="item[0].answeredCount === item?.length"></div>
                     </div>
                 </div>
             </div>
@@ -273,7 +273,11 @@
                         {{ question.category.OBJECT_NAME }}
                     </div>
                     <div class="language">
-
+                        @for (item of toggleLanguage; let j = $index; track j) {
+                        <div (click)="clickLanguage(j)"
+                            [ngClass]="(item.active) ? 'active-language' : 'setting-margin '">
+                            {{item.language}}</div>
+                        }
                     </div>
                     <div class="add-review" (click)="add_remove_Review(question)">
                         <div class="review-txt">
@@ -290,7 +294,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex">
+                <div class="d-flex w-100 align-items-center justify-content-center section-setting">
 
                     @if(question.IS_MAP) {
                     <div class="map-section">
@@ -300,15 +304,21 @@
                     <div class="ques-img" [style.background-image]="'url(' + question.image + ')'"> </div>
                     }
 
-                    <div class="question-section">
+                    <div class="question-section"
+                        [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section' : 'w-100'">
                         <div class="quest-count">
                             {{i+1}} of {{ questions.length }}
                         </div>
+                        @if(displayLanguage === 'En') {
                         <div class="question">
                             {{ question.QUESTION_NAME }}
-                        </div>
+                        </div>} @else {
+                        <div class="question">
+                            {{ question.QUESTION_NAME_AR }}
+                        </div>}
 
-                        <div class="options">
+                        <div class="options"
+                            [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section-grid' : 'normal-grid'">
                             @for (options of question.Answers; track options.ID; let j = $index) {
                             <div class="each-option" (click)="optionSelect(question.Answers, options, question)">
                                 <div class="checkbox">

@@ -232,7 +232,17 @@
 
                     }
 
-                    .language {}
+                    .language {
+                        background-color: white;
+                        border-radius: 40px;
+                        width: 10rem;
+                        height: 4rem;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        font-size: 1.5rem;
+                        font-weight: 500;
+                    }
 
                     .add-review {
                         display: flex;
@@ -260,7 +270,7 @@
                 }
 
                 .question-section {
-                    height: 76%;
+                    // height: 76%;
                     display: flex;
                     flex-direction: column;
                     gap: 1em;
@@ -276,7 +286,7 @@
                     .question {
                         font-size: 2rem;
                         line-height: 1.5;
-                        width: 80rem;
+                        width: 40rem;
                         text-align: center;
                         font-weight: 500;
                         color: #5364a3;
@@ -284,7 +294,7 @@
 
                     .options {
                         display: grid;
-                        grid-template-columns: repeat(2, 1fr);
+
                         gap: 2rem;
                         margin-top: 2rem;
 
@@ -398,4 +408,31 @@
 
 .green-colour {
     border: 4px solid forestgreen !important;
+}
+
+.map-section {
+    width: 50%;
+}
+
+.map-section-grid {
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.normal-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.section-setting {
+    height: 76%;
+}
+
+.active-language {
+    background: #003a5d;
+    color: white;
+    padding: 23px 32px;
+    border-radius: 40px;
+}
+
+.setting-margin {
+    margin: 0 1.35rem;
 }
