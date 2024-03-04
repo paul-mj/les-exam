@@ -229,14 +229,14 @@
                         <div class="arrow">
                             <img src="/assets/images/google-icons/arrow-right.svg" alt="">
                         </div>
-                        <div class="heaing-section">
+                        <h5 class="heaing-section">
                             {{ item[0].category.OBJECT_NAME }}
-                        </div>
+                        </h5>
                     </div>
                     <div class="answered-section">
-                        <div class="count">
+                        <p class="count">
                             {{item[0].answeredCount}}/{{ item?.length }}
-                        </div>
+                        </p>
                         <div class="circle" [class.green-colour]="item[0].answeredCount === item?.length"></div>
                     </div>
                 </div>
@@ -252,9 +252,9 @@
                     @if (question.isReview) {
                     <img src="assets/images/star-active.png" class="review-star" />
                     }
-                    <div class="number">
+                    <p class="number">
                         {{ i+1 }}
-                    </div>
+                    </p>
                 </div>}
             </div>
         </div>
@@ -273,11 +273,10 @@
             @for (question of questions; track question.ID; let i = $index) {
             @if(question.isShow) {
             <div class="question-section">
-
                 <div class="question-heading">
-                    <div class="cat-tab">
+                    <h5 class="cat-tab">
                         {{ question.category.OBJECT_NAME }}
-                    </div>
+                    </h5>
                     <div class="language">
                         @for (item of toggleLanguage; let j = $index; track j) {
                         <div (click)="clickLanguage(j)"
@@ -286,9 +285,9 @@
                         }
                     </div>
                     <div class="add-review" (click)="add_remove_Review(question)">
-                        <div class="review-txt">
+                        <p class="review-txt">
                             Add to Review
-                        </div>
+                        </p>
                         <div class="star">
                             <!-- <img src="assets/images/google-icons/star.svg" /> -->
                             @if (question.isReview) {
@@ -312,16 +311,16 @@
 
                     <div class="question-section"
                         [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section' : 'w-100'">
-                        <div class="quest-count">
+                        <p class="quest-count">
                             {{i+1}} of {{ questions.length }}
-                        </div>
+                        </p>
                         @if(displayLanguage === 'En') {
-                        <div class="question">
+                        <p class="question">
                             {{ question.QUESTION_NAME }}
-                        </div>} @else {
-                        <div class="question">
+                        </p>} @else {
+                        <p class="question">
                             {{ question.QUESTION_NAME_AR }}
-                        </div>}
+                        </p>}
 
                         <div class="options"
                             [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section-grid' : 'normal-grid'">
@@ -334,9 +333,9 @@
                                     <img src="assets/images/google-icons/square-box.svg" />
                                     }
                                 </div>
-                                <div class="answer">
+                                <p class="answer">
                                     {{ options.GRADE_NAME }}
-                                </div>
+                                </p>
                             </div>}
                         </div>
 

@@ -1,5 +1,5 @@
 <div class="exam-wrapper"> 
-    @if (!screenControl.exam && !examQuestions){
+    <!-- @if (!screenControl.exam && !examQuestions){
     <nav class="navbar fixed-top exam-nav container-fluid p-container">
         <div class="d-flex w-100 ">
             <div class="col-md-2">
@@ -7,7 +7,7 @@
             </div>
         </div>
     </nav>
-    }
+    } -->
      <!-- @else {
     <nav class="navbar fixed-top exam-nav container-fluid p-container">
         <div class="d-flex w-100 ">
@@ -19,7 +19,7 @@
     } -->
 
 
-    <!-- @if (screenControl.center) {
+    @if (screenControl.center) {
     <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo}"
         (onClickNextToVerify)="registerDevice($event)" />
     }
@@ -40,9 +40,9 @@
     @else {
 
     }
- -->
 
-    <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
+
+    <!-- <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey> -->
 
     <!-- <app-result />   -->
 </div>

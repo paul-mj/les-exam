@@ -92,6 +92,7 @@
                     .heaing-section {
                         font-size: 1.5rem;
                         font-weight: 500;
+                        margin-bottom: 0rem;
                     }
                 }
 
@@ -102,6 +103,7 @@
 
                     .count {
                         font-size: 1.35rem;
+                        margin-bottom: 0rem;
                     }
 
                     .circle {
@@ -143,6 +145,7 @@
                         text-align: center;
                         height: 100%;
                         padding: 30px 10px;
+                        margin-bottom: 0rem;
                     }
 
                     .review-star {
@@ -229,6 +232,7 @@
                         text-align: center;
                         text-transform: uppercase;
                         letter-spacing: 1px;
+                        margin-bottom: 0rem;
 
                     }
 
@@ -242,6 +246,7 @@
                         align-items: center;
                         font-size: 1.5rem;
                         font-weight: 500;
+                        cursor: pointer;
                     }
 
                     .add-review {
@@ -256,6 +261,7 @@
                         .review-txt {
                             font-size: 1.5rem;
                             font-weight: 500;
+                            margin-bottom: 0rem;
                         }
 
                         .star {
@@ -280,6 +286,7 @@
                     .quest-count {
                         font-size: 1.50rem;
                         font-weight: 500;
+                        margin-bottom: 0rem;
 
                     }
 
@@ -290,6 +297,7 @@
                         text-align: center;
                         font-weight: 500;
                         color: #5364a3;
+                        margin-bottom: 0rem;
                     }
 
                     .options {
@@ -312,6 +320,7 @@
                                 font-size: 1.25rem;
                                 font-weight: 500;
                                 line-height: 1.75;
+                                margin-bottom: 0rem;
                             }
                         }
                     }
@@ -427,14 +436,23 @@
 }
 
 .active-language {
-    .lng {
-        background: #003a5d;
-        color: white;
-        padding: 23px 32px;
-        border-radius: 40px;
-    }
+
+    background: #003a5d;
+    color: white;
+    padding: 23px 32px;
+    border-radius: 40px;
+
 }
 
 .setting-margin {
     margin: 0 1.35rem;
+}
+
+.nxt-bttn {
+    background: #003a5d;
+    color: white;
+    padding: 1.25rem;
+    line-height: 1.2;
+    border-radius: 10px;
+    font-size: 1.5rem;
 }

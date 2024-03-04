@@ -22,7 +22,7 @@ export class SurveyComponent {
 			"OPT_2": 0,
 			"OPT_3": 0,
 			"OPT_4": 0,
-			"OBJECT_NAME": "What is your evaluation for your company management ?",
+			"OBJECT_NAME": "What is your evaluation for your company management ? ",
 			"OBJECT_NAME_ARABIC": "ما هو تقييمك لادارة الشركة التي تعمل بها ؟"
 		},
 		{
