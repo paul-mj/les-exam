@@ -64,20 +64,20 @@
             <div class="icon-section">
                 <div class="lang-sec" (click)="changeLang()">
                     <img src="assets/images/google-icons/language.svg" alt="">
-                    <div class="language">{{toggleLanguage ? 'En' : 'Ar'}}</div>
+                    <p class="language">{{toggleLanguage ? 'En' : 'Ar'}}</p>
                 </div>
                 <img src="assets/images/google-icons/close.svg" alt="" (click)="dialogClose()">
             </div>
             @for(item of groupedData; let i = $index; track i) {
             <div class="custom-accordian">
                 <div class="top-header">
-                    <div class="heading">
+                    <h4 class="heading">
                         {{ item[0].category.OBJECT_NAME }}
-                    </div>
+                    </h4>
                     <div class="count-dropdown">
-                        <div class="count-section">
+                        <p class="count-section">
                             4/{{ item?.length }}
-                        </div>
+                        </p>
                         <div class="dropdown" (click)="clicktoggle(i)">
                             <img src="assets/images/google-icons/expand.svg" alt="">
                         </div>
@@ -87,12 +87,12 @@
                 <div class="each-item-wrapper">
                     @for(question of item; let j = $index; track j) {
                     <div class="quest-det" [class.toggleQues]="!toggleLanguage" [class.toggleborder]="toggleLanguage" [class.answerd]="question.isAnswered">
-                        @if (toggleLanguage) { <div class="each-question">
+                        @if (toggleLanguage) { <p class="each-question">
                             {{question.QUESTION_NAME}}
-                        </div>}
-                        @if (!toggleLanguage) { <div class="each-question">
+                        </p>}
+                        @if (!toggleLanguage) { <p class="each-question">
                             {{question.QUESTION_NAME_AR}}
-                        </div>}
+                        </p>}
                         <div class="visible-eye" (click)="onClickToQuestion(question)">
                             <img src="assets/images/google-icons/eye-filled.svg" alt="">
                         </div>

@@ -147,6 +147,7 @@
         font-size: 1.25rem;
         font-weight: 600;
         line-height: 1.35;
+        margin-bottom: 0rem;
       }
 
       .quest-det {
@@ -155,14 +156,15 @@
         align-items: center;
         border: 1px solid #ccbfbf;
         border-radius: 5px;
-
-        height: 4rem;
+        min-height: 4rem;
+        height: auto;
         padding: 15px;
       }
     }
 
     .heading {
       font-size: 1.5em;
+      margin-bottom: 0rem;
     }
   }
 
@@ -179,6 +181,7 @@
       padding: 15px;
       font-weight: 600;
       border-radius: 5px;
+      margin-bottom: 0rem;
     }
   }
 }
@@ -186,9 +189,9 @@
 .cancel-btn {
 
   font-size: 1.5rem;
-    padding: 2rem;
-    border: 1px solid black;
-    border-radius: 8px;
+  padding: 2rem;
+  border: 1px solid black;
+  border-radius: 8px;
 }
 
 .icon-section {
@@ -205,6 +208,7 @@
     margin-left: 4px;
     margin-top: 15px;
     font-weight: 600;
+    margin-bottom: 0rem;
   }
 }
 
@@ -250,5 +254,5 @@
 
 .submit-sec {
   background-color: #1c3449;
-    color: white !important;
+  color: white !important;
 }
