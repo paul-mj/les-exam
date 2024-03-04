@@ -1,42 +1,84 @@
-<div class="center-wrap text-center mt-5">
-    <div>
-        <h4 class="primary-heading">Survey</h4>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-sm-8 col-sm-offset-4">
-            <div class="search-list mt-3">
-                <div class="h-100 overflow-auto text-start p-4">
-                    <ng-container *ngFor="let item of surveyDummyData; let i = index;">
-                        <div class="row g-0 mb-5">
-                            <div class="col-md-1">
-                                {{ i+1 }}.
-                            </div>
-                            <div class="col-md-11">
-                                <div class="question">
-                                    <p class="field-value">{{ item.OBJECT_NAME }}</p>
-                                    <p class="field-value font-ar text-end mb-0">{{ item.OBJECT_NAME_ARABIC }}</p>
-                                </div>
-                                <div>
-                                    <mat-radio-group>
-                                        <mat-radio-button 
-                                            (change)="item.OPT_1 = 1">Yes</mat-radio-button>
-                                        <mat-radio-button (change)="item.OPT_1 = 0"
-                                            class="mx-3">No</mat-radio-button>
-                                    </mat-radio-group>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
+<div class="wrapper">
+    <nav class="navbar fixed-top exam-nav container-fluid set-padding">
+        <div class="d-flex w-100 ">
+            <div class="col-md-2">
+                <img src="assets/images/itc_logo.png" class="img-fluid logo" alt="Itc Logo" />
+            </div>
+        </div>
+    </nav>
 
+    <!-- <div class="center-wrap text-center margin-top-wrap">
+        <div>
+            <h4 class="primary-heading">Survey</h4>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-sm-offset-4">
+                <div class="search-list mt-3">
+                    <div class="h-100 overflow-auto text-start p-4">
+                        <ng-container *ngFor="let item of surveyDummyData; let i = index;">
+                            <div class="row g-0 mb-5">
+                                <div class="col-md-1">
+                                    {{ i+1 }}.
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="question">
+                                        <p class="field-value">{{ item.OBJECT_NAME }}</p>
+                                        <p class="field-value font-ar text-end mb-0">{{ item.OBJECT_NAME_ARABIC }}</p>
+                                    </div>
+                                    <div>
+                                        <mat-radio-group>
+                                            <mat-radio-button 
+                                                (change)="item.OPT_1 = 1">Yes</mat-radio-button>
+                                            <mat-radio-button (change)="item.OPT_1 = 0"
+                                                class="mx-3">No</mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+    
+                    </div>
+                </div>
+                <div class="next-button text-end mt-4">
+                    <button mat-button class="next-button" (click)="emitData()">
+                        Next
+                        <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-3" />
+                    </button>
                 </div>
             </div>
-            <div class="next-button text-end mt-4">
-                <button mat-button class="next-button" (click)="emitData()">
-                    Next
-                    <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-3" />
-                </button>
+        </div>
+    
+    </div> -->
+
+
+    <div class="survey-questions-wrapper">
+        <div class="heading-section">
+            Survey
+        </div>
+        <div class="content-section" *ngFor="let item of surveyDummyData.slice(0, displayCount); let i = index;">
+            <div class="dot">
+                <img src="./../../../assets/images/google-icons/tick.svg" />
+            </div>
+            <div class="question-sec-wrap">
+                <div class="each-question-section">
+                    <div class="english-question">
+                        {{ item.OBJECT_NAME }}
+                    </div>
+                    <div class="arabic-question">
+                        {{ item.OBJECT_NAME_ARABIC }}
+                    </div>
+                </div>
+                <div class="option-section">
+                    <mat-radio-group>
+                        <mat-radio-button (change)="item.OPT_1 = 1">
+                            <div class="font-en">Yes</div>
+                        </mat-radio-button>
+                        <mat-radio-button (change)="item.OPT_1 = 0" class="mx-3">
+                            <div class="font-en">No</div>
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
             </div>
         </div>
     </div>
-
 </div>

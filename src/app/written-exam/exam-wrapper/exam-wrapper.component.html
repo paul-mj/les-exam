@@ -8,9 +8,18 @@
         </div>
     </nav>
     }
+     <!-- @else {
+    <nav class="navbar fixed-top exam-nav container-fluid p-container">
+        <div class="d-flex w-100 ">
+            <div class="col-md-2">
+                <img src="assets/images/itc_logo.png" class="img-fluid logo" alt="Itc Logo" />
+            </div>
+        </div>
+    </nav>
+    } -->
 
 
-    @if (screenControl.center) {
+    <!-- @if (screenControl.center) {
     <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo}"
         (onClickNextToVerify)="registerDevice($event)" />
     }
@@ -31,16 +40,9 @@
     @else {
 
     }
+ -->
 
-
-
-    <!--    
-         
-        <app-exam />
-        <app-summary />
-        <app-result />  
-    -->
-    <!-- <app-exam /> -->
+    <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
 
     <!-- <app-result />   -->
 </div>
