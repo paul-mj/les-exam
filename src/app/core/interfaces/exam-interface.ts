@@ -143,13 +143,16 @@ export interface IExamSave {
     StartTime: string
     EndTime: string
     Remarks: string
-    ActualTime: number
-    Weightage: number
-    MinPassMark: number
+    ActualTime?: number
+    Weightage?: number
+    MinPassMark?: number
+    UserId?: number
     Questiones: ISaveQuestion[]
-    Categories: ISaveCategory[]
+    Categories?: ISaveCategory[]
+    Courses?: ISaveCourse[]
     Images: ISaveImage[]
   }
+  
   
   export interface ISaveQuestion {
     QUESTION_ID: number
@@ -168,6 +171,12 @@ export interface IExamSave {
     IS_PASS: number
     INSPECT_MARK_DEVIATION: number
     IS_PREV_TEST: number
+  }
+  export interface ISaveCourse {
+    COURSE_ID: number
+    IS_PASS: number
+    INSPECT_MARK: number
+    MIN_FOR_PASS: number 
   }
   
   export interface ISaveImage {

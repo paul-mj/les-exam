@@ -135,8 +135,8 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        this.loadQuestions__Test();
-        // this.pingChecking();
+        /* this.loadQuestions__Test(); */
+        this.pingChecking();
     }
 
     pingChecking(): void {
@@ -719,14 +719,14 @@ export class ExamWrapperComponent {
                 this.screenControl[key as keyof IScreenControls] = key === screenName;
             }
         }
-    } 
+    }
 
     loadQuestions__Test() {
         const payload: IQuesSettingsPayload = {
             Id: 24220,
             CultureId: 0,
             UserType: 42602,
-            ExamType: 31002,
+            ExamType: examTypeEnum.Written,
         };
         this.api.httpPost<IQuesSettingsPayload>({ url: 'Assessment/readData', data: payload }).pipe(
             switchMap((response: IExamResponse) => {
@@ -824,7 +824,7 @@ export class ExamWrapperComponent {
             LineId: this.userTransData?.LINE_ID,
             DeviceId: this.assessmentStatusInfo.DeviceId,
             UserType: this.assessmentStatusInfo.UserType,
-            ExamType: 31002,
+            ExamType: examTypeEnum.Written,
             QuestionId: $event.question.ID,
             GradeId: $event.selectedOption.ID,
             InspectMark: $event.selectedOption.WEIGHTAGE,
@@ -834,23 +834,46 @@ export class ExamWrapperComponent {
     }
 
     onExamComplete($event: IExamCompleteEmitResponse): void {
-        const data: IExamSave = {
-            LineId: 0,
-            ExamType: 0,
-            StartTime: "2024-02-22T05:55:49.649Z",
-            EndTime: "2024-02-22T05:55:49.649Z",
-            Remarks: "string",
+        console.log($event, 'event data');
+        const driverParam = { 
             ActualTime: 0,
             Weightage: 0,
             MinPassMark: 0,
-            Questiones: this.formatQuestions($event.question),
-            Categories: this.formatCategories(),
-            Images: this.formatImages($event.question),
+            Categories: this.formatCategories(), 
         }
-
-        console.log(data, 'save payload ')
-
+        const trainerParam = {  
+            UserId: 0, 
+            Courses: this.formatCources(), 
+        } 
+        const data: IExamSave = { 
+            LineId:this.userTransData?.LINE_ID,
+            ExamType: examTypeEnum.Written,
+            StartTime: "2024-02-22T05:55:49.649Z",
+            EndTime: "2024-02-22T05:55:49.649Z",
+            Remarks: "", 
+            ...(this.assessmentStatusInfo.UserType === userTypeEnum.Driver ? driverParam : trainerParam),
+            Questiones: this.formatQuestions($event.question), 
+            Images: this.formatImages($event.question),
+        } 
+        const url = (this.assessmentStatusInfo.UserType === userTypeEnum.Driver) ? 'assessment/saveDriverAssessment' : 'assessment/saveTrainerAssessment';
+        this.completeExam(data, url)
     }
+
+
+    completeExam(data: IExamSave, url: string): void {
+       /*  this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
+            console.log(res, 'complete exam final call');
+        }) */
+    }
+
+
+
+
+
+
+
+
+
 
     formatQuestions(question: IQuestion[]): ISaveQuestion[] {
         return question.map((ques: IQuestion) => ({
@@ -860,7 +883,7 @@ export class ExamWrapperComponent {
             REMARKS: ques.REMARKS,
             WEIGHTAGE: this._selectedAnswerWeightage(ques.Answers) ? this._selectedAnswerWeightage(ques.Answers) : 0,
             GRADE_ID: this._selectedAnswerId(ques.Answers) ? this._selectedAnswerId(ques.Answers) : -1
-        }));
+        })); 
     }
 
     formatCategories(): ISaveCategory[] {
@@ -873,6 +896,14 @@ export class ExamWrapperComponent {
             IS_PREV_TEST: category.IS_PREV_TEST,
             INSPECT_MARK_DEVIATION: category.INSPECT_MARK_DEVIATION
         }));
+    }
+    formatCources(): any {
+        /* return this.examQuestionApiResponse.Categories.map((category: ICategory) => ({
+            COURSE_ID: category.COURSE_ID,
+            IS_PASS: category.IS_PASS,
+            INSPECT_MARK: category.INSPECT_MARK,
+            MIN_FOR_PASS: category.MIN_PASS_MARK, 
+        })); */
     }
 
 

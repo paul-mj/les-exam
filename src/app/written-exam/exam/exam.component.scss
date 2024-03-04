@@ -427,10 +427,12 @@
 }
 
 .active-language {
-    background: #003a5d;
-    color: white;
-    padding: 23px 32px;
-    border-radius: 40px;
+    .lng {
+        background: #003a5d;
+        color: white;
+        padding: 23px 32px;
+        border-radius: 40px;
+    }
 }
 
 .setting-margin {
