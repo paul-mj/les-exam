@@ -51,7 +51,7 @@ export class ExamComponent {
             const userTransReadLine: TransLine = this.signal.getUserTypeTransLine;
             if (userTransReadLine?.EXTRA_TIME) {
                 if(this.extraTime != userTransReadLine?.EXTRA_TIME){
-                    this.currentExtraTime = this.extraTime - userTransReadLine?.EXTRA_TIME;
+                    this.currentExtraTime = this.extraTime ? this.extraTime - userTransReadLine?.EXTRA_TIME: userTransReadLine?.EXTRA_TIME;
                     this.extraTime = userTransReadLine?.EXTRA_TIME;
                     console.log(this.currentExtraTime);
                     this.examDefaultTimer += Number(this.currentExtraTime);
