@@ -22,6 +22,8 @@ const componets = [EsriMapComponent]
 })
 
 export class ExamComponent {
+    extraTime = 0;
+    currentExtraTime = 0;
     timerunner: any;
     displayLanguage: string = 'En';
     answeredCounts: any = [];
@@ -48,9 +50,14 @@ export class ExamComponent {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
             const userTransReadLine: TransLine = this.signal.getUserTypeTransLine;
             if (userTransReadLine?.EXTRA_TIME) {
-                this.examDefaultTimer += Number(userTransReadLine.EXTRA_TIME);
-                // this.updateTimer();
-                this.updateTimerV2(userTransReadLine.EXTRA_TIME);
+                if(this.extraTime != userTransReadLine?.EXTRA_TIME){
+                    this.extraTime = userTransReadLine?.EXTRA_TIME;
+                    this.currentExtraTime = this.extraTime -   userTransReadLine?.EXTRA_TIME;
+                    console.log(this.currentExtraTime);
+                    this.examDefaultTimer += Number(this.currentExtraTime);
+                    // this.updateTimer();
+                    this.updateTimerV2(userTransReadLine.EXTRA_TIME);
+                }
             }
         });
 
