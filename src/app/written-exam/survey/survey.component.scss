@@ -5,7 +5,7 @@
     gap: 6rem;
 
     .header-section-wrap {
-        padding-top: 8rem;
+        padding-top: 10rem;
 
         .heading-section {
             font-size: 3.5rem;
@@ -22,10 +22,12 @@
     }
 }
 
-.next-button button {
+.next-button {
     background: #003a5d;
-    padding: 0 3rem;
+    padding: 1rem 3rem;
     font-weight: 400;
+    font-size: 1.5rem;
+    border-radius: 5px;
     color: #fff !important;
 }
 
