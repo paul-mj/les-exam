@@ -484,7 +484,6 @@ export class ExamWrapperComponent {
                     /* if (deviceLineResponse.LINE_STATUS === deviceStatusEnum.Extend) {
                         userTypeTransResponse.Data.EXTRA_TIME = 1;
                     } */
-                    debugger;
                     this.signal.userTypeTransLineData(userTypeTransResponse.Data);
                     this.userTransData = userTypeTransResponse.Data;
 
