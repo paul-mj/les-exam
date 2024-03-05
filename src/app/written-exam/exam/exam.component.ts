@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { Component, EventEmitter, Input, Output, effect } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -70,10 +70,6 @@ export class ExamComponent {
         }
     ]
 
-    // updateTimer(): void {
-    //     clearInterval(this.resetTimer);
-    //     this.timer(this.examDefaultTimer);
-    // }
     initTimer(min = 2) {
         this.timerExipiry = new Date().setMinutes(new Date().getMinutes() + min);
         this.timerV2();
@@ -99,9 +95,13 @@ export class ExamComponent {
             });
             console.log(this.questions)
             this.questionMaxCount = value.questions.length;
-            this.examDefaultTimer = value.examConfig?.ASSESSMENT_DURATION_TIMER || 5;
+            /* this.examDefaultTimer = value.examConfig?.ASSESSMENT_DURATION_TIMER;
             // this.timer(this.examDefaultTimer);
-            this.initTimer(value.examConfig?.ASSESSMENT_DURATION_TIMER)
+            this.initTimer(value.examConfig?.ASSESSMENT_DURATION_TIMER) */
+
+            this.examDefaultTimer = value.examSetting.EXAM_DURATION;
+            this.initTimer(value.examSetting.EXAM_DURATION)
+
             this.getcategoriesList();
         }
     }
@@ -306,9 +306,17 @@ export class ExamComponent {
             this.currentQuestionIndex = 1; */
         }
         this.onClickExamComplete.emit({
-            question: this.questions
+            question: this.questions,
+            examTimer: this.countDownTimer,
+            endTime: this.formatDateToenUS(new Date(), 'dd-MMM-yyyy HH:mm:ss')
         })
     }
+
+    formatDateToenUS(date: Date, format: string): any {
+        return formatDate(date, format, 'en-US');
+    }
+
+
     // -----------------Timer-------------
     get distance() {
         const days = Math.floor(this.updatedTimeDistance / (1000 * 60 * 60 * 24));

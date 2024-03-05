@@ -334,3 +334,18 @@ export interface ISaveStatusResponse {
     HasMessageParam: boolean
 }
 
+
+export interface IExamSetingsResponse {
+    Data: IExamSettings
+    Valid: boolean
+    ResponseMessage: string
+  }
+  
+  export interface IExamSettings {
+    QUESTIONAIRE_ID: number
+    IS_EXAM: number
+    EXAM_DURATION: number
+    MIN_PASS_MARK: number
+    WEIGHATGE: number
+  }
+  

@@ -55,7 +55,7 @@
         <div class="heading-section">
             Survey
         </div>
-        <div class="content-section" *ngFor="let item of surveyDummyData.slice(0, displayCount); let i = index;">
+        <div class="content-section" *ngFor="let item of surveyDummyData; let i = index;">
             <div class="dot">
                 <img src="./../../../assets/images/google-icons/tick.svg" />
             </div>
@@ -79,6 +79,12 @@
                     </mat-radio-group>
                 </div>
             </div>
+        </div>
+        <div class="next-button text-end mt-4">
+            <button mat-button class="next-button" (click)="emitData()">
+                Next
+                <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-3" />
+            </button>
         </div>
     </div>
 </div>
