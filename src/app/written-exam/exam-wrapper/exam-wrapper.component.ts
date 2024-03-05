@@ -3,7 +3,7 @@ import { CenterComponent } from "../center/center.component";
 import { VerifyComponent } from "../verify/verify.component";
 import { UserDetailsComponent } from "../user-details/user-details.component";
 import { ExamComponent } from "../exam/exam.component";
-import { CommonModule } from "@angular/common";
+import { CommonModule, formatDate } from "@angular/common";
 import { SurveyComponent } from "../survey/survey.component";
 import { SummaryComponent } from "../summary/summary.component";
 import { ResultComponent } from "../result/result.component";
@@ -104,6 +104,7 @@ export class ExamWrapperComponent {
     surveyQuestions!: ISurvey;
     userTransData!: TransLine;
     examSettings!: IExamSettings;
+    examStartTime!: Date;
 
     assessmentStatusInfo: IAssessmentStatusInfo = {
         LineId: -1,
@@ -138,8 +139,8 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        this.loadQuestions__Test();
-        // this.pingChecking();
+        /* this.loadQuestions__Test(); */
+        this.pingChecking();
     }
 
     pingChecking(): void {
@@ -727,8 +728,13 @@ export class ExamWrapperComponent {
         for (const key in this.screenControl) {
             if (Object.prototype.hasOwnProperty.call(this.screenControl, key)) {
                 this.screenControl[key as keyof IScreenControls] = key === screenName;
+                (screenName === 'exam' )&& this.isExamScreen();
             }
         }
+    }
+
+    isExamScreen(): void {
+        this.examStartTime = this.formatDateToenUS(new Date(), 'dd-MMM-yyyy HH:mm:ss')
     }
 
         loadQuestions__Test() {
@@ -840,6 +846,7 @@ export class ExamWrapperComponent {
 
     onExamComplete($event: IExamCompleteEmitResponse): void {
         console.log($event, 'event data from exam');
+        console.log(this.returnActualTime($event), 'this.returnActualTime($event)');
         const driverParam = {
             ActualTime: this.returnActualTime($event),
             Weightage: this.examSettings.WEIGHATGE,
@@ -853,25 +860,30 @@ export class ExamWrapperComponent {
         const data: IExamSave = {
             LineId: this.userTransData?.LINE_ID,
             ExamType: examTypeEnum.Written,
-            StartTime: "2024-02-22T05:55:49.649Z", //timer stard time
-            EndTime: "2024-02-22T05:55:49.649Z", //end time
+            StartTime: this.examStartTime,
+            EndTime: $event.endTime,
             Remarks: "",
             ...(this.assessmentStatusInfo.UserType === userTypeEnum.Driver ? driverParam : trainerParam),
             Questiones: this.formatQuestions($event.question),
             Images: this.formatImages($event.question),
         }
-        console.log(data);
+        console.log(data, 'Exam Save Param');
         const url = (this.assessmentStatusInfo.UserType === userTypeEnum.Driver) ? 'assessment/saveDriverAssessment' : 'assessment/saveTrainerAssessment';
         this.completeExam(data, url)
     }
 
     returnActualTime(data: any): any {
-        const actTime = this.timeCalc({ timeStart: data.examTimer, timeEnd: `${this.examSettings.EXAM_DURATION}:00` }).time;
+        const timeObj = { timeStart: data.examTimer, timeEnd: `${this.examSettings.EXAM_DURATION}:00` }; 
+        const actTime = this.timeCalc(timeObj).time;
         return Number(actTime.split(':')[0]);
     }
 
+    formatDateToenUS(date: Date, format: string): any {
+        return formatDate(date, format, 'en-US');
+    }
 
     timeCalc(arg: any): any {
+        console.log(arg, 'argument');
         const [tsm, tss] = arg.timeStart.split(':');
         const [tem, tes] = arg.timeEnd.split(':');
         const tsms = ((Number(tsm) * 60) + Number(tss)) * 1000;

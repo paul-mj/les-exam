@@ -143,8 +143,8 @@ export interface IOptionSaveParam {
 export interface IExamSave {
     LineId: number
     ExamType: number
-    StartTime: string
-    EndTime: string
+    StartTime: Date
+    EndTime: Date
     Remarks: string
     ActualTime?: number
     Weightage?: number
