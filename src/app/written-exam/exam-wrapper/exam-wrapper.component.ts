@@ -18,6 +18,8 @@ import {
     IDeviceLineResponse,
     IEnrolledList,
     IEnrolledResponse,
+    IExamSetingsResponse,
+    IExamSettings,
     IFingerVerifyResponse,
     IQuesSettingsPayload,
     IReadDeviceLinePayload,
@@ -101,6 +103,7 @@ export class ExamWrapperComponent {
     readUserProfile!: IReadProfile;
     surveyQuestions!: ISurvey;
     userTransData!: TransLine;
+    examSettings!: IExamSettings;
 
     assessmentStatusInfo: IAssessmentStatusInfo = {
         LineId: -1,
@@ -393,13 +396,13 @@ export class ExamWrapperComponent {
                                 this.verifiedUserData = res.Data;
                                 this.assessmentStatusInfo = {
                                     ...this.assessmentStatusInfo,
-                                    LineId: this.verifiedUserData.LINE_ID,
+                                    LineId: this.verifiedUserData?.LINE_ID,
                                     UserType: this.verifiedUserData.USER_TYPE,
                                     LineStatus: Number(deviceStatusEnum.Ready)
                                 };
                                 this.saveStatus().subscribe((saveSatatusResponse: any) => {
                                     if (saveSatatusResponse.Valid) {
-                                        this.loadUserDetails(this.verifiedUserData.LINE_ID)
+                                        this.loadUserDetails(this.verifiedUserData?.LINE_ID)
                                     }
                                 })
                             } else {
@@ -481,7 +484,7 @@ export class ExamWrapperComponent {
                     switch (deviceLineData.LINE_STATUS) {
                         case deviceStatusEnum.Ready:
                             if (this.iStatus !== deviceLineData.LINE_STATUS) {
-                                this.loadUserDetails(deviceLineData.LINE_ID);
+                                this.loadUserDetails(deviceLineData?.LINE_ID);
                             }
                             /* Stop Scanner Service */
                             break;
@@ -596,7 +599,8 @@ export class ExamWrapperComponent {
     }
 
     loadQuestions(): void {
-        this.readSetting().subscribe((profileSettingsResponse: any) => {
+        this.readSetting().subscribe((profileSettingsResponse: IExamSetingsResponse) => {
+            this.examSettings = profileSettingsResponse.Data;
             if (profileSettingsResponse.Valid) {
                 const payload: IQuesSettingsPayload = {
                     Id: this.userTransData.LINE_ID,
@@ -626,7 +630,6 @@ export class ExamWrapperComponent {
                                 if (!!question.HAS_IMAGE) {
                                     fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, blob: null });
                                 }
-                                // Check for HAS_IMAGE in answers and push file download tasks if present
                                 question.Answers.forEach((answer: IAnswer) => {
                                     if (!!answer.HAS_IMAGE) {
                                         fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, blob: null });
@@ -679,15 +682,9 @@ export class ExamWrapperComponent {
                         }
                     })
                 ).subscribe((examQuestion: any) => {
+                    this._getAssessmentSettings();
                     if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
-                        this.readSurveyData().subscribe((surveyResponse: any) => {
-                            if (surveyResponse.Data.length) {
-                                this.surveyQuestions = surveyResponse.Data;
-                                this.toggleScreen('survey');
-                            } else {
-                                this.toggleScreen('exam');
-                            }
-                        });
+                        this.gotoDriverView();
                     } else {
                         this.toggleScreen('exam');
                     }
@@ -696,6 +693,28 @@ export class ExamWrapperComponent {
                 });
 
             }
+        });
+    }
+
+    gotoDriverView(): void {
+        this.readSurveyData().subscribe((surveyResponse: any) => {
+            if (surveyResponse.Data.length) {
+                this.surveyQuestions = surveyResponse.Data;
+                this.toggleScreen('survey');
+            } else {
+                this.toggleScreen('exam');
+            }
+        });
+    }
+
+    _getAssessmentSettings(): void {
+        const data = {
+            LineId: this.userTransData.LINE_ID,
+            CultureId: 0,
+            Mode: examTypeEnum.Written
+        };
+        this.api.httpPost({ url: 'driver/getAssessmentSettings', data }).subscribe((res: any) => {
+            console.log(res, 'response');
         });
     }
 
@@ -721,103 +740,98 @@ export class ExamWrapperComponent {
         }
     }
 
-    loadQuestions__Test() {
-        const payload: IQuesSettingsPayload = {
-            Id: 24220,
-            CultureId: 0,
-            UserType: 42602,
-            ExamType: examTypeEnum.Written,
-        };
-        this.api.httpPost<IQuesSettingsPayload>({ url: 'Assessment/readData', data: payload }).pipe(
-            switchMap((response: IExamResponse) => {
-                if (response.Valid && response.Categories && response.Questions) {
-                    this.examQuestionApiResponse = response;
-                    const fileArray: any[] = [];
-                    const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
-                        return {
-                            ...question,
-                            isShow: index === 0 ? true : false,
-                            isPrevious: index === 0 ? false : true,
-                            isNext: index === response.Questions?.length ? false : true,
-                            isAnswered: false,
-                            isReview: false,
-                            category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
-                        };
-                    });
-
-                    questionsWithCategory.forEach((question: any) => {
-                        if (!!question.HAS_IMAGE) {
-                            fileArray.push({ id: question.QUESTION_ID, url: `assessment/getQuestionImage?questionid=${question.QUESTION_ID}`, blob: null });
-                        }
-                        // Check for HAS_IMAGE in answers and push file download tasks if present
-                        question.Answers.forEach((answer: IAnswer) => {
-                            if (!!answer.HAS_IMAGE) {
-                                fileArray.push({ id: answer.ID, url: `assessment/getAnswerImage?answerid=${answer.ID}`, blob: null });
-                            }
-                            answer.selected = false;
+        loadQuestions__Test() {
+            const payload: IQuesSettingsPayload = {
+                Id: 24220,
+                CultureId: 0,
+                UserType: 42602,
+                ExamType: examTypeEnum.Written,
+            };
+            this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).pipe(
+                switchMap((response: IExamResponse) => {
+                    if (response.Valid && response.Categories && response.Questions) {
+                        this.examQuestionApiResponse = response;
+                        const fileArray: any[] = [];
+                        const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
+                            return {
+                                ...question,
+                                isShow: index === 0 ? true : false,
+                                isPrevious: index === 0 ? false : true,
+                                isNext: index === response.Questions?.length ? false : true,
+                                isAnswered: false,
+                                isReview: false,
+                                category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
+                            };
                         });
-                    });
 
-                    const requests = fileArray.map((file: any) => {
-                        return this.api.httpGetBlob({ url: file.url }).pipe(
-                            catchError((error: any) => {
-                                return of(null);
-                            })
-                        );
-                    });
+                        questionsWithCategory.forEach((question: any) => {
+                            if (!!question.HAS_IMAGE) {
+                                fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, blob: null });
+                            }
+                            question.Answers.forEach((answer: IAnswer) => {
+                                if (!!answer.HAS_IMAGE) {
+                                    fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, blob: null });
+                                }
+                                answer.selected = false;
+                            });
+                        });
 
-                    if (requests.length) {
-                        return forkJoin(requests).pipe(
-                            map((imgResponse: BlobResponse[]) => {
-                                imgResponse.forEach((res: any, i) => {
-                                    if (res) {
-                                        const reader = new FileReader();
-                                        reader.readAsDataURL(res);
-                                        reader.onloadend = () => {
-                                            const base64Image = reader.result as string;
-                                            const foundQuestion = questionsWithCategory.find((question: any) => question.QUESTION_ID === fileArray[i].id);
-                                            if (foundQuestion) {
-                                                foundQuestion.image = base64Image;
-                                            } else {
-                                                const foundAnswer = questionsWithCategory.find((question: any) => {
-                                                    return question.Answers.some((ans: any) => ans.ID === fileArray[i].id);
-                                                });
-                                                if (foundAnswer) {
-                                                    const ansIndex = foundAnswer.Answers.findIndex((ans: any) => ans.ID === fileArray[i].id);
-                                                    foundAnswer.Answers[ansIndex].image = base64Image;
+                        const requests = fileArray.map((file: any) => {
+                            return this.api.httpGetBlob({ url: file.url }).pipe(
+                                catchError((error: any) => {
+                                    return of(null);
+                                })
+                            );
+                        });
+
+                        if (requests.length) {
+                            return forkJoin(requests).pipe(
+                                map((imgResponse: BlobResponse[]) => {
+                                    imgResponse.forEach((res: any, i) => {
+                                        if (res) {
+                                            const reader = new FileReader();
+                                            reader.readAsDataURL(res);
+                                            reader.onloadend = () => {
+                                                const base64Image = reader.result as string;
+                                                const foundQuestion = questionsWithCategory.find((question: any) => question.QUESTION_ID === fileArray[i].id);
+                                                if (foundQuestion) {
+                                                    foundQuestion.image = base64Image;
+                                                } else {
+                                                    const foundAnswer = questionsWithCategory.find((question: any) => {
+                                                        return question.Answers.some((ans: any) => ans.ID === fileArray[i].id);
+                                                    });
+                                                    if (foundAnswer) {
+                                                        const ansIndex = foundAnswer.Answers.findIndex((ans: any) => ans.ID === fileArray[i].id);
+                                                        foundAnswer.Answers[ansIndex].image = base64Image;
+                                                    }
                                                 }
-                                            }
-                                        };
-                                    }
-                                });
-                                return questionsWithCategory;
-                            }));
+                                            };
+                                        }
+                                    });
+                                    return questionsWithCategory;
+                                }));
+                        } else {
+                            return of(questionsWithCategory);
+                        }
+
+
                     } else {
-                        return of(questionsWithCategory);
+                        return of([]);
                     }
-
-
+                })
+            ).subscribe((examQuestion: any) => {
+                this._getAssessmentSettings();
+                if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
+                    this.gotoDriverView();
                 } else {
-                    return of([]);
+                    this.toggleScreen('exam');
                 }
-            })
-        ).subscribe((examQuestion: any) => {
-            if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
-                this.readSurveyData().subscribe((surveyResponse: any) => {
-                    if (surveyResponse.Data.length) {
-                        this.surveyQuestions = surveyResponse.Data;
-                        this.toggleScreen('survey');
-                    } else {
-                        this.toggleScreen('exam');
-                    }
-                });
-            } else {
-                this.toggleScreen('exam');
-            }
-            this.examQuestions = examQuestion;
-            console.log(this.examQuestions);
-        });
-    }
+                this.examQuestions = examQuestion;
+                console.log(this.examQuestions);
+            });
+        }
+
+
 
     individualAnswerSave($event: IOptionSave) {
         const data: IOptionSaveParam = {
@@ -834,36 +848,62 @@ export class ExamWrapperComponent {
     }
 
     onExamComplete($event: IExamCompleteEmitResponse): void {
-        console.log($event, 'event data');
-        const driverParam = { 
-            ActualTime: 0,
-            Weightage: 0,
-            MinPassMark: 0,
-            Categories: this.formatCategories(), 
+        console.log($event, 'event data from exam');
+        const driverParam = {
+            ActualTime: this.returnActualTime($event),
+            Weightage: this.examSettings.WEIGHATGE,
+            MinPassMark: this.examSettings.MIN_PASS_MARK,
+            Categories: this.formatCategories(),
         }
-        const trainerParam = {  
-            UserId: 0, 
-            Courses: this.formatCources(), 
-        } 
-        const data: IExamSave = { 
-            LineId:this.userTransData?.LINE_ID,
+        const trainerParam = {
+            UserId: 0,
+            Courses: this.formatCources(),
+        }
+        const data: IExamSave = {
+            LineId: this.userTransData?.LINE_ID,
             ExamType: examTypeEnum.Written,
-            StartTime: "2024-02-22T05:55:49.649Z",
-            EndTime: "2024-02-22T05:55:49.649Z",
-            Remarks: "", 
+            StartTime: "2024-02-22T05:55:49.649Z", //timer stard time
+            EndTime: "2024-02-22T05:55:49.649Z", //end time
+            Remarks: "",
             ...(this.assessmentStatusInfo.UserType === userTypeEnum.Driver ? driverParam : trainerParam),
-            Questiones: this.formatQuestions($event.question), 
+            Questiones: this.formatQuestions($event.question),
             Images: this.formatImages($event.question),
-        } 
+        }
+        console.log(data);
         const url = (this.assessmentStatusInfo.UserType === userTypeEnum.Driver) ? 'assessment/saveDriverAssessment' : 'assessment/saveTrainerAssessment';
         this.completeExam(data, url)
     }
 
+    returnActualTime(data: any): any {
+        const actTime = this.timeCalc({ timeStart: data.examTimer, timeEnd: `${this.examSettings.EXAM_DURATION}:00` }).time;
+        return Number(actTime.split(':')[0]);
+    }
+
+
+    timeCalc(arg: any): any {
+        const [tsm, tss] = arg.timeStart.split(':');
+        const [tem, tes] = arg.timeEnd.split(':');
+        const tsms = ((Number(tsm) * 60) + Number(tss)) * 1000;
+        const tems = ((Number(tem) * 60) + Number(tes)) * 1000;
+        let milliseconds = tems - tsms;
+        if (arg.operator === '+') {
+            milliseconds = tems + tsms;
+        }
+        const minutes = Math.floor(milliseconds / 60000);
+        const seconds = Number(((milliseconds % 60000) / 1000).toFixed(0));
+        const time = `${minutes}:${(seconds < 10 ? '0' : '')} ${seconds}`;
+        return {
+            milliseconds,
+            seconds,
+            minutes,
+            time
+        };
+    }
 
     completeExam(data: IExamSave, url: string): void {
-       /*  this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
-            console.log(res, 'complete exam final call');
-        }) */
+        /*  this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
+             console.log(res, 'complete exam final call');
+         }) */
     }
 
 
@@ -883,7 +923,7 @@ export class ExamWrapperComponent {
             REMARKS: ques.REMARKS,
             WEIGHTAGE: this._selectedAnswerWeightage(ques.Answers) ? this._selectedAnswerWeightage(ques.Answers) : 0,
             GRADE_ID: this._selectedAnswerId(ques.Answers) ? this._selectedAnswerId(ques.Answers) : -1
-        })); 
+        }));
     }
 
     formatCategories(): ISaveCategory[] {

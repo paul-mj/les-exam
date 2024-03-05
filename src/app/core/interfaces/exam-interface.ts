@@ -1,4 +1,4 @@
-import { IConfiguration } from "./exam-wrap.interface"
+import { IConfiguration, IExamSettings } from "./exam-wrap.interface"
 
 export interface IExamResponse {
     Categories: ICategory[]
@@ -85,7 +85,7 @@ export interface IAnswer {
     WEIGHTAGE: number
     FILE_EXTENSION: any
     HAS_IMAGE: number
-    points?:MapPoints
+    points?: MapPoints
     selected?: boolean
     image?: string
 }
@@ -104,6 +104,7 @@ export interface BlobResponse {
 export interface IExamChildInput {
     questions: IFinalQUestionResponse;
     examConfig: IConfiguration
+    examSetting: IExamSettings
 }
 
 
@@ -113,10 +114,12 @@ export interface ISummaryDialogResponse {
     isComplete: boolean
     question?: IQuestion
 }
- 
 
-export interface IExamCompleteEmitResponse { 
-    question: IFinalQUestionResponse
+
+export interface IExamCompleteEmitResponse {
+    question: IFinalQUestionResponse,
+    examTimer: any,
+    endTime: any
 }
 
 export interface IOptionSave {
@@ -136,7 +139,7 @@ export interface IOptionSaveParam {
     InspectMark: number,
     Remarks: string
 }
- 
+
 export interface IExamSave {
     LineId: number
     ExamType: number
@@ -151,19 +154,19 @@ export interface IExamSave {
     Categories?: ISaveCategory[]
     Courses?: ISaveCourse[]
     Images: ISaveImage[]
-  }
-  
-  
-  export interface ISaveQuestion {
+}
+
+
+export interface ISaveQuestion {
     QUESTION_ID: number
     INSPECT_MARK: number
     REMARKS: string
     WEIGHTAGE: number
     GRADE_ID: number
     QUESTION_CAT_ID: number
-  }
-  
-  export interface ISaveCategory {
+}
+
+export interface ISaveCategory {
     CATEGORY_ID: number
     WEIGHTAGE: number
     INSPECT_MARK: number
@@ -171,16 +174,15 @@ export interface IExamSave {
     IS_PASS: number
     INSPECT_MARK_DEVIATION: number
     IS_PREV_TEST: number
-  }
-  export interface ISaveCourse {
+}
+export interface ISaveCourse {
     COURSE_ID: number
     IS_PASS: number
     INSPECT_MARK: number
-    MIN_FOR_PASS: number 
-  }
-  
-  export interface ISaveImage {
+    MIN_FOR_PASS: number
+}
+
+export interface ISaveImage {
     QUESTION_ID: number
     DOC_NAME: string
-  }
-  
+}

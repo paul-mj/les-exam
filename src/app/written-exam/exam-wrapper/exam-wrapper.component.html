@@ -34,7 +34,7 @@
     <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
     }
     @else if (screenControl.exam && examQuestions) {
-    <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration}"
+    <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings}"
         (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" />
     }
     @else {
