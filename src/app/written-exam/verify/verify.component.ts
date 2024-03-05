@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -10,5 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
     styleUrl: './verify.component.scss'
 })
 export class VerifyComponent {
+
+    @Output() retryClick = new EventEmitter<void>();
+
+    retry() {
+      this.retryClick.emit();
+    }
 
 }

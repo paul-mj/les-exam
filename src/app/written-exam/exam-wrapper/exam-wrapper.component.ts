@@ -139,8 +139,8 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        /* this.loadQuestions__Test(); */
-        this.pingChecking();
+        this.loadQuestions__Test();
+        // this.pingChecking();
     }
 
     pingChecking(): void {
@@ -683,7 +683,7 @@ export class ExamWrapperComponent {
                         }
                     })
                 ).subscribe((examQuestion: any) => {
-                    
+
                     if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
                         this.gotoDriverView();
                     } else {
@@ -708,7 +708,7 @@ export class ExamWrapperComponent {
         });
     }
 
- 
+
 
     readSetting(): Observable<any> {
         const payloadSettings: IQuesSettingsPayload = {
@@ -728,7 +728,7 @@ export class ExamWrapperComponent {
         for (const key in this.screenControl) {
             if (Object.prototype.hasOwnProperty.call(this.screenControl, key)) {
                 this.screenControl[key as keyof IScreenControls] = key === screenName;
-                (screenName === 'exam' )&& this.isExamScreen();
+                (screenName === 'exam') && this.isExamScreen();
             }
         }
     }
@@ -737,96 +737,96 @@ export class ExamWrapperComponent {
         this.examStartTime = this.formatDateToenUS(new Date(), 'dd-MMM-yyyy HH:mm:ss')
     }
 
-        loadQuestions__Test() {
-            const payload: IQuesSettingsPayload = {
-                Id: 24220,
-                CultureId: 0,
-                UserType: 42602,
-                ExamType: examTypeEnum.Written,
-            };
-            this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).pipe(
-                switchMap((response: IExamResponse) => {
-                    if (response.Valid && response.Categories && response.Questions) {
-                        this.examQuestionApiResponse = response;
-                        const fileArray: any[] = [];
-                        const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
-                            return {
-                                ...question,
-                                isShow: index === 0 ? true : false,
-                                isPrevious: index === 0 ? false : true,
-                                isNext: index === response.Questions?.length ? false : true,
-                                isAnswered: false,
-                                isReview: false,
-                                category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
-                            };
-                        });
+    loadQuestions__Test() {
+        const payload: IQuesSettingsPayload = {
+            Id: 24220,
+            CultureId: 0,
+            UserType: 42602,
+            ExamType: examTypeEnum.Written,
+        };
+        this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).pipe(
+            switchMap((response: IExamResponse) => {
+                if (response.Valid && response.Categories && response.Questions) {
+                    this.examQuestionApiResponse = response;
+                    const fileArray: any[] = [];
+                    const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
+                        return {
+                            ...question,
+                            isShow: index === 0 ? true : false,
+                            isPrevious: index === 0 ? false : true,
+                            isNext: index === response.Questions?.length ? false : true,
+                            isAnswered: false,
+                            isReview: false,
+                            category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
+                        };
+                    });
 
-                        questionsWithCategory.forEach((question: any) => {
-                            if (!!question.HAS_IMAGE) {
-                                fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, blob: null });
-                            }
-                            question.Answers.forEach((answer: IAnswer) => {
-                                if (!!answer.HAS_IMAGE) {
-                                    fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, blob: null });
-                                }
-                                answer.selected = false;
-                            });
-                        });
-
-                        const requests = fileArray.map((file: any) => {
-                            return this.api.httpGetBlob({ url: file.url }).pipe(
-                                catchError((error: any) => {
-                                    return of(null);
-                                })
-                            );
-                        });
-
-                        if (requests.length) {
-                            return forkJoin(requests).pipe(
-                                map((imgResponse: BlobResponse[]) => {
-                                    imgResponse.forEach((res: any, i) => {
-                                        if (res) {
-                                            const reader = new FileReader();
-                                            reader.readAsDataURL(res);
-                                            reader.onloadend = () => {
-                                                const base64Image = reader.result as string;
-                                                const foundQuestion = questionsWithCategory.find((question: any) => question.QUESTION_ID === fileArray[i].id);
-                                                if (foundQuestion) {
-                                                    foundQuestion.image = base64Image;
-                                                } else {
-                                                    const foundAnswer = questionsWithCategory.find((question: any) => {
-                                                        return question.Answers.some((ans: any) => ans.ID === fileArray[i].id);
-                                                    });
-                                                    if (foundAnswer) {
-                                                        const ansIndex = foundAnswer.Answers.findIndex((ans: any) => ans.ID === fileArray[i].id);
-                                                        foundAnswer.Answers[ansIndex].image = base64Image;
-                                                    }
-                                                }
-                                            };
-                                        }
-                                    });
-                                    return questionsWithCategory;
-                                }));
-                        } else {
-                            return of(questionsWithCategory);
+                    questionsWithCategory.forEach((question: any) => {
+                        if (!!question.HAS_IMAGE) {
+                            fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, blob: null });
                         }
+                        question.Answers.forEach((answer: IAnswer) => {
+                            if (!!answer.HAS_IMAGE) {
+                                fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, blob: null });
+                            }
+                            answer.selected = false;
+                        });
+                    });
 
+                    const requests = fileArray.map((file: any) => {
+                        return this.api.httpGetBlob({ url: file.url }).pipe(
+                            catchError((error: any) => {
+                                return of(null);
+                            })
+                        );
+                    });
 
+                    if (requests.length) {
+                        return forkJoin(requests).pipe(
+                            map((imgResponse: BlobResponse[]) => {
+                                imgResponse.forEach((res: any, i) => {
+                                    if (res) {
+                                        const reader = new FileReader();
+                                        reader.readAsDataURL(res);
+                                        reader.onloadend = () => {
+                                            const base64Image = reader.result as string;
+                                            const foundQuestion = questionsWithCategory.find((question: any) => question.QUESTION_ID === fileArray[i].id);
+                                            if (foundQuestion) {
+                                                foundQuestion.image = base64Image;
+                                            } else {
+                                                const foundAnswer = questionsWithCategory.find((question: any) => {
+                                                    return question.Answers.some((ans: any) => ans.ID === fileArray[i].id);
+                                                });
+                                                if (foundAnswer) {
+                                                    const ansIndex = foundAnswer.Answers.findIndex((ans: any) => ans.ID === fileArray[i].id);
+                                                    foundAnswer.Answers[ansIndex].image = base64Image;
+                                                }
+                                            }
+                                        };
+                                    }
+                                });
+                                return questionsWithCategory;
+                            }));
                     } else {
-                        return of([]);
+                        return of(questionsWithCategory);
                     }
-                })
-            ).subscribe((examQuestion: any) => {
-                
-                if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
-                    this.gotoDriverView();
+
+
                 } else {
-                    this.toggleScreen('exam');
+                    return of([]);
                 }
-                this.examQuestions = examQuestion;
-                console.log(this.examQuestions);
-            });
-        }
+            })
+        ).subscribe((examQuestion: any) => {
+
+            if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
+                this.gotoDriverView();
+            } else {
+                this.toggleScreen('exam');
+            }
+            this.examQuestions = examQuestion;
+            console.log(this.examQuestions);
+        });
+    }
 
 
 
@@ -873,7 +873,7 @@ export class ExamWrapperComponent {
     }
 
     returnActualTime(data: any): any {
-        const timeObj = { timeStart: data.examTimer, timeEnd: `${this.examSettings.EXAM_DURATION}:00` }; 
+        const timeObj = { timeStart: data.examTimer, timeEnd: `${this.examSettings.EXAM_DURATION}:00` };
         const actTime = this.timeCalc(timeObj).time;
         return Number(actTime.split(':')[0]);
     }
