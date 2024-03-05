@@ -42,7 +42,9 @@
     } -->
 
 
-    <app-verify (retryClick)="captureFinger()"/>
+    <!-- <app-verify (retryClick)="captureFinger()"/> -->
+
+    <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
 
     <!-- <app-result />   -->
 </div>
