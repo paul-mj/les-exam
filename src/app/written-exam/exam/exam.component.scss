@@ -246,7 +246,7 @@
                         align-items: center;
                         font-size: 1.5rem;
                         font-weight: 500;
-                        cursor: pointer;
+
                     }
 
                     .add-review {
@@ -436,16 +436,23 @@
 }
 
 .active-language {
-
     background: #003a5d;
     color: white;
-    padding: 23px 32px;
+    height: 100%;
+    width: 100%;
     border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
 }
 
 .setting-margin {
-    margin: 0 1.35rem;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .nxt-bttn {
@@ -455,4 +462,8 @@
     line-height: 1.2;
     border-radius: 10px;
     font-size: 1.5rem;
+}
+
+.set-pointer {
+    cursor: pointer;
 }

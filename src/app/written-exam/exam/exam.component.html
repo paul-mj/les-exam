@@ -279,7 +279,7 @@
                     </h5>
                     <div class="language">
                         @for (item of toggleLanguage; let j = $index; track j) {
-                        <div (click)="clickLanguage(j)"
+                        <div class="set-pointer" (click)="clickLanguage(j)"
                             [ngClass]="(item.active) ? 'active-language' : 'setting-margin '">
                             {{item.language}}</div>
                         }
