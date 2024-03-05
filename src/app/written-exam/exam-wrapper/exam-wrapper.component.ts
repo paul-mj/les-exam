@@ -682,7 +682,7 @@ export class ExamWrapperComponent {
                         }
                     })
                 ).subscribe((examQuestion: any) => {
-                    this._getAssessmentSettings();
+                    
                     if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
                         this.gotoDriverView();
                     } else {
@@ -707,16 +707,7 @@ export class ExamWrapperComponent {
         });
     }
 
-    _getAssessmentSettings(): void {
-        const data = {
-            LineId: this.userTransData.LINE_ID,
-            CultureId: 0,
-            Mode: examTypeEnum.Written
-        };
-        this.api.httpPost({ url: 'driver/getAssessmentSettings', data }).subscribe((res: any) => {
-            console.log(res, 'response');
-        });
-    }
+ 
 
     readSetting(): Observable<any> {
         const payloadSettings: IQuesSettingsPayload = {
@@ -820,7 +811,7 @@ export class ExamWrapperComponent {
                     }
                 })
             ).subscribe((examQuestion: any) => {
-                this._getAssessmentSettings();
+                
                 if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
                     this.gotoDriverView();
                 } else {
