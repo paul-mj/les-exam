@@ -8,6 +8,21 @@ export interface IScreenControls {
     result: boolean;
 }
 
+export interface IResponseControl {
+    scanner: ILoader
+    readFinger: ILoader
+    verifyFinger: ILoader
+    userDetails: ILoader
+    examStart: ILoader
+}
+
+export interface ILoader {
+    loader: boolean
+    error: boolean
+    message: string 
+}
+
+
 export interface IDeviceInfo {
     BiosId: string;
     IP4Address: string;
@@ -347,5 +362,35 @@ export interface IExamSetingsResponse {
     EXAM_DURATION: number
     MIN_PASS_MARK: number
     WEIGHATGE: number
+  }
+  
+
+
+  export interface IUserResponse {
+    Data: IUserData
+    Valid: boolean
+    ResponseMessage: string
+  }
+  
+  export interface IUserData {
+    DRIVER_NAME_EN: string
+    DRIVER_NAME_AR: string
+    DRIVER_DOB: string
+    DRIVER_PASSPORT_NO: string
+    DRIVER_PROFILE_ID: number
+    PERMIT_NO: number
+    LICENSE_NO: string
+    LICENSE_EXPIRY_DATE: string
+    PERMIT_EXPIRY_DATE: string
+    DRIVER_MOBILE_NO: string
+    UPLOAD_PHOTO_DOC_NAME: string
+    UPLOAD_PHOTO_EXTENSION: string
+    ORAL_PHOTO_DOC_NAME: string
+    ORAL_PHOTO_EXTENSION: string
+    PERMIT_VALIDITY: string
+    ENROLL_ID: number
+    SERVICE_TYPE: string
+    VEHICLE_TYPE: string
+    FRANCHISE_NAME: string
   }
   
