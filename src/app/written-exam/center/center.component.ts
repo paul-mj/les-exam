@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ICenter, IDeviceInfo, IRegisterDevice } from '../../core/interfaces/exam-wrap.interface';
+import { ICenter, IDeviceInfo, IRegisterDevice, IResponseControl } from '../../core/interfaces/exam-wrap.interface';
 import { ApiService } from '../../core/services/api/api.service';
 
 interface IInputData {
-    deviceInfo: IDeviceInfo,
+    deviceInfo: IDeviceInfo
     list: ICenter[]
+    blockControl: IResponseControl
 }
 
 @Component({

@@ -1,4 +1,4 @@
-import { IConfiguration, IExamSettings } from "./exam-wrap.interface"
+import { IConfiguration, IExamSettings, IResponseControl } from "./exam-wrap.interface"
 
 export interface IExamResponse {
     Categories: ICategory[]
@@ -105,6 +105,7 @@ export interface IExamChildInput {
     questions: IFinalQUestionResponse;
     examConfig: IConfiguration
     examSetting: IExamSettings
+    blockControl: IResponseControl
 }
 
 

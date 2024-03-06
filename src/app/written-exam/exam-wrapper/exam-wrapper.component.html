@@ -19,30 +19,30 @@
     }
 
     
-    <!-- @if (screenControl.center) {
-    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo}"
+    @if (screenControl.center) {
+    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
         (onClickNextToVerify)="registerDevice($event)" />
     }
     @else if (screenControl.verify) {
-    <app-verify />
+    <app-verify [verifyInput]="{blockControl: responseControl}"/>
     <button (click)="captureFinger()">Retry</button>
     }
     @else if (screenControl.userDetails) {
-    <app-user-details [readUserProfile]="{profileDetails: readUserProfile}" />
+    <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
     }
     @else if (screenControl.survey) {
-    <app-survey [surveyInput]="surveyQuestions" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
+    <app-survey [surveyInput]="{survey: surveyQuestions, blockControl: responseControl}" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
     }
     @else if (screenControl.exam && examQuestions) {
-    <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings}"
+    <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings, blockControl: responseControl}"
         (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" />
     }
     @else {
 
-    } -->
+    }
 
-    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo}"
-    (onClickNextToVerify)="registerDevice($event)" />
+  <!--   <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
+    (onClickNextToVerify)="registerDevice($event)" /> -->
 
 
     <!-- <app-verify (retryClick)="captureFinger()"/> -->

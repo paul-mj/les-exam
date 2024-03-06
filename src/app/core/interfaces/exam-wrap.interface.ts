@@ -249,9 +249,14 @@ export interface IReadProfileResponse {
     ResponseMessage: string
 }
 
+export interface IVerifyInput { 
+    blockControl: IResponseControl
+}
+
 
 export interface UserInput {
-    profileDetails: IReadProfile
+    profileDetails: IReadProfile,
+    blockControl: IResponseControl
 }
 
 export interface IReadProfile {
