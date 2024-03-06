@@ -22,21 +22,17 @@
 
     }
 
-    .user-header {
-        background: #d3efed;
-        border-radius: 5px;
-    }
 
     .loader-content {
-        font-size: 1rem;
-        color: #252525; 
-        overflow: hidden; 
+        font-size: 1.25rem;
+        color: #252525;
+        overflow: hidden;
         /* border-right: .15em solid orange;  */
-        white-space: nowrap; 
-        margin: 0 auto; 
-        letter-spacing: .15em; 
+        white-space: nowrap;
+        margin: 0 auto;
+        letter-spacing: .15em;
         animation:
-            typing 3.5s steps(40, end) infinite, 
+            typing 3.5s steps(40, end) infinite,
     }
 
 
@@ -55,16 +51,16 @@
 
 .question-loader {
     img.dab-img {
-        width: 55px;
+        width: 8rem;
         height: auto;
     }
 
     img.sys-img {
-        width: 60px;
+        width: 8rem;
         height: auto;
     }
 
-    
+
     div.dot {
         display: inline-block;
         margin: 0px;
@@ -101,7 +97,7 @@
             opacity: 1;
         }
     }
- 
+
 
 }
 
@@ -113,7 +109,8 @@
 }
 
 .wrapper-user-details {
-    height: 90vh;
+    height: 97vh;
+    margin-top: 3rem;
 
     .user-wrap {
         height: 100%;
@@ -123,11 +120,66 @@
         align-items: center;
 
         .user-cnr {
-            padding: 10px;
+            width: 110rem;
+            padding: 18px;
             border: 3px solid #eae6e6;
             border-radius: 10px;
             gap: 3rem;
-            box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+            box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            .user-img-wrap {
+                width: 15rem;
+                padding: 6px;
+                height: 15rem;
+                box-sizing: content-box;
+
+                img {
+                    color: transparent;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    text-align: center;
+                    text-indent: 10000px;
+                    border-radius: 50%;
+                }
+
+            }
+
+            .user-name {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 3rem;
+                margin-top: 2rem;
+
+                .user-name-cnr {
+                    .user-type {
+                        font-size: 2.25rem;
+                    }
+
+                    .highlight-value {
+                        font-size: 1.75rem;
+                        padding-top: 20px;
+                    }
+                }
+
+            }
         }
     }
+}
+
+.set-font-size {
+    font-size: 1.5rem;
+    line-height: 1.5;
+
+}
+
+.set-sub-font {
+    font-size: 1.35rem;
+}
+
+.set-padding {
+    padding: 0rem 4rem;
+    gap: 1.5rem 0rem;
 }
