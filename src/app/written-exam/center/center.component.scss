@@ -7,15 +7,16 @@
 
 .search-box {
     position: relative;
-    width: 30rem;
+    width: 100%;
 
     input.search-input {
         padding: 0.8rem;
         border-radius: 5px;
-        border: 1px solid #9c9c9c;
+        border: 2px solid #dfdfdf;
         font-weight: 400;
         font-size: 1.5rem;
         background-color: #fff;
+        height: 5.5rem;
 
         &:focus {
             outline: none;
@@ -38,7 +39,7 @@
 
 .search-list {
     height: 30rem;
-    width: 30rem;
+    width: 100%;
     border-radius: 5px;
     background-color: #fff;
 
@@ -66,11 +67,18 @@
 
 .next-wrap {
     display: flex;
-    gap: 6rem;
+    gap: 2rem;
 
     .search-section {
         display: flex;
         flex-direction: column;
+        flex: 3;
+    }
+
+    .next-section {
+        flex: 1;
+        align-items: center;
+        display: flex;
     }
 }
 
@@ -88,6 +96,13 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+
+    .assessment-wrap {
+        width: 65rem;
+        background-color: #ecf6ff;
+        padding: 5rem 2rem;
+        border-radius: 13px;
+    }
 }
 
 .heading-section {

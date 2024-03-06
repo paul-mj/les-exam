@@ -38,37 +38,40 @@
     <div class="wrap-assesment">
 
         <div class="section-wrap">
-            <h5 class="heading-section">
-                Assessment Center
-            </h5>
-            <div class="next-wrap">
-                <div class="search-section">
-                    <div class="search-box position-relative">
-                        <input type="text" class="search-input w-100" [value]="choosedCenter"
-                            placeholder="Select one center from the below list" readonly
-                            [class.has-error]="isInputValid" />
-                        <span class="arrow-icon"><img src="assets/images/google-icons/down.svg"
-                                class="img-fluid"></span>
-                    </div>
-                    <div class="search-list mt-3">
-                        <div class="h-100 overflow-auto text-start">
-                            <ul class="p-0 list-unstyled">
-                                <ng-container *ngFor="let item of list">
-                                    <li (click)="onClickCenter(item)" [class.activeItem]="item.active">{{
-                                        item.Description
-                                        }}
-                                    </li>
-                                </ng-container>
 
-                            </ul>
+            <div class="assessment-wrap">
+                <h5 class="heading-section">
+                    Assessment Center
+                </h5>
+                <div class="next-wrap">
+                    <div class="search-section">
+                        <div class="search-box position-relative">
+                            <input type="text" class="search-input w-100" [value]="choosedCenter"
+                                placeholder="Select one center from the below list" readonly
+                                [class.has-error]="isInputValid" />
+                            <span class="arrow-icon"><img src="assets/images/google-icons/down.svg"
+                                    class="img-fluid"></span>
+                        </div>
+                        <div class="search-list mt-3">
+                            <div class="h-100 overflow-auto text-start">
+                                <ul class="p-0 list-unstyled">
+                                    <ng-container *ngFor="let item of list">
+                                        <li (click)="onClickCenter(item)" [class.activeItem]="item.active">{{
+                                            item.Description
+                                            }}
+                                        </li>
+                                    </ng-container>
+
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <button class="next-button" (click)="onClickNextToVerifyScreen()">
-                        Next
-                        <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-3" />
-                    </button>
+                    <div class="next-section">
+                        <button class="next-button" (click)="onClickNextToVerifyScreen()">
+                            Next
+                            <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-3" />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
