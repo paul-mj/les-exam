@@ -52,6 +52,8 @@ import {
     distinctUntilChanged,
     forkJoin,
     interval,
+    last,
+    lastValueFrom,
     map,
     mergeMap,
     of,
@@ -474,7 +476,10 @@ export class ExamWrapperComponent {
                 })
                 return;
             } else {
-                this.readUserTypeTransLine(deviceLineData).subscribe((userTypeTransResponse: ITranslineResponse) => {
+                let lineStatus: number = deviceLineData.LINE_STATUS;
+                let lineId: number = deviceLineData.LINE_ID;
+
+                this.readUserTypeTransLine(lineId).subscribe(async (userTypeTransResponse: ITranslineResponse) => {
                     /* This if only for testing need to remove after fixing extra time update */
                     /* if (deviceLineResponse.LINE_STATUS === deviceStatusEnum.Extend) {
                         userTypeTransResponse.Data.EXTRA_TIME = 1;
@@ -482,31 +487,36 @@ export class ExamWrapperComponent {
                     this.signal.userTypeTransLineData(userTypeTransResponse.Data);
                     this.userTransData = userTypeTransResponse.Data;
 
-                    switch (deviceLineData.LINE_STATUS) {
+                    switch (lineStatus) {
                         case deviceStatusEnum.Ready:
-                            if (this.iStatus !== deviceLineData.LINE_STATUS) {
-                                this.loadUserDetails(deviceLineData?.LINE_ID);
+                            if (this.iStatus !== lineStatus) {
+                                this.loadUserDetails(lineId);
                             }
                             /* Stop Scanner Service */
                             break;
                         case deviceStatusEnum.Extend:
-                            if (this.assessmentStatusInfo.LineId > 0 && userTypeTransResponse.Valid) {
-                                const extra = this.userTransData.EXTRA_TIME;
-                                if (this.extraTime != extra) {
-                                    this.extraTime = extra;
+                            if (lineId > 0 && userTypeTransResponse.Valid) {
+                                const extraTimeAdded = this.userTransData.EXTRA_TIME;
+                                if (this.extraTime != extraTimeAdded) {
+                                    this.extraTime = extraTimeAdded;
                                     this.ResetDuration();
                                     this.assessmentStatusInfo.LineStatus = deviceStatusEnum.Started;
                                     /* Need to verify Extra time is added or not */
-                                    this.saveStatus().subscribe((saveSatatusResponse: ISaveStatusResponse) => {
+                                    /* this.saveStatus().subscribe((saveSatatusResponse: ISaveStatusResponse) => {
                                         if (saveSatatusResponse.Id > 0) {
                                             this.iStatus = deviceStatusEnum.Started;
                                         }
-                                    })
+                                    }) */
+                                    const saveStatus$ = this.saveStatus();
+                                    const saveSatatusResponse: ISaveStatusResponse = await lastValueFrom(saveStatus$);
+                                    if (saveSatatusResponse.Id > 0) {
+                                        this.iStatus = deviceStatusEnum.Started;
+                                    }
                                 }
                             }
                             break;
                         case deviceStatusEnum.StartExam:
-                            if ((this.iStatus !== deviceLineData.LINE_STATUS) && userTypeTransResponse.Valid) {
+                            if ((this.iStatus !== lineStatus) && userTypeTransResponse.Valid) {
                                 /*   oExamSrv.LineId = Convert.ToInt32(dr[BaseVars.LineId]);
                                   oExamSrv.DriverId = Convert.ToInt64(dr[BaseVars.DriverId]); */
                                 this.assessmentStatusInfo.LineId = this.userTransData.LINE_ID
@@ -514,6 +524,7 @@ export class ExamWrapperComponent {
                                 this.assessmentStatusInfo.StartTime = new Date();
                                 this.saveStatus().subscribe((saveSatatusResponse: ISaveStatusResponse) => {
                                     if (saveSatatusResponse.Id > 0) {
+                                        this.extraTime = this.userTransData.EXTRA_TIME;
                                         this.iStatus = deviceStatusEnum.Started;
                                         /* ExtraTime = Convert.ToInt32(dr[BaseVars.ExtraTime]);
                                         oExamSrv.StartTime = oInfo.StartTime;  */
@@ -524,7 +535,7 @@ export class ExamWrapperComponent {
                             }
                             break;
                         case deviceStatusEnum.EndExam:
-                            if (this.iStatus !== deviceLineData.LINE_STATUS) {
+                            if (this.iStatus !== lineStatus) {
                                 /* 
                                     Step 1
                                         Show Dialog Message ("Assessment ended by assessor")
@@ -537,7 +548,7 @@ export class ExamWrapperComponent {
                             }
                             break;
                         case deviceStatusEnum.Detach:
-                            if (this.iStatus !== deviceLineData.LINE_STATUS) {
+                            if (this.iStatus !== lineStatus) {
                                 this.assessmentStatusInfo.LineStatus = deviceStatusEnum.Detached;
                                 this.saveStatus().subscribe((saveSatatusResponse: ISaveStatusResponse) => {
                                     if (saveSatatusResponse.Id > 0) {
@@ -552,8 +563,8 @@ export class ExamWrapperComponent {
                             break;
                     }
 
-                    if (this.iStatus != deviceLineData.LINE_STATUS) {
-                        this.iStatus = deviceLineData.LINE_STATUS;
+                    if (this.iStatus != lineStatus) {
+                        this.iStatus = lineStatus;
                     }
                 })
             }
@@ -568,7 +579,8 @@ export class ExamWrapperComponent {
 
     ResetDuration(): void {
         if (this.userTransData.LINE_ID > 0) {
-            const total = this.extraTime + this.configuration.ASSESSMENT_DURATION_TIMER;
+            const total = this.extraTime + this.examSettings.EXAM_DURATION ; 
+            // this.configuration.ASSESSMENT_DURATION_TIMER;
             const timeSecond = total * 60
             /* this.showTime(); */
         }
@@ -590,9 +602,9 @@ export class ExamWrapperComponent {
         return this.api.httpPost<any>({ url: API.Assessment.readProfile, data: profilePayload });
     }
 
-    readUserTypeTransLine(deviceLineData: IDeviceLine): Observable<any> {
+    readUserTypeTransLine(lineId: number): Observable<any> {
         const profilePayload = {
-            Id: deviceLineData.LINE_ID,
+            Id: lineId,
             CultureId: 0,
             UserType: this.assessmentStatusInfo.UserType,
         };
@@ -606,7 +618,8 @@ export class ExamWrapperComponent {
                 const payload: IQuesSettingsPayload = {
                     Id: this.userTransData.LINE_ID,
                     CultureId: 0,
-                    UserType: this.verifiedUserData.USER_TYPE,
+                    UserType: this.verifiedUserData?.USER_TYPE,
+                    //UserType: this.verifiedUserData?.USER_TYPE,
                     ExamType: examTypeEnum.Written,
                 };
 
@@ -696,7 +709,6 @@ export class ExamWrapperComponent {
             }
         });
     }
-
     gotoDriverView(): void {
         this.readSurveyData().subscribe((surveyResponse: any) => {
             if (surveyResponse.Data.length) {
@@ -739,7 +751,7 @@ export class ExamWrapperComponent {
 
     loadQuestions__Test() {
         const payload: IQuesSettingsPayload = {
-            Id: 24220,
+            Id: 24252, //todays Enroll 05-03-2024
             CultureId: 0,
             UserType: 42602,
             ExamType: examTypeEnum.Written,
