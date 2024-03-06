@@ -21,6 +21,7 @@ import {
     IExamSetingsResponse,
     IExamSettings,
     IFingerVerifyResponse,
+    ILoader,
     IQuesSettingsPayload,
     IReadDeviceLinePayload,
     IReadImpressionPayload,
@@ -29,6 +30,7 @@ import {
     IReadProfileResponse,
     IReadSettings,
     IRegisterDevice,
+    IResponseControl,
     ISaveStatusResponse,
     IScanner,
     IScannerResponse,
@@ -36,6 +38,7 @@ import {
     ISurvey,
     ITranslineResponse,
     IUpdateAddress,
+    IUserResponse,
     IVerifiedUserData,
     IVerifyDevice,
     IVerifyDeviceResponse,
@@ -94,6 +97,35 @@ export class ExamWrapperComponent {
         summary: false,
         result: false,
     };
+
+    responseControl: IResponseControl = {
+        scanner: {
+            loader: false,
+            error: false,
+            message: ''
+        },
+        readFinger: {
+            loader: false,
+            error: false,
+            message: ''
+        },
+        verifyFinger: {
+            loader: false,
+            error: false,
+            message: ''
+        },
+        userDetails: {
+            loader: false,
+            error: false,
+            message: ''
+        },
+        examStart: {
+            loader: false,
+            error: false,
+            message: ''
+        },
+    }
+
     deviceInfo!: IDeviceInfo;
     verifiedDeviceData!: IVerifyDevice;
     configuration!: IConfiguration;
@@ -141,8 +173,8 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        this.loadQuestions__Test();
-        // this.pingChecking();
+        /* this.loadQuestions__Test(); */
+        this.pingChecking();
     }
 
     pingChecking(): void {
@@ -318,12 +350,13 @@ export class ExamWrapperComponent {
             map(deviceLineResponse => {
                 return deviceLineResponse;
             })
-        ).subscribe((deviceLineResponse: IDeviceLineResponse) => {
+        ).subscribe((deviceLineResponse: IDeviceLineResponse) => { 
             this.processDeviceData(deviceLineResponse.Data);
         });
     }
 
     initScanner(): void {
+        this.responseControl.scanner.loader = true;
         this.api
             .httpLocalGet({ url: API.scanner.discoverScanners })
             .subscribe((response: IScannerResponse) => {
@@ -331,19 +364,30 @@ export class ExamWrapperComponent {
                     this.scannerDetails = response.Scanners[0];
                     this.captureFinger();
                 } else {
-                    alert(response.Message);
+                    this.responseControl.scanner.error = true;
+                    this.responseControl.scanner.message = response.Message;
                 }
+                this.responseControl.scanner.error = false;
+                this.responseControl.scanner.loader = false;
             });
     }
 
     captureFinger(): void {
-        this.api
-            .httpLocalGet({
-                url: `${API.scanner.captureFinger}?scannerId=${this.scannerDetails.ScannerId}`,
-            })
+        this.responseControl.readFinger.loader = true;
+        this.api.httpLocalGet({ url: `${API.scanner.captureFinger}?scannerId=${this.scannerDetails.ScannerId}` })
             .subscribe((response: ICaptureResponse) => {
-                this.captureResponse = response;
-                this.getEnrolledList();
+                if (response.Valid) {
+                    this.captureResponse = response;
+                    this.getEnrolledList();
+                } else {
+                    /* Failed your finger print scan with machine */
+                    /* Need to add retry button to rescan finger */
+                    this.responseControl.readFinger.error = true;
+                    this.responseControl.readFinger.message = response.Message;
+
+                }
+                this.responseControl.readFinger.error = false;
+                this.responseControl.readFinger.loader = false;
             });
     }
 
@@ -373,51 +417,59 @@ export class ExamWrapperComponent {
             });
         }
         let index = 0;
+        this.responseControl.verifyFinger.loader = true;
         this.processreadImpressionPayload(readImpressionPayload, index);
     }
 
-    processreadImpressionPayload(
-        readImpressionPayload: any[],
-        index: number
-    ): void {
+    processreadImpressionPayload(readImpressionPayload: any[], index: number): void {
         const payload: IReadImpressionPayload = readImpressionPayload[index];
         if (!payload) {
+            this.responseControl.verifyFinger.loader = false;
             return;
         }
-        this.readImpression(payload).subscribe(
-            (response: IReadImpressionResponse) => {
-                if (response.Valid) {
-                    const verifyPayload: IVerifyPayload = {
-                        Lines: response.Lines,
-                        Impression: this.captureResponse.Impression,
-                        Quality: this.captureResponse.Quality,
-                        Size: this.captureResponse.Size,
-                    };
-                    this.verifyImpression(verifyPayload).subscribe(
-                        (res: IFingerVerifyResponse) => {
-                            if (res.Valid) {
-                                this.verifiedUserData = res.Data;
-                                this.assessmentStatusInfo = {
-                                    ...this.assessmentStatusInfo,
-                                    LineId: this.verifiedUserData?.LINE_ID,
-                                    UserType: this.verifiedUserData.USER_TYPE,
-                                    LineStatus: Number(deviceStatusEnum.Ready)
-                                };
-                                this.saveStatus().subscribe((saveSatatusResponse: any) => {
-                                    if (saveSatatusResponse.Valid) {
-                                        this.loadUserDetails(this.verifiedUserData?.LINE_ID)
-                                    }
-                                })
-                            } else {
-                                index++;
-                                this.processreadImpressionPayload(readImpressionPayload, index);
-                            }
-                        }
-                    );
-                }
-            }
-        );
+        this.readImpression(payload).subscribe((response: IReadImpressionResponse) => {
+            if (response.Valid) {
+                const verifyPayload: IVerifyPayload = {
+                    Lines: response.Lines,
+                    Impression: this.captureResponse.Impression,
+                    Quality: this.captureResponse.Quality,
+                    Size: this.captureResponse.Size,
+                };
+                this.verifyImpression(verifyPayload).subscribe((res: IFingerVerifyResponse) => {
+                    if (res.Valid) {
+                        this.verifiedUserData = res.Data;
+                        this.assessmentStatusInfo = {
+                            ...this.assessmentStatusInfo,
+                            LineId: this.verifiedUserData?.LINE_ID,
+                            UserType: this.verifiedUserData.USER_TYPE,
+                            LineStatus: Number(deviceStatusEnum.Ready)
+                        };
+                        this.saveStatus().subscribe((saveSatatusResponse: any) => {
+                            if (saveSatatusResponse.Valid) {
+                                this.loadUserDetails(this.verifiedUserData?.LINE_ID);
+                            } 
+                        });
+                        this.responseControl.verifyFinger.loader = false;
+                        this.responseControl.verifyFinger.error = false; 
+                        this.responseControl.userDetails.loader = true;
+                    } else {
+                        this.responseControl.verifyFinger.loader = false;
+                        this.responseControl.verifyFinger.error = true;
+                        this.responseControl.verifyFinger.message = 'User Verification Failed';
+                    }
+                }, (error: any) => {
+                    this.responseControl.verifyFinger.loader = false;
+                    this.responseControl.verifyFinger.error = true;
+                    this.responseControl.verifyFinger.message = "API Error verifying impression.";
+                });
+            } 
+        }, (error: any) => {
+            this.responseControl.verifyFinger.loader = false;
+            this.responseControl.verifyFinger.error = true;
+            this.responseControl.verifyFinger.message = "API Error reading impression.";
+        });
     }
+    
 
     readImpression(impressionPayload: IReadImpressionPayload): Observable<any> {
         return this.api.httpPost<IReadImpressionPayload>({
@@ -584,9 +636,16 @@ export class ExamWrapperComponent {
     }
 
     loadUserDetails(Id: number): void {
-        this.loadUserDetailsObservable(Id).subscribe((response: any) => {
-            this.readUserProfile = response.Data;
-            this.toggleScreen('userDetails');
+        this.loadUserDetailsObservable(Id).subscribe((response: IUserResponse) => {
+            if(response.Valid) {
+                this.readUserProfile = response.Data;
+                this.toggleScreen('userDetails');
+            } else {
+                this.responseControl.userDetails.error = true;
+                this.responseControl.userDetails.message = response.ResponseMessage;
+            }
+            this.responseControl.userDetails.loader = false;
+            this.responseControl.examStart.loader = true;
         })
     }
 
@@ -700,7 +759,7 @@ export class ExamWrapperComponent {
                         this.toggleScreen('exam');
                     }
                     this.examQuestions = examQuestion;
-                    console.log(this.examQuestions);
+                    this.responseControl.examStart.loader = false; 
                 });
 
             }
