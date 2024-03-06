@@ -106,8 +106,8 @@ export class ExamComponent {
             // this.timer(this.examDefaultTimer);
             this.initTimer(value.examConfig?.ASSESSMENT_DURATION_TIMER) */
 
-            this.examDefaultTimer = value.examSetting.EXAM_DURATION;
-            this.initTimer(value.examSetting.EXAM_DURATION)
+            this.examDefaultTimer = value.examSetting?.EXAM_DURATION;
+            this.initTimer(value.examSetting?.EXAM_DURATION)
 
             this.getcategoriesList();
         }

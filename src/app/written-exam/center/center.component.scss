@@ -7,12 +7,14 @@
 
 .search-box {
     position: relative;
+    width: 30rem;
 
     input.search-input {
         padding: 0.8rem;
         border-radius: 5px;
         border: 1px solid #9c9c9c;
         font-weight: 400;
+        font-size: 1.5rem;
         background-color: #fff;
 
         &:focus {
@@ -35,14 +37,15 @@
 }
 
 .search-list {
-    height: 300px;
+    height: 30rem;
+    width: 30rem;
     border-radius: 5px;
-    /* border: 1px solid #9c9c9c; */
     background-color: #fff;
 
     ul {
         li {
-            padding: 15px 25px;
+            padding: 31px 25px;
+            font-size: 1.5rem;
             transition: all 0.3s ease-in;
 
             &:hover {
@@ -54,10 +57,21 @@
             &.activeItem {
                 background: #003a5d;
                 color: #fff;
+                border-radius: 5px;
             }
         }
     }
 
+}
+
+.next-wrap {
+    display: flex;
+    gap: 6rem;
+
+    .search-section {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .next-button button {
@@ -65,4 +79,32 @@
     padding: 0 3rem;
     font-weight: 400;
     color: #fff !important;
+}
+
+.section-wrap {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.heading-section {
+    font-size: 3.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 7rem;
+}
+
+.wrap-assesment {
+    height: 99vh;
+}
+
+.next-button {
+    background-color: #003a5d;
+    padding: 1rem 3rem;
+    color: white;
+    border-radius: 10px;
+    font-size: 1.5rem;
 }

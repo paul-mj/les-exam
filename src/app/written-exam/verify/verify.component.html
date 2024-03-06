@@ -1,4 +1,4 @@
-<div class="container center-wrap text-center mt-5">
+<!-- <div class="container center-wrap text-center mt-5">
     <div>
         <h4 class="primary-heading">Verify User</h4>
         <p class="info-paragraph">Scan your finger</p>
@@ -7,15 +7,30 @@
         <div class="col-sm-5 col-sm-offset-7">
             <div class="search-list mt-3">
                 <div class="d-flex align-items-center justify-content-center h-100">
-                    <img src="../../../assets/images/finger.gif" class="finger-gif"/>
+                    <img src="assets/images/finger.gif" class="finger-gif" />
                 </div>
             </div>
             <div class="next-button text-end mt-4">
-               <!--  <button mat-button class="next-button">
-                    Next
-                    <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-3" />
-                </button> -->
+
             </div>
         </div>
     </div>
+</div> -->
+
+
+<div class="verify-wrapper">
+
+    <div class="verify-section">
+        <div class="items-wrap">
+            <div class="heading-wrap">
+                <h4 class="primary-heading">Verify User</h4>
+                <p class="info-paragraph">Scan your finger</p>
+            </div>
+            <div class="finger-print-section">
+                <img src="assets/images/finger.gif" class="finger-gif" />
+            </div>
+            <button class="refresh-btn" (click)="retry()">Verify Finger</button>
+        </div>
+    </div>
+
 </div>

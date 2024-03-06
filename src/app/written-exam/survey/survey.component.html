@@ -2,7 +2,7 @@
 
     <div class="header-section-wrap">
         <div class="logo">
-            <img src="assets/images/itc_logo.png" class="img-fluid logo" alt="Itc Logo" />
+            <!-- <img src="assets/images/itc_logo.png" class="img-fluid logo" alt="Itc Logo" /> -->
         </div>
         <h5 class="heading-section">
             Survey
@@ -10,9 +10,6 @@
     </div>
 
     <div class="survey-questions-wrapper">
-        <div class="heading-section">
-            Survey
-        </div>
         <div class="content-section" *ngFor="let item of surveyDummyData; let i = index;">
             <div class="dot">
                 <img src="/assets/images/google-icons/tick.svg" />
@@ -38,8 +35,8 @@
                 </div>
             </div>
         </div>
-        <div class="next-button text-end mt-4">
-            <button mat-button class="next-button" (click)="emitData()">
+        <div class="text-end mt-4">
+            <button class="next-button" (click)="emitData()">
                 Next
                 <img src="assets/images/google-icons/right-arrow.svg" class="img-fluid pl-3" />
             </button>
