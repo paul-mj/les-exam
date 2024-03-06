@@ -480,10 +480,6 @@ export class ExamWrapperComponent {
                 let lineId: number = deviceLineData.LINE_ID;
 
                 this.readUserTypeTransLine(lineId).subscribe(async (userTypeTransResponse: ITranslineResponse) => {
-                    /* This if only for testing need to remove after fixing extra time update */
-                    /* if (deviceLineResponse.LINE_STATUS === deviceStatusEnum.Extend) {
-                        userTypeTransResponse.Data.EXTRA_TIME = 1;
-                    } */
                     this.signal.userTypeTransLineData(userTypeTransResponse.Data);
                     this.userTransData = userTypeTransResponse.Data;
 
@@ -522,16 +518,17 @@ export class ExamWrapperComponent {
                                 this.assessmentStatusInfo.LineId = this.userTransData.LINE_ID
                                 this.assessmentStatusInfo.LineStatus = deviceStatusEnum.Started;
                                 this.assessmentStatusInfo.StartTime = new Date();
-                                this.saveStatus().subscribe((saveSatatusResponse: ISaveStatusResponse) => {
-                                    if (saveSatatusResponse.Id > 0) {
-                                        this.extraTime = this.userTransData.EXTRA_TIME;
-                                        this.iStatus = deviceStatusEnum.Started;
-                                        /* ExtraTime = Convert.ToInt32(dr[BaseVars.ExtraTime]);
-                                        oExamSrv.StartTime = oInfo.StartTime;  */
-                                        this.loadQuestions();
-                                    }
-                                })
 
+
+                                const saveStatus$ = this.saveStatus();
+                                const saveSatatusResponse: ISaveStatusResponse = await lastValueFrom(saveStatus$);
+                                if (saveSatatusResponse.Id > 0) {
+                                    this.extraTime = this.userTransData.EXTRA_TIME;
+                                    this.iStatus = deviceStatusEnum.Started;
+                                    /* ExtraTime = Convert.ToInt32(dr[BaseVars.ExtraTime]);
+                                    oExamSrv.StartTime = oInfo.StartTime;  */
+                                    this.loadQuestions();
+                                }
                             }
                             break;
                         case deviceStatusEnum.EndExam:
@@ -579,7 +576,7 @@ export class ExamWrapperComponent {
 
     ResetDuration(): void {
         if (this.userTransData.LINE_ID > 0) {
-            const total = this.extraTime + this.examSettings.EXAM_DURATION ; 
+            const total = this.extraTime + this.examSettings.EXAM_DURATION;
             // this.configuration.ASSESSMENT_DURATION_TIMER;
             const timeSecond = total * 60
             /* this.showTime(); */
