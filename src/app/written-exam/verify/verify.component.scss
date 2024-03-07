@@ -125,3 +125,30 @@
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
 }
+ 
+
+.set-green-top,
+.set-green {
+    animation: blinkBorder 1s infinite; 
+    transition: border-color 0.3s ease; 
+}
+ 
+@keyframes blinkBorder {
+    0%, 100% {
+        border-color: #4bb762; 
+    }
+    50% {
+        border-color: transparent; 
+    }
+}
+
+p.no-scanner {
+    text-align: center;
+    font-size: 2rem;
+    color: #e50000;
+    padding: 8rem 0;
+    border: 1px solid #e50000;
+    border-radius: 1rem;
+    margin-bottom: 15rem;
+    background: #ffd4d4;
+}

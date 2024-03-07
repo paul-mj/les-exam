@@ -1,0 +1,20 @@
+<div class="cnfrm-dialog" [ngClass]="className">
+    <div class="p-6">
+        <div mat-dialog-title class="cnfrm-dialog-title">
+            <div class="set-border">
+                <img class="icon" src={{icon}} alt="">
+            </div>
+            <p class="title">{{data.title}}</p>
+            <p class="message" [innerHtml]="data.message"></p>
+
+        </div>
+    </div>
+
+    <div mat-dialog-actions class="confirm-footer">
+        <button mat-button (click)="closeDialog()" class="error-btn" *ngIf="data.secondaryButton">{{data.secondaryButton
+            }}</button>
+        <button mat-button (click)="onClickConfirmClose()" class="success-btn" *ngIf="data.primaryButton">{{
+            data.primaryButton }}</button>
+    </div>
+
+</div>

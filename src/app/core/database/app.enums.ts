@@ -29,3 +29,11 @@ export const userTypeEnum = Object.freeze({
 export const examTypeEnum = Object.freeze({
     Written: 31002
 })
+
+export const ConfirmDialog = Object.freeze({
+    confirm: 101,
+    delete: 102,
+    success: 103,
+    warning: 104,
+    error: 105,
+})

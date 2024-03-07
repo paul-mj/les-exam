@@ -9,17 +9,17 @@ export interface IScreenControls {
 }
 
 export interface IResponseControl {
-    scanner: ILoader
-    readFinger: ILoader
-    verifyFinger: ILoader
+    scanner: ILoader 
+    readAndVerifyFinger: ILoader
     userDetails: ILoader
     examStart: ILoader
 }
-
+ 
 export interface ILoader {
-    loader: boolean
-    error: boolean
-    message: string 
+    isSuccess?: boolean
+    buttonText?: string
+    loader: boolean 
+    message?: string 
 }
 
 
