@@ -41,8 +41,8 @@
 
     } -->
 
-    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
-    (onClickNextToVerify)="registerDevice($event)" />
+    <!-- <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
+    (onClickNextToVerify)="registerDevice($event)" /> -->
 
 
     <!-- <app-verify (retryClick)="captureFinger()"/> -->
@@ -51,5 +51,5 @@
 
     <!-- <app-result />   -->
 
-    <!-- <app-user-details [readUserProfile]="{profileDetails: readUserProfile}" /> -->
+    <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
 </div>
