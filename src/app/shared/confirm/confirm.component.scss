@@ -1,0 +1,151 @@
+.cnfrm-dialog {
+
+    width: 55em;
+    min-height: 30em;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+
+    .cnfrm-dialog-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5em 0;
+
+        p.title {
+            font-size: 3.3em;
+            font-weight: 600;
+            padding: 1em 0;
+        }
+
+        p.message {
+            font-size: 2.3em;
+            font-weight: 400;
+        }
+    }
+
+    .set-border {
+        border-radius: 50%;
+
+        .icon {
+            height: 8em;
+            padding: 1rem;
+        }
+    }
+
+
+    p.text-val {
+        font-size: 0.8em;
+        font-weight: 400;
+    }
+
+    &.confirm {
+
+        .set-border {
+            background: aliceblue;
+            border: 1px solid #4991ff;
+            transform: rotate(180deg);
+        }
+
+        .set-txt-colour {
+            color: white;
+            background-color: #4991ff;
+        }
+
+
+        .success-btn {
+            background: #4991ff;
+            ;
+        }
+
+    }
+
+    &.delete {
+
+        .set-border {
+            background-image: linear-gradient(to right top, #ffbab3, #ffc4c3, #ffced2, #ffd9df, #ffe4ea);
+            border: 1px solid #e54132;
+        }
+
+        .set-txt-colour {
+            color: #e54132;
+        }
+
+
+        .success-btn {
+            background: #ce2427;
+            color: white;
+        }
+
+    }
+
+    &.error {
+
+        .set-border {
+            background-image: linear-gradient(to right top, #ffbab3, #ffc4c3, #ffced2, #ffd9df, #ffe4ea);
+            border: 1px solid #e54132;
+        }
+
+        .set-txt-colour {
+            color: #e54132;
+        }
+
+        .error-btn {
+            width: 100%;
+            color: #e54132;
+        }
+
+    }
+
+    &.success {
+
+        .set-border {
+            background-image: linear-gradient(to right top, #bbc3c0, #cafbe4, #d2ffe4, #eafff1, #e4fbe8);
+            border: 1px solid forestgreen;
+        }
+
+        .success-div {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .success-btn {
+            background: #4fad66;
+            color: white;
+        }
+
+    }
+
+
+    .confirm-footer {
+        display: flex;
+        flex-direction: row;
+        gap: 3em;
+        padding: 2em;
+        width: 100%;
+        justify-content: space-between;
+        border-top: 1px solid rgb(117, 117, 117);
+
+        button.success-btn {
+            padding: 1.7rem 0;
+            font-size: 2.3em;
+            border-radius: 5px;
+            width: 13em;
+            border: none;
+        }
+
+        button.error-btn {
+            flex: 1;
+            padding: 1.7rem 0;
+            font-size: 2.3em;
+            border-radius: 5px;
+            border: none;
+        }
+    }
+}
+
+::ng-deep .les-confirm-dialog .mat-mdc-dialog-surface {
+    border-radius: 1.3rem;
+}

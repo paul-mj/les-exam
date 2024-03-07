@@ -66,8 +66,9 @@ import {
 import { ApiService } from "../../core/services/api/api.service";
 import { API } from "../../core/application/api.config";
 import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IFinalQUestionResponse, IOptionSave, IOptionSaveParam, IQuestion, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
-import { DeviceExamStatus, deviceStatusEnum, examTypeEnum, userTypeEnum } from "../../core/database/app.enums";
+import { ConfirmDialog, DeviceExamStatus, deviceStatusEnum, examTypeEnum, userTypeEnum } from "../../core/database/app.enums";
 import { SignalService } from "../../core/services/signal/signal.service";
+import { UtilityService } from "../../core/services/utility/utility.service";
 
 @Component({
     selector: "app-exam-wrapper",
@@ -80,7 +81,7 @@ import { SignalService } from "../../core/services/signal/signal.service";
         ExamComponent,
         SurveyComponent,
         SummaryComponent,
-        ResultComponent,
+        ResultComponent
     ],
     templateUrl: "./exam-wrapper.component.html",
     styleUrl: "./exam-wrapper.component.scss",
@@ -169,7 +170,9 @@ export class ExamWrapperComponent {
     constructor(
         private ping: PingService,
         private api: ApiService,
-        private signal: SignalService
+        private signal: SignalService,
+        private utils: UtilityService,
+
     ) { }
 
     ngOnInit(): void {
@@ -1054,7 +1057,12 @@ export class ExamWrapperComponent {
 
 
 
-
+    confirm(): void { 
+        this.utils.openStatusDialog('Error', 'Finger Verification Failed', ConfirmDialog.error).subscribe((result: any) => {
+            if (result) {
+            }
+        });
+    }
 
 
 
