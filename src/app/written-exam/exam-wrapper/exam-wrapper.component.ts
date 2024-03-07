@@ -174,6 +174,7 @@ export class ExamWrapperComponent {
 
     ngOnInit(): void {
         this.loadQuestions__Test();
+        console.log(this.screenControl)
         // this.pingChecking();
     }
 

@@ -1,6 +1,6 @@
 .box-card {
     border-radius: 5px;
-    background-color: #fff;
+    background-color: #ededed;
     min-height: 100px;
 
     .user-img-wrap {
@@ -68,6 +68,7 @@
         animation: dot 1s infinite linear;
         font-size: 2rem;
         color: #000000;
+        font-size: 5rem;
     }
 
     div.dot:nth-child(2) {
@@ -150,19 +151,27 @@
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
-                gap: 1rem;
-                margin-bottom: 3rem;
-                margin-top: 2rem;
+                gap: 2rem;
+                margin-bottom: 1rem;
+                margin-top: 0rem;
                 background-color: white;
                 padding: 13px;
+                border-radius: 10px;
 
                 .user-name-cnr {
                     .user-type {
-                        font-size: 2.25rem;
+                        font-size: 1.25rem;
+                        background-color: forestgreen;
+                        width: 10rem;
+                        padding: 1rem 2rem;
+                        text-align: center;
+                        border-radius: 35px;
+                        color: white;
                     }
 
                     .highlight-value {
                         font-size: 2.25rem;
+                        margin-bottom: 2.15rem;
                     }
                 }
 
@@ -182,6 +191,24 @@
 }
 
 .set-padding {
-    padding: 0rem 4rem;
     gap: 1.5rem 0rem;
+}
+
+.user-details-exam {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.set-dots {
+    padding-bottom: 40px;
+
+}
+
+.set-gap {
+    gap: 2rem;
+    padding: 2rem;
 }

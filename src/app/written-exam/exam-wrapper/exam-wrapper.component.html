@@ -1,11 +1,11 @@
 <div class="exam-wrapper">
     @if (screenControl.exam && examQuestions){
     <nav class="navbar fixed-top exam-nav container-fluid p-container">
-        <div class="d-flex w-100 p-4">
+        <!-- <div class="d-flex w-100 p-4">
             <div class="col-md-2">
                 <img src="assets/images/itc_logo.png" class="img-fluid logo" alt="Itc Logo" />
             </div>
-        </div>
+        </div> -->
     </nav>
     }
     @else {
@@ -18,7 +18,7 @@
     </nav>
     }
 
-    
+
     <!-- @if (screenControl.center) {
     <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
         (onClickNextToVerify)="registerDevice($event)" />
@@ -52,4 +52,7 @@
     <!-- <app-result />   -->
 
     <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
+
+    <!-- <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings, blockControl: responseControl}"
+    (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" /> -->
 </div>
