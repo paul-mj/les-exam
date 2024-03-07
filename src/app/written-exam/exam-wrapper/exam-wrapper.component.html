@@ -17,35 +17,35 @@
         </div>
     </nav>
     }
-    +
 
-    <button (click)="confirm()">Click tets Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fuga quas nemo ullam, dolorem doloribus ad unde optio amet laborum repellat quam ea earum quae, blanditiis quibusdam? Est libero laboriosam id.</button>
-    
-    <!-- @if (screenControl.center) {
+
+    @if (screenControl.center) {
     <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
         (onClickNextToVerify)="registerDevice($event)" />
     }
-    @else if (screenControl.verify) {
-    <app-verify [verifyInput]="{blockControl: responseControl}"/>
-    <button (click)="captureFinger()">Retry</button>
+    @else if (screenControl.verify) { 
+    <app-verify [verifyInput]="{blockControl: responseControl}" (retryClick)="captureFinger()" (reconnectScanner)="initScanner()"/>
     }
     @else if (screenControl.userDetails) {
     <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
     }
     @else if (screenControl.survey) {
-    <app-survey [surveyInput]="{survey: surveyQuestions, blockControl: responseControl}" (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
+    <app-survey [surveyInput]="{survey: surveyQuestions, blockControl: responseControl}"
+        (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
     }
     @else if (screenControl.exam && examQuestions) {
-    <app-exam [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings, blockControl: responseControl}"
+    <app-exam
+        [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings, blockControl: responseControl}"
         (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" />
     }
     @else {
 
-    } -->
+    }
+ 
 
-    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
+    <!--    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
     (onClickNextToVerify)="registerDevice($event)" />
-
+ -->
 
     <!-- <app-verify (retryClick)="captureFinger()"/> -->
 
@@ -55,4 +55,3 @@
 
     <!-- <app-user-details [readUserProfile]="{profileDetails: readUserProfile}" /> -->
 </div>
-{{ responseControl | json }}
