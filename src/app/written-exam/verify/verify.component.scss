@@ -88,13 +88,21 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    background-color: #ebecee;
+    background-color: #ebecee;  
     border-radius: 8px;
     position: relative;
-
-    // border-top: 4px solid #4bb762;
-    // border-bottom: 4px solid #4bb762;
+    animation: changeColor 1s infinite;  
 }
+
+@keyframes changeColor {
+    /* 0%,100% {
+        filter: none;  
+    } 
+    50% {
+        filter: invert(89%) sepia(10%) saturate(3431%) hue-rotate(301deg) brightness(132%) contrast(122%);
+    } */
+}
+
 
 .finger-print-section {
     position: relative;

@@ -25,11 +25,10 @@
             @if(!blockControl.scanner.isSuccess) {
             <div>
                 <p class="no-scanner">{{ blockControl.scanner.message }}</p>
-                <button class="refresh-btn" (click)="connetToScanner()">
-                    @if(blockControl.scanner.loader) {
-                    <app-btn-loader />
-                    } @else {
+                <button class="refresh-btn d-flex align-items-center" (click)="connetToScanner()">
                     Connect to Scanner
+                    @if(!blockControl.scanner.loader) {
+                    <app-btn-loader />
                     }
                 </button>
             </div>
@@ -42,9 +41,13 @@
                 <div class="set-finger-print"></div>
                 <div class="set-green-top"></div>
                 <div class="set-green"></div>
-            </div> 
+            </div>
             <button class="refresh-btn" (click)="retry()">
                 {{blockControl.readAndVerifyFinger.buttonText}}
+
+                @if(blockControl.readAndVerifyFinger.loader) {
+                <app-btn-loader />
+                }
             </button>
             }
         </div>
@@ -52,23 +55,3 @@
 
 
 </div>
-
-<!-- readFinger: {
-    loader: false,
-    error: false,
-    isSuccess: false,
-    message: ''
-},
-verifyFinger: {
-    loader: false,
-    error: false, 
-    message: ''
-},
-
-<button class="refresh-btn" (click)="retry()"> </button>
-
-need to show text and loader based on object, readfinger loading false and error is true ans isSuccess false show "Scan Finger" no loader
-readfinger loading true error false and is success false show loader with text "reading impression"
-readfinger loader false and error is success true and blockControl.verifyFinger.loader true and blockControl.verifyFinger.error false and blockControl.verifyFinger.isSuccess false show loader and text "Verifying impression"
-blockControl.verifyFinger.loader false ans error true need to show "Scan Finger" and reaset readFinger and verifyFinger
-verifyFinger loader false and isSuccess true hide loader and show "Okay".   -->
