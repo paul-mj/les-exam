@@ -21,16 +21,7 @@ interface IInputData {
 
 export class CenterComponent {
 
-    // list: any = [];
-
-    list = [
-        { Description: 'Item 1', active: false },
-        { Description: 'Item 2', active: true },
-        { Description: 'Item 3', active: false },
-        { Description: 'Item 4', active: false },
-        { Description: 'Item 5', active: false }
-    ];
-
+    list: any = [];
     deviceInfo!: IDeviceInfo;
     selectedItem = new FormControl<any>(null, [Validators.required]);
     choosedCenter: string = "";
@@ -62,7 +53,7 @@ export class CenterComponent {
             DeviceId: null,
             DeviceName: this.deviceInfo.MachineName,
             IsActive: 1
-        }
+        } 
         this.emitData(registerParam);
     }
 
