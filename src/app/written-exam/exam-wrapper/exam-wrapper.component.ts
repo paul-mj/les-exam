@@ -176,8 +176,8 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        /* this.loadQuestions__Test(); */
-        this.pingChecking();
+        this.loadQuestions__Test();
+        // this.pingChecking();
     }
 
     pingChecking(): void {
@@ -353,7 +353,7 @@ export class ExamWrapperComponent {
             map(deviceLineResponse => {
                 return deviceLineResponse;
             })
-        ).subscribe((deviceLineResponse: IDeviceLineResponse) => { 
+        ).subscribe((deviceLineResponse: IDeviceLineResponse) => {
             this.processDeviceData(deviceLineResponse.Data);
         });
     }
@@ -450,10 +450,10 @@ export class ExamWrapperComponent {
                         this.saveStatus().subscribe((saveSatatusResponse: any) => {
                             if (saveSatatusResponse.Valid) {
                                 this.loadUserDetails(this.verifiedUserData?.LINE_ID);
-                            } 
+                            }
                         });
                         this.responseControl.verifyFinger.loader = false;
-                        this.responseControl.verifyFinger.error = false; 
+                        this.responseControl.verifyFinger.error = false;
                         this.responseControl.userDetails.loader = true;
                     } else {
                         this.responseControl.verifyFinger.loader = false;
@@ -465,14 +465,14 @@ export class ExamWrapperComponent {
                     this.responseControl.verifyFinger.error = true;
                     this.responseControl.verifyFinger.message = "API Error verifying impression.";
                 });
-            } 
+            }
         }, (error: any) => {
             this.responseControl.verifyFinger.loader = false;
             this.responseControl.verifyFinger.error = true;
             this.responseControl.verifyFinger.message = "API Error reading impression.";
         });
     }
-    
+
 
     readImpression(impressionPayload: IReadImpressionPayload): Observable<any> {
         return this.api.httpPost<IReadImpressionPayload>({
@@ -640,7 +640,7 @@ export class ExamWrapperComponent {
 
     loadUserDetails(Id: number): void {
         this.loadUserDetailsObservable(Id).subscribe((response: IUserResponse) => {
-            if(response.Valid) {
+            if (response.Valid) {
                 this.readUserProfile = response.Data;
                 this.toggleScreen('userDetails');
             } else {
@@ -762,7 +762,7 @@ export class ExamWrapperComponent {
                         this.toggleScreen('exam');
                     }
                     this.examQuestions = examQuestion;
-                    this.responseControl.examStart.loader = false; 
+                    this.responseControl.examStart.loader = false;
                 });
 
             }
