@@ -11,16 +11,23 @@ export class UtilityService {
 
     private closeDialogSubject: Subject<void> = new Subject<void>();
 
-    
+
     constructor(
-        public dialog: MatDialog, 
+        public dialog: MatDialog,
     ) { }
 
-    
+
     openStatusDialog(title: string, message: string, ui: any, button?: string): Observable<boolean> {
+
+        if (ui !== ConfirmDialog.error) {
+            setTimeout(() => {
+                this.closeDialogSubject.next();
+            }, 3000);
+        }
+
         const dialogRef = this.dialog.open(ConfirmComponent, {
             disableClose: true,
-            panelClass: ['les-confirm-dialog'], 
+            panelClass: ['les-confirm-dialog'],
             data: {
                 ...this.dialogObject(ui, button),
                 title: title,
@@ -41,6 +48,9 @@ export class UtilityService {
             case ConfirmDialog.confirm:
                 data = { primaryButton: button || 'Confirm', secondaryButton: 'Dismiss', Ui: ConfirmDialog.confirm, }
                 break;
+            case ConfirmDialog.forExam:
+                data = { primaryButton: 'Okay', secondaryButton: '', Ui: ConfirmDialog.error }
+                break;
             case ConfirmDialog.delete:
                 data = { primaryButton: 'Delete', secondaryButton: 'Dismiss', Ui: ConfirmDialog.delete, }
                 break;
@@ -59,5 +69,5 @@ export class UtilityService {
         }
         return data;
     }
-    
+
 }

@@ -155,3 +155,15 @@
 ::ng-deep .les-confirm-dialog .mat-mdc-dialog-surface {
     border-radius: 1.3rem;
 }
+
+.cnfrm-dialog.error {
+    .confirm-footer {
+        justify-content: center !important;
+    }
+
+    button.success-btn {
+        background: #ce2427;
+        color: #fff;
+    }
+
+}

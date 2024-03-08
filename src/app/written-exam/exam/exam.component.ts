@@ -11,6 +11,8 @@ import { SignalService } from '../../core/services/signal/signal.service';
 import { CircularProgressComponent } from "../circular-progress/circular-progress.component";
 import { SummaryComponent } from '../summary/summary.component';
 import { TransLine } from '../../core/interfaces/exam-wrap.interface';
+import { ConfirmDialog } from '../../core/database/app.enums';
+import { UtilityService } from '../../core/services/utility/utility.service';
 
 const componets = [EsriMapComponent]
 @Component({
@@ -44,7 +46,8 @@ export class ExamComponent {
 
     constructor(
         private signal: SignalService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private utils: UtilityService
     ) {
         effect(() => {
             this.updatePointsFromSignal = this.signal.selectedMapPoint;
@@ -58,6 +61,10 @@ export class ExamComponent {
                     // this.updateTimer();
                     this.updateTimerV2(this.currentExtraTime);
                 }
+            }
+            const isRefreshFav = this.signal.getIsAccessorEndExam;
+            if (isRefreshFav) {
+                this.completeExam();
             }
         });
 
@@ -299,9 +306,10 @@ export class ExamComponent {
         });
     }
 
-    completeAlert() {
-        alert('Are you sure you want to complete your exam')
-        this.completeExam();
+    completeAlert() { 
+        this.utils.openStatusDialog('Confirmation', 'Are you sure you want to complete your exam', ConfirmDialog.confirm).subscribe((result) => {
+            this.completeExam();
+        });
     }
 
     completeExam(): void {

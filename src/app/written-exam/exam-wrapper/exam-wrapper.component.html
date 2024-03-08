@@ -18,8 +18,8 @@
     </nav>
     }
 
-
-    <!-- @if (screenControl.center) {
+    <!-- <button (click)="test()">Test Dialog</button> -->
+    @if (screenControl.center) {
     <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
         (onClickNextToVerify)="registerDevice($event)" />
     }
@@ -38,10 +38,13 @@
         [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings, blockControl: responseControl}"
         (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" />
     }
+    @else if (screenControl.result) {
+        <app-result />
+    }
     @else {
 
-    } -->
+    }
 
-    <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
- 
+<!--     <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
+ --> 
 </div>

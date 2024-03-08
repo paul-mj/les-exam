@@ -36,4 +36,5 @@ export const ConfirmDialog = Object.freeze({
     success: 103,
     warning: 104,
     error: 105,
+    forExam: 106,
 })

@@ -168,8 +168,8 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        this.loadQuestions__Test();
-        // this.pingChecking();
+        /* this.loadQuestions__Test(); */
+        this.pingChecking();
     }
 
     pingChecking(): void {
@@ -368,7 +368,7 @@ export class ExamWrapperComponent {
     }
 
     captureFinger(): void {
-        this.responseControl.readAndVerifyFinger.loader = true; 
+        this.responseControl.readAndVerifyFinger.loader = true;
         this.responseControl.readAndVerifyFinger.buttonText = 'Reading Finger';
         this.api.httpLocalGet({ url: `${API.scanner.captureFinger}?scannerId=${this.scannerDetails.ScannerId}` })
             .subscribe((response: ICaptureResponse) => {
@@ -377,7 +377,7 @@ export class ExamWrapperComponent {
                     this.getEnrolledList();
                     this.responseControl.readAndVerifyFinger.buttonText = 'Verifying User';
 
-                } else { 
+                } else {
                     this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
                     this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
                 }
@@ -447,7 +447,6 @@ export class ExamWrapperComponent {
                                 this.loadUserDetails(this.verifiedUserData?.LINE_ID);
                             }
                         });
-                        this.responseControl.readAndVerifyFinger.loader = false;
                         this.responseControl.readAndVerifyFinger.buttonText = 'Fetching Details';
                     } else {
                         this.responseControl.readAndVerifyFinger.loader = false;
@@ -537,7 +536,7 @@ export class ExamWrapperComponent {
                             if (this.iStatus !== lineStatus) {
                                 this.loadUserDetails(lineId);
                             }
-                            /* Stop Scanner Service */
+                            this.stopScannerDevices();
                             break;
                         case deviceStatusEnum.Extend:
                             if (lineId > 0 && userTypeTransResponse.Valid) {
@@ -590,6 +589,8 @@ export class ExamWrapperComponent {
                                     Step 3
                                         Exam Save Success => Current Status to this.iStatus = deviceStatusEnum.Ended;
                                 */
+                                this.signal.accessorEndExam(true);
+                                this.utils.openStatusDialog('Alert', 'Exam has been stopped', ConfirmDialog.forExam).subscribe(); 
                                 this.assessmentStatusInfo.LineStatus = deviceStatusEnum.Ended;
                             }
                             break;
@@ -615,6 +616,14 @@ export class ExamWrapperComponent {
                 })
             }
         }
+    }
+
+    test() {
+        this.utils.openStatusDialog('Alert', 'Exam has been stopped', ConfirmDialog.forExam).subscribe((response: any) => {
+            if (response) {
+                this.toggleScreen('result');
+            }
+        });
     }
 
     initExamService(): void { }
@@ -968,9 +977,14 @@ export class ExamWrapperComponent {
     }
 
     completeExam(data: IExamSave, url: string): void {
+        alert('complete done ')
         /*  this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
              console.log(res, 'complete exam final call');
          }) */
+
+        /* this.toggleScreen('result'); */
+        /* this.iStatus = deviceStatusEnum.EndExam; */
+
     }
 
 
@@ -1047,14 +1061,15 @@ export class ExamWrapperComponent {
         return weightage;
     }
 
+    stopScannerDevices(): void {
+        this.pingSubscription?.unsubscribe();
+        this.ping.stopService();
+    }
 
     ngOnDestroy(): void {
-        this.pingSubscription?.unsubscribe();
+        this.stopScannerDevices();
         this.deviceUpdateSubscription?.unsubscribe();
         this.assessmentTimesSubscription?.unsubscribe();
-        this.ping.stopService();
-
-
         this.unSubscribeDeviceLine$.next();
         this.intervalAssessmentScreen$.next();
         this.unSubscribeDeviceLine$.complete();

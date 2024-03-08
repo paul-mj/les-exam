@@ -44,6 +44,10 @@ export class ConfirmComponent {
                 this.icon = "assets/images/remove.png"
                 this.className = "error"
                 break;
+            case 106:
+                this.icon = "assets/images/tick.png"
+                this.className = "error"
+                break;
             default:
                 break;
         }

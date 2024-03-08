@@ -212,3 +212,16 @@
     gap: 2rem;
     padding: 2rem;
 }
+
+.exam-wait {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        font-size: 1.35rem;
+        color: #000;
+        font-weight: 400
+    }
+}

@@ -9,6 +9,8 @@ export class SignalService {
 
     mapPoint = signal(undefined);
     userTransLine: any = signal(null); 
+    isAccessorEndExam = signal(false);
+
 
     get selectedMapPoint(): any {
         return this.mapPoint();
@@ -24,6 +26,16 @@ export class SignalService {
 
     get getUserTypeTransLine() {
         return this.userTransLine();
+    }
+
+
+
+    accessorEndExam(value: any): void {
+        this.isAccessorEndExam.set(value);
+    }
+
+    get getIsAccessorEndExam() {
+        return this.isAccessorEndExam();
     }
 
 }
