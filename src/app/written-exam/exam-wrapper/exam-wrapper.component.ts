@@ -154,6 +154,7 @@ export class ExamWrapperComponent {
     extraTime!: number;
     examQuestions!: IFinalQUestionResponse;
     examQuestionApiResponse!: IExamResponse;
+    examResultResponse!: any;
 
     pingSubscription!: Subscription;
     deviceUpdateSubscription!: Subscription;
@@ -1064,10 +1065,12 @@ export class ExamWrapperComponent {
         const catResult$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getAssessmentCategoryResult', data });
         const result$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getResult', data });
         const nextExam$ = this.api.httpPost<INextExamParam>({ url: 'assessment/getNextExam', data: nextExamParam });
-        forkJoin([catResult$, result$, nextExam$]).subscribe(([categoryResult, result, nextExam]: IExamSaveResponse[]) => {
-            console.log(categoryResult, 'category result')
-            console.log(result, 'result')
-            console.log(nextExam, 'nextExam$')
+        forkJoin([catResult$, result$, nextExam$]).subscribe(([categoryResult, result, nextExam]: IExamSaveResponse[]) => { 
+            this.examResultResponse = {
+                categoryResult: categoryResult,
+                result,
+                nextExam
+            }
         });
     }
 
