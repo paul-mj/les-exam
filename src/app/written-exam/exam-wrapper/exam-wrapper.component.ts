@@ -65,7 +65,7 @@ import {
 } from "rxjs";
 import { ApiService } from "../../core/services/api/api.service";
 import { API } from "../../core/application/api.config";
-import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IFinalQUestionResponse, IOptionSave, IOptionSaveParam, IQuestion, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
+import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IFinalQUestionResponse, INewExamOrRetest, IOptionSave, IOptionSaveParam, IQuestion, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
 import { ConfirmDialog, DeviceExamStatus, deviceStatusEnum, examTypeEnum, userTypeEnum } from "../../core/database/app.enums";
 import { SignalService } from "../../core/services/signal/signal.service";
 import { UtilityService } from "../../core/services/utility/utility.service";
@@ -89,6 +89,7 @@ import { UtilityService } from "../../core/services/utility/utility.service";
 export class ExamWrapperComponent {
     centerList!: ICenter[];
     pingError: any;
+    pingErrorScreen: boolean = false;
     screenControl: IScreenControls = {
         center: false,
         verify: false,
@@ -109,6 +110,7 @@ export class ExamWrapperComponent {
             loader: true,
             isSuccess: false,
             buttonText: 'Scan Finger',
+            image: 0
         },
         userDetails: {
             loader: false,
@@ -132,6 +134,7 @@ export class ExamWrapperComponent {
     userTransData!: TransLine;
     examSettings!: IExamSettings;
     examStartTime!: Date;
+    scannerResponse!: IScannerResponse;
 
     assessmentStatusInfo: IAssessmentStatusInfo = {
         LineId: -1,
@@ -186,8 +189,10 @@ export class ExamWrapperComponent {
             .subscribe((res: string) => {
                 this.pingError = res;
                 if (res === "error") {
+                    this.pingErrorScreen = true;
                     this.utils.openStatusDialog('Error', 'Local service not connectd properly, Please check connection', ConfirmDialog.error).subscribe();
                 } else {
+                    this.pingErrorScreen = false;
                     this.getDeviceInformation();
                     this.getCenters();
                     console.log("Local service connect success");
@@ -338,6 +343,59 @@ export class ExamWrapperComponent {
     }
 
     AssessmentScreenTimer(): void {
+        const testConfig = {
+            "ID": 1,
+            "ORAL_WRITTEN_DELAY_MI": 2,
+            "SCHEDULE_SELECT_DELAY_DAYS": 0,
+            "SCHEDULE_VISIBLE_DAYS": 90,
+            "ORAL_DELAY_MI": 1,
+            "WRITTEN_DELAY_MI": 0,
+            "ATTENDANCE_RANGE_FROM_MI": 1000,
+            "ATTENDANCE_RANGE_TO_MI": -1000,
+            "MAX_DRIVERS_IN_ONE_BATCH": 30,
+            "DRIVER_DOC_VALIDITY_PERIOD_MI": 12,
+            "PERMIT_EXPIRY_PERIOD_FOR_RENEW_MI": 3,
+            "ASSESSOR_SCREEN_TIMER": 15,
+            "ASSESSMENT_SCREEN_TIMER": 15,
+            "ASSESSMENT_DURATION_TIMER": 15,
+            "ASSESSMENT_RESULT_TIMER": 60,
+            "ASSESSMENT_REVIEW_TIMER": 45,
+            "ASSESSMENT_MESSAGE_TIMER": 10,
+            "ASSESSMENT_DIALOG_TIMER": 20,
+            "SEC_CLEARNC_DOC_VALIDITY_MONTHS": 100,
+            "ASSESSMENT_MAX_REPEAT_CALLS": 20,
+            "ASSESSMENT_REPEAT_CALL_DELAY_MI": 30,
+            "REPRINT_LOST_PERMIT_CHARGES": 0,
+            "REPRINT_DAMAGED_PERMIT_CHARGES": 0,
+            "DLS_SUSPEND_JOB_STATUS": 1,
+            "DRIVER_CLEARANCE_CHARGES": 0,
+            "OLD_DRIVER_PERMIT_ISSUE_LAST_DATE": "2013-02-01T00:00:00",
+            "OLD_DRIVER_SUSPENSION_MONTHS": 3,
+            "ASSESMENT_PERMI_ISSUE_MAX_DAYS": 90,
+            "ASSESMENT_FAIL_TRNG_COMPLTN_DAYS": 90,
+            "SEC_CLRNCE_PENDING_MAX_MONTHS": 2,
+            "BLACK_POINT_FOR_SUSPENSION": 36,
+            "BLACK_POINT_SUSPENSION_MONTHS": 12,
+            "OLD_DRIVER_PERMIT_ISSUE_LAST_DATE_PHC": "2013-02-01T00:00:00",
+            "ASSMENT_STATUS_MAIL_DATE": "2015-10-04T00:00:00",
+            "DOC_REJECT_SUSPN_DELY_HRS": 120,
+            "EXAM_AVG_MONTHS": 6,
+            "DOC_EXPIRY_FIRST_ACK_DAYS": 30,
+            "DOC_EXPIRY_SECOND_ACK_DAYS": 4,
+            "DOC_EXPIRY_MAIL_SENT_DATE": "2015-10-05T05:00:00.81",
+            "PROFILE_DATE_FOR_EDU_DOC": "2013-01-13T00:00:00",
+            "PROFILE_DATE_FOR_EDU_DOC_PHC": "2013-07-14T00:00:00",
+            "WHITE_POINT_CALC_NEXT_DATE": null,
+            "LAST_WHITE_POINT_CALC_DATE": null,
+            "WHITE_TO_BLACK_CONVR_RATIO": null,
+            "WHITE_POINT_VLDTY_MNTHS": 12,
+            "AUTO_NEXT_ASSMENT_TRANS": 0,
+            "IS_SURVEY": 1,
+            "FAIL_LINE_CONNECION_MAX_MONTHS": 6,
+            "UP_USER_ID": 2699,
+            "UP_DATE": "2024-02-22T10:26:53.013"
+        }
+        this.configuration = testConfig;
         const seconds: number = this.configuration.ASSESSMENT_SCREEN_TIMER * 1000;
         const intervalAssessmentScreen$ = interval(seconds);
         this.assessmentTimesSubscription = intervalAssessmentScreen$.pipe(
@@ -346,6 +404,7 @@ export class ExamWrapperComponent {
                 return deviceLineResponse;
             })
         ).subscribe((deviceLineResponse: IDeviceLineResponse) => {
+          /*   debugger; */
             this.processDeviceData(deviceLineResponse.Data);
         });
     }
@@ -363,6 +422,7 @@ export class ExamWrapperComponent {
                     this.responseControl.scanner.isSuccess = false;
                     this.responseControl.scanner.message = response.Message;
                 }
+                this.scannerResponse = response;
                 this.responseControl.scanner.loader = false;
             });
     }
@@ -370,16 +430,18 @@ export class ExamWrapperComponent {
     captureFinger(): void {
         this.responseControl.readAndVerifyFinger.loader = true;
         this.responseControl.readAndVerifyFinger.buttonText = 'Reading Finger';
+        this.responseControl.readAndVerifyFinger.image = 2; //blink border
         this.api.httpLocalGet({ url: `${API.scanner.captureFinger}?scannerId=${this.scannerDetails.ScannerId}` })
             .subscribe((response: ICaptureResponse) => {
                 if (response.Valid) {
                     this.captureResponse = response;
                     this.getEnrolledList();
-                    this.responseControl.readAndVerifyFinger.buttonText = 'Verifying User';
+                    this.responseControl.readAndVerifyFinger.buttonText = 'Verifying User'; 
 
                 } else {
                     this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
-                    this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
+                    this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false;
+                    this.responseControl.readAndVerifyFinger.image = 0;
                 }
                 this.responseControl.readAndVerifyFinger.loader = false;
 
@@ -401,6 +463,7 @@ export class ExamWrapperComponent {
                 } else {
                     this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
                     this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
+                    this.responseControl.readAndVerifyFinger.image = 0;
                 }
             });
     }
@@ -448,20 +511,28 @@ export class ExamWrapperComponent {
                             }
                         });
                         this.responseControl.readAndVerifyFinger.buttonText = 'Fetching Details';
+                        this.responseControl.readAndVerifyFinger.image = 3; //image with tick
+
                     } else {
                         this.responseControl.readAndVerifyFinger.loader = false;
                         this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
                         this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
+                        this.responseControl.readAndVerifyFinger.image = 0;
+
                     }
                 }, (error: any) => {
                     this.responseControl.readAndVerifyFinger.loader = false;
                     this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
+                    this.responseControl.readAndVerifyFinger.image = 0;
+
 
                 });
             }
         }, (error: any) => {
             this.responseControl.readAndVerifyFinger.loader = false;
             this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
+            this.responseControl.readAndVerifyFinger.image = 0;
+
 
         });
     }
@@ -580,7 +651,7 @@ export class ExamWrapperComponent {
                             }
                             break;
                         case deviceStatusEnum.EndExam:
-                            if (this.iStatus !== lineStatus) {
+                            if (this.iStatus !== lineStatus) { 
                                 /* 
                                     Step 1
                                         Show Dialog Message ("Assessment ended by assessor")
@@ -589,8 +660,8 @@ export class ExamWrapperComponent {
                                     Step 3
                                         Exam Save Success => Current Status to this.iStatus = deviceStatusEnum.Ended;
                                 */
-                                this.signal.accessorEndExam(true);
-                                this.utils.openStatusDialog('Alert', 'Exam has been stopped', ConfirmDialog.forExam).subscribe(); 
+                                this.signal.accessorEndExam({ isEnd: true });
+                                this.utils.openStatusDialog('Alert', 'Exam has been stopped', ConfirmDialog.forExam).subscribe();
                                 this.assessmentStatusInfo.LineStatus = deviceStatusEnum.Ended;
                             }
                             break;
@@ -616,14 +687,6 @@ export class ExamWrapperComponent {
                 })
             }
         }
-    }
-
-    test() {
-        this.utils.openStatusDialog('Alert', 'Exam has been stopped', ConfirmDialog.forExam).subscribe((response: any) => {
-            if (response) {
-                this.toggleScreen('result');
-            }
-        });
     }
 
     initExamService(): void { }
@@ -770,6 +833,7 @@ export class ExamWrapperComponent {
             }
         });
     }
+
     gotoDriverView(): void {
         this.readSurveyData().subscribe((surveyResponse: any) => {
             if (surveyResponse.Data.length) {
@@ -780,8 +844,6 @@ export class ExamWrapperComponent {
             }
         });
     }
-
-
 
     readSetting(): Observable<any> {
         const payloadSettings: IQuesSettingsPayload = {
@@ -976,46 +1038,121 @@ export class ExamWrapperComponent {
         };
     }
 
-    completeExam(data: IExamSave, url: string): void {
-        alert('complete done ')
-        /*  this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
+    completeExam(data: IExamSave, url: string): void { 
+         this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
+            if (res.Id > 0) { 
+                debugger;
+                this.toggleScreen('result');
+                this.iStatus = deviceStatusEnum.EndExam;
+            }
              console.log(res, 'complete exam final call');
-         }) */
-
-        /* this.toggleScreen('result'); */
-        /* this.iStatus = deviceStatusEnum.EndExam; */
+         }) 
 
     }
 
 
+    toRetestOrRenew(event: INewExamOrRetest) {  
+        if (event.isRetest) {
+            this.AssessmentScreenTimer();
+        } else {
+            this.resetAllForNewUser().then(() => {
+                this.pingChecking();
+            }).catch((error) => {
+                console.error("Error resetting variables:", error);
+            });
+        }
+    }
+ 
 
 
+    resetAllForNewUser(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this.centerList = [];
+            this.pingError = null;
+            this.screenControl = {
+                center: false,
+                verify: false,
+                userDetails: false,
+                survey: false,
+                exam: false,
+                summary: false,
+                result: false,
+            };
 
+            this.responseControl = {
+                scanner: {
+                    loader: false,
+                    isSuccess: false,
+                    message: ''
+                },
+                readAndVerifyFinger: {
+                    loader: true,
+                    isSuccess: false,
+                    buttonText: 'Scan Finger',
+                },
+                userDetails: {
+                    loader: false,
+                },
+                examStart: {
+                    loader: false,
+                },
+            };
 
-
-
+            this.deviceInfo = {} as IDeviceInfo;
+            this.verifiedDeviceData = {} as IVerifyDevice;
+            this.configuration = {} as IConfiguration;
+            this.scannerDetails = {} as IScanner;
+            this.captureResponse = {} as ICaptureResponse;
+            this.enrolledList = [] as IEnrolledList[];
+            this.verifiedUserData = {} as IVerifiedUserData;
+            this.readSettings = {} as IReadSettings;
+            this.readUserProfile = {} as IReadProfile;
+            this.surveyQuestions = {} as ISurvey;
+            this.userTransData = {} as TransLine;
+            this.examSettings = {} as IExamSettings;
+            this.examStartTime = {} as Date;
+            this.assessmentStatusInfo = {
+                LineId: -1,
+                CentreId: -1,
+                DeviceId: -1,
+                UserId: 3,
+                LineStatus: Number(deviceStatusEnum.None),
+                StartTime: null,
+                ExtraTime: 0,
+                UserType: 0,
+                ExtraRemarks: '',
+                EndRemarks: '',
+                Table: null,
+            }
+            this.iStatus = {} as number;
+            this.extraTime = {} as number;
+            this.examQuestions = {} as IFinalQUestionResponse;
+            this.examQuestionApiResponse = {} as IExamResponse;
+            resolve();
+        });
+    }
 
 
     formatQuestions(question: IQuestion[]): ISaveQuestion[] {
         return question.map((ques: IQuestion) => ({
-            QUESTION_ID: ques.QUESTION_ID,
-            QUESTION_CAT_ID: ques.QUESTION_CAT_ID,
-            INSPECT_MARK: ques.INSPECT_MARK,
-            REMARKS: ques.REMARKS,
-            WEIGHTAGE: this._selectedAnswerWeightage(ques.Answers) ? this._selectedAnswerWeightage(ques.Answers) : 0,
-            GRADE_ID: this._selectedAnswerId(ques.Answers) ? this._selectedAnswerId(ques.Answers) : -1
+            QuestionId: ques.QUESTION_ID,
+            QuestionCatId: ques.QUESTION_CAT_ID,
+            InspectMark: ques.INSPECT_MARK,
+            Remarks: ques.REMARKS,
+            Weightage: this._selectedAnswerWeightage(ques.Answers) ? this._selectedAnswerWeightage(ques.Answers) : 0,
+            GradeId: this._selectedAnswerId(ques.Answers) ? this._selectedAnswerId(ques.Answers) : -1
         }));
     }
 
     formatCategories(): ISaveCategory[] {
         return this.examQuestionApiResponse.Categories.map((category: ICategory) => ({
-            CATEGORY_ID: category.CATEGORY_ID,
-            WEIGHTAGE: category.WEIGHTAGE,
-            INSPECT_MARK: category.INSPECT_MARK,
-            MIN_FOR_PASS: category.MIN_PASS_MARK,
-            IS_PASS: category.IS_PASS,
-            IS_PREV_TEST: category.IS_PREV_TEST,
-            INSPECT_MARK_DEVIATION: category.INSPECT_MARK_DEVIATION
+            CategoryId: category.CATEGORY_ID,
+            Weightage: category.WEIGHTAGE,
+            InspectMark: category.INSPECT_MARK,
+            MinForPass: category.MIN_PASS_MARK,
+            IsPass: category.IS_PASS,
+            IsPrevTest: category.IS_PREV_TEST,
+            InspectMarkDeviation: category.INSPECT_MARK_DEVIATION
         }));
     }
     formatCources(): any {
@@ -1033,8 +1170,8 @@ export class ExamWrapperComponent {
         question.map((ques: IQuestion) => {
             if (ques.HAS_IMAGE === 1) {
                 imageArray.push({
-                    QUESTION_ID: ques.QUESTION_ID,
-                    DOC_NAME: ques.FILE_EXTENSION
+                    QuestionId: ques.QUESTION_ID,
+                    DocName: ques.FILE_EXTENSION
                 });
             }
         })

@@ -18,33 +18,45 @@
     </nav>
     }
 
-    <!-- <button (click)="test()">Test Dialog</button> -->
-    @if (screenControl.center) {
-    <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
-        (onClickNextToVerify)="registerDevice($event)" />
+    @if(pingErrorScreen) {
+    <div class="d-flex align-items-center justify-content-center service-error">
+        <p>Local service not Started Please check your connection</p>
+    </div>
     }
-    @else if (screenControl.verify) { 
-    <app-verify [verifyInput]="{blockControl: responseControl}" (retryClick)="captureFinger()" (reconnectScanner)="initScanner()"/>
+    @if (screenControl.center) {
+        <app-center [centerInput]="{list: centerList, deviceInfo: deviceInfo, blockControl: responseControl}"
+            (onClickNextToVerify)="registerDevice($event)" />
+
+    }
+    @else if (screenControl.verify) {
+        <app-verify [verifyInput]="{blockControl: responseControl, scannerDetails: scannerResponse }"
+        (retryClick)="captureFinger()" (reconnectScanner)="initScanner()" />
+
     }
     @else if (screenControl.userDetails) {
-    <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
+        <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
     }
     @else if (screenControl.survey) {
-    <app-survey [surveyInput]="{survey: surveyQuestions, blockControl: responseControl}"
+        <app-survey [surveyInput]="{survey: surveyQuestions, blockControl: responseControl}"
         (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
     }
     @else if (screenControl.exam && examQuestions) {
-    <app-exam
+        <app-exam
         [examInputs]="{questions: examQuestions, examConfig: configuration, examSetting: examSettings, blockControl: responseControl}"
         (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" />
     }
     @else if (screenControl.result) {
-        <app-result />
+        <app-result (toRetestOrRenew)="toRetestOrRenew($event)" />
     }
     @else {
 
     }
 
-<!--     <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
- --> 
+    <!-- <button (click)="test()">Test Dialog</button> -->
+
+    <!--     <app-result (toRetestOrRenew)="toRetestOrRenew($event)"/> -->
+    <!--     <app-user-details [readUserProfile]="{profileDetails: readUserProfile, blockControl: responseControl}" />
+ -->
+
+
 </div>

@@ -9,7 +9,7 @@ export class SignalService {
 
     mapPoint = signal(undefined);
     userTransLine: any = signal(null); 
-    isAccessorEndExam = signal(false);
+    isAccessorEndExam = signal({});
 
 
     get selectedMapPoint(): any {
