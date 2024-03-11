@@ -10,7 +10,7 @@
     </div>
 
     <div class="survey-questions-wrapper">
-        <div class="content-section" *ngFor="let item of survey; let i = index;">
+        <!-- <div class="content-section" *ngFor="let item of survey; let i = index;">
             <div class="dot">
                 <img src="/assets/images/google-icons/tick.svg" />
             </div>
@@ -32,6 +32,40 @@
                             <p class="font-en">No</p>
                         </mat-radio-button>
                     </mat-radio-group>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="content-section">
+            <div class="dot">
+                <img src="/assets/images/google-icons/tick.svg" />
+            </div>
+            <div class="question-sec-wrap">
+                <div class="each-question-section">
+                    <p class="english-question">
+                        Obj-nameEnglish
+                    </p>
+                    <p class="arabic-question">
+                        obj-name-arabic
+                    </p>
+                </div>
+                <div class="option-section">
+                    <!-- <mat-radio-group>
+                        <mat-radio-button (change)="1">
+                            <p class="font-en">Yes</p>
+                        </mat-radio-button>
+                        <mat-radio-button (change)="0" class="mx-3">
+                            <p class="font-en">No</p>
+                        </mat-radio-button>
+                    </mat-radio-group> -->
+
+                    <div class="yes-btn">
+                        Yes
+                    </div>
+                    <div class="cancel-btn">
+                        No
+                    </div>
+
                 </div>
             </div>
         </div>

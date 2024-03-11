@@ -58,7 +58,29 @@
     .option-section {
         width: 100%;
         display: flex;
-        gap: 3rem;
+        gap: 3.5rem;
+        align-items: center;
+
+        .yes-btn {
+            background: #003a5d;
+            padding: 1rem 5rem;
+            font-weight: 400;
+            font-size: 1.75rem;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .cancel-btn {
+            // background: #003a5d;
+            padding: 1rem 5rem;
+            font-weight: 400;
+            font-size: 1.75rem;
+            color: black;
+            border: 1px solid grey;
+            border-radius: 10px;
+        }
+
+
     }
 }
 
