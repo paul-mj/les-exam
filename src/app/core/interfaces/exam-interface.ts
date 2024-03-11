@@ -128,8 +128,7 @@ export interface IOptionSave {
     selectedOption: IAnswer
     question: IQuestion
 }
-
-
+ 
 export interface IOptionSaveParam {
     LineId: number,
     DeviceId: number,
@@ -159,22 +158,22 @@ export interface IExamSave {
 
 
 export interface ISaveQuestion {
-    QUESTION_ID: number
-    INSPECT_MARK: number
-    REMARKS: string
-    WEIGHTAGE: number
-    GRADE_ID: number
-    QUESTION_CAT_ID: number
+    QuestionId: number
+    InspectMark: number
+    Remarks: string
+    Weightage: number
+    GradeId: number
+    QuestionCatId: number
 }
 
 export interface ISaveCategory {
-    CATEGORY_ID: number
-    WEIGHTAGE: number
-    INSPECT_MARK: number
-    MIN_FOR_PASS: number
-    IS_PASS: number
-    INSPECT_MARK_DEVIATION: number
-    IS_PREV_TEST: number
+    CategoryId: number
+    Weightage: number
+    InspectMark: number
+    MinForPass: number
+    IsPass: number
+    InspectMarkDeviation: number
+    IsPrevTest: number
 }
 export interface ISaveCourse {
     COURSE_ID: number
@@ -184,6 +183,10 @@ export interface ISaveCourse {
 }
 
 export interface ISaveImage {
-    QUESTION_ID: number
-    DOC_NAME: string
+    QuestionId: number
+    DocName: string
+}
+
+export interface INewExamOrRetest {
+    isRetest: boolean
 }

@@ -17,7 +17,7 @@
     </div>
 </div> -->
 
-
+<!-- 
 <div class="verify-wrapper">
 
     <div class="verify-section">
@@ -53,5 +53,60 @@
         </div>
     </div>
 
+
+</div> -->
+
+<div class="verify-wrapper">
+    <div class="verify-section">
+        <div class="items-wrap">
+
+
+
+            <!-- <div class="scan">
+                <div class="fingerprint"></div>
+                <h3 class="verified">  User Verified' </h3> 
+            </div> -->
+ 
+
+             @if(!blockControl.scanner.isSuccess) {
+                <div>
+                    <p class="no-scanner">{{ blockControl.scanner.message }}</p>
+                    <button class="refresh-btn d-flex align-items-center" (click)="connetToScanner()">
+                        Connect to Scanner
+                        @if(blockControl.scanner.loader) {
+                        <app-btn-loader />
+                        }
+                    </button>
+                </div>
+            } @else {
+                <div class="heading-wrap">
+                    <h4 class="primary-heading">Scan Finger</h4>
+                </div> 
+                <div class="scan">
+                    <ng-container *ngIf="blockControl.readAndVerifyFinger.image !== 2">
+                        <div class="fingerprint-other" [ngStyle]="{
+                            'background': 'url(' + 
+                                (blockControl.readAndVerifyFinger.image === 0 ? './../../../assets/images/finger-plain.png' : 
+                                (blockControl.readAndVerifyFinger.image === 1 ? './../../../assets/images/finger-line.png' : 
+                                (blockControl.readAndVerifyFinger.image === 3 ? './../../../assets/images/finger-success.png' : ''))) +')'
+                        }"></div> 
+                         
+                        <h3 class="verified"> {{ blockControl.readAndVerifyFinger.image === 3 ? 'User Verified' : '' }} </h3>
+                    </ng-container>
+                    <ng-container *ngIf="blockControl.readAndVerifyFinger.image === 2">
+                        <div class="fingerprint"></div>
+                        <h3>Scanning...</h3>
+                    </ng-container>
+                </div> 
+                <button class="refresh-btn with-loader" (click)="retry()"> 
+                    {{blockControl.readAndVerifyFinger.buttonText}}
+
+                    @if(blockControl.readAndVerifyFinger.loader) {
+                    <app-btn-loader />
+                    }
+                </button>
+            }
+        </div>
+    </div>
 
 </div>

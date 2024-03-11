@@ -62,13 +62,15 @@ export class ExamComponent {
                     this.updateTimerV2(this.currentExtraTime);
                 }
             }
-            const isRefreshFav = this.signal.getIsAccessorEndExam;
-            if (isRefreshFav) {
-                this.completeExam();
-            }
+            this.isEndExam = this.signal.getIsAccessorEndExam;
+             
         });
+    }
 
-
+    set isEndExam(value: any) {
+        if(value.isEnd) {
+            this.completeExam();
+        }
     }
 
     toggleLanguage: any = [

@@ -20,6 +20,7 @@ export interface ILoader {
     buttonText?: string
     loader: boolean 
     message?: string 
+    image?: number 
 }
 
 
@@ -251,6 +252,7 @@ export interface IReadProfileResponse {
 
 export interface IVerifyInput { 
     blockControl: IResponseControl
+    scannerDetails: IScannerResponse
 }
 
 
