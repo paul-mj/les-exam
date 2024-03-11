@@ -65,7 +65,7 @@ import {
 } from "rxjs";
 import { ApiService } from "../../core/services/api/api.service";
 import { API } from "../../core/application/api.config";
-import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IExamSaveResponse, IFinalQUestionResponse, INewExamOrRetest, INextExamParam, IOptionSave, IOptionSaveParam, IQuestion, IResultPostParam, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
+import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IExamSaveResponse, IFinalQUestionResponse, INewExamOrRetest, INextAssessmentPossible, INextExamParam, INextExamPossibleResponse, INextExamResult, IOptionSave, IOptionSaveParam, IQuestion, IResultPostParam, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
 import { ConfirmDialog, DeviceExamStatus, deviceStatusEnum, examTypeEnum, userTypeEnum } from "../../core/database/app.enums";
 import { SignalService } from "../../core/services/signal/signal.service";
 import { UtilityService } from "../../core/services/utility/utility.service";
@@ -1051,32 +1051,45 @@ export class ExamWrapperComponent {
         })
     }
 
+
+
+    // Inside your method
     getExamResults() {
         const data = {
-            LineId: 24259,
-            CultureId: 0,
+            LineId: 24259, //this.verifiedUserData?.LINE_ID
+            CultureId: 0, //this.verifiedUserData?.LINE_ID
             Mode: examTypeEnum.Written
-        }
+        };
         const nextExamParam = {
             LineId: 24259,
             CentreId: this.verifiedDeviceData?.CENTRE_ID,
             CultureId: 0,
-        }
+        };
+
         const catResult$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getAssessmentCategoryResult', data });
         const result$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getResult', data });
         const nextExam$ = this.api.httpPost<INextExamParam>({ url: 'assessment/getNextExam', data: nextExamParam });
-        forkJoin([catResult$, result$, nextExam$]).subscribe(([categoryResult, result, nextExam]: IExamSaveResponse[]) => { 
-            this.examResultResponse = {
-                categoryResult: categoryResult,
-                result,
-                nextExam
-            }
+
+        forkJoin([catResult$, result$, nextExam$]).pipe(
+            switchMap(([categoryResult, result, nextExam]: [IResultPostParam, IResultPostParam, INextExamResult]) => {
+                if (nextExam.LineId > 0) {
+                    const nextAssParam = {
+                        Id: 24259, //this.verifiedUserData?.LINE_ID
+                        CultureId: 0,
+                    }
+                    return this.api.httpPost<INextAssessmentPossible>({ url: 'assessment/nextExamPossible', data: nextAssParam });
+                } else {
+                    return of(null);
+                }
+            })
+        ).subscribe((additionalResponse: INextExamPossibleResponse) => { 
+            this.nextExamOrNewExam(additionalResponse)
         });
     }
 
 
-    toRetestOrRenew(event: INewExamOrRetest) {
-        if (event.isRetest) {
+    nextExamOrNewExam(response: INextExamPossibleResponse): void {
+        if(response.Data?.length) {
             this.AssessmentScreenTimer();
         } else {
             this.resetAllForNewUser().then(() => {
@@ -1084,6 +1097,16 @@ export class ExamWrapperComponent {
             }).catch((error) => {
                 console.error("Error resetting variables:", error);
             });
+        }
+    }
+
+
+
+    toRetestOrRenew(event: INewExamOrRetest) {
+        if (event.isRetest) {
+             
+        } else {
+            
         }
     }
 
