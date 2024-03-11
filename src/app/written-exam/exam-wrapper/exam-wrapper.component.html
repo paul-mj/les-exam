@@ -18,7 +18,7 @@
     </nav>
     }
 
-    @if(pingErrorScreen) {
+    <!-- @if(pingErrorScreen) {
     <div class="d-flex align-items-center justify-content-center service-error">
         <p>Local service not Started Please check your connection</p>
     </div>
@@ -50,7 +50,16 @@
     }
     @else {
 
-    }
+    } -->
+
+
+
+
+
+
+
+    <app-result (toRetestOrRenew)="toRetestOrRenew($event)" />
+
 
     <!-- <button (click)="test()">Test Dialog</button> -->
 

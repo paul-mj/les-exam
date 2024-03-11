@@ -65,7 +65,7 @@ import {
 } from "rxjs";
 import { ApiService } from "../../core/services/api/api.service";
 import { API } from "../../core/application/api.config";
-import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IFinalQUestionResponse, INewExamOrRetest, IOptionSave, IOptionSaveParam, IQuestion, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
+import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IExamSaveResponse, IFinalQUestionResponse, INewExamOrRetest, INextExamParam, IOptionSave, IOptionSaveParam, IQuestion, IResultPostParam, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
 import { ConfirmDialog, DeviceExamStatus, deviceStatusEnum, examTypeEnum, userTypeEnum } from "../../core/database/app.enums";
 import { SignalService } from "../../core/services/signal/signal.service";
 import { UtilityService } from "../../core/services/utility/utility.service";
@@ -171,8 +171,9 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
+        this.getExamResults();
         /* this.loadQuestions__Test(); */
-        this.pingChecking();
+        /* this.pingChecking(); */
     }
 
     pingChecking(): void {
@@ -404,7 +405,7 @@ export class ExamWrapperComponent {
                 return deviceLineResponse;
             })
         ).subscribe((deviceLineResponse: IDeviceLineResponse) => {
-          /*   debugger; */
+            /*   debugger; */
             this.processDeviceData(deviceLineResponse.Data);
         });
     }
@@ -436,7 +437,7 @@ export class ExamWrapperComponent {
                 if (response.Valid) {
                     this.captureResponse = response;
                     this.getEnrolledList();
-                    this.responseControl.readAndVerifyFinger.buttonText = 'Verifying User'; 
+                    this.responseControl.readAndVerifyFinger.buttonText = 'Verifying User';
 
                 } else {
                     this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
@@ -651,7 +652,7 @@ export class ExamWrapperComponent {
                             }
                             break;
                         case deviceStatusEnum.EndExam:
-                            if (this.iStatus !== lineStatus) { 
+                            if (this.iStatus !== lineStatus) {
                                 /* 
                                     Step 1
                                         Show Dialog Message ("Assessment ended by assessor")
@@ -1038,20 +1039,40 @@ export class ExamWrapperComponent {
         };
     }
 
-    completeExam(data: IExamSave, url: string): void { 
-         this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
-            if (res.Id > 0) { 
-                debugger;
+    completeExam(data: IExamSave, url: string): void {
+        this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
+            if (res.Id > 0) {
+                this.getExamResults();
                 this.toggleScreen('result');
-                this.iStatus = deviceStatusEnum.EndExam;
+                this.iStatus = deviceStatusEnum.Ended;
             }
-             console.log(res, 'complete exam final call');
-         }) 
+            console.log(res, 'complete exam final call');
+        })
+    }
 
+    getExamResults() {
+        const data = {
+            LineId: 24259,
+            CultureId: 0,
+            Mode: examTypeEnum.Written
+        }
+        const nextExamParam = {
+            LineId: 24259,
+            CentreId: this.verifiedDeviceData?.CENTRE_ID,
+            CultureId: 0,
+        }
+        const catResult$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getAssessmentCategoryResult', data });
+        const result$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getResult', data });
+        const nextExam$ = this.api.httpPost<INextExamParam>({ url: 'assessment/getNextExam', data: nextExamParam });
+        forkJoin([catResult$, result$, nextExam$]).subscribe(([categoryResult, result, nextExam]: IExamSaveResponse[]) => {
+            console.log(categoryResult, 'category result')
+            console.log(result, 'result')
+            console.log(nextExam, 'nextExam$')
+        });
     }
 
 
-    toRetestOrRenew(event: INewExamOrRetest) {  
+    toRetestOrRenew(event: INewExamOrRetest) {
         if (event.isRetest) {
             this.AssessmentScreenTimer();
         } else {
@@ -1062,7 +1083,7 @@ export class ExamWrapperComponent {
             });
         }
     }
- 
+
 
 
     resetAllForNewUser(): Promise<void> {
@@ -1097,7 +1118,6 @@ export class ExamWrapperComponent {
                     loader: false,
                 },
             };
-
             this.deviceInfo = {} as IDeviceInfo;
             this.verifiedDeviceData = {} as IVerifyDevice;
             this.configuration = {} as IConfiguration;
