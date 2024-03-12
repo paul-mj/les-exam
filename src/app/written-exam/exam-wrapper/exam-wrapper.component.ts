@@ -65,7 +65,7 @@ import {
 } from "rxjs";
 import { ApiService } from "../../core/services/api/api.service";
 import { API } from "../../core/application/api.config";
-import { BlobResponse, IAnswer, ICategory, IExamCompleteEmitResponse, IExamResponse, IExamSave, IExamSaveResponse, IFinalQUestionResponse, INewExamOrRetest, INextAssessmentPossible, INextExamParam, INextExamPossibleResponse, INextExamResult, IOptionSave, IOptionSaveParam, IQuestion, IResultPostParam, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
+import { BlobResponse, IAnswer, ICategory, IExamCategoryResult, IExamCompleteEmitResponse, IExamResponse, IExamResult, IExamSave, IExamSaveResponse, IFinalQUestionResponse, INewExamOrRetest, INextAssessmentPossible, INextExamParam, INextExamPossibleResponse, INextExamResult, IOptionSave, IOptionSaveParam, IQuestion, IResultPostParam, ISaveCategory, ISaveImage, ISaveQuestion } from "../../core/interfaces/exam-interface";
 import { ConfirmDialog, DeviceExamStatus, deviceStatusEnum, examTypeEnum, userTypeEnum } from "../../core/database/app.enums";
 import { SignalService } from "../../core/services/signal/signal.service";
 import { UtilityService } from "../../core/services/utility/utility.service";
@@ -345,7 +345,7 @@ export class ExamWrapperComponent {
     }
 
     AssessmentScreenTimer(): void {
-        const testConfig = {
+        /* const testConfig = {
             "ID": 1,
             "ORAL_WRITTEN_DELAY_MI": 2,
             "SCHEDULE_SELECT_DELAY_DAYS": 0,
@@ -397,7 +397,7 @@ export class ExamWrapperComponent {
             "UP_USER_ID": 2699,
             "UP_DATE": "2024-02-22T10:26:53.013"
         }
-        this.configuration = testConfig;
+        this.configuration = testConfig; */
         const seconds: number = this.configuration.ASSESSMENT_SCREEN_TIMER * 1000;
         const intervalAssessmentScreen$ = interval(seconds);
         this.assessmentTimesSubscription = intervalAssessmentScreen$.pipe(
@@ -405,8 +405,7 @@ export class ExamWrapperComponent {
             map(deviceLineResponse => {
                 return deviceLineResponse;
             })
-        ).subscribe((deviceLineResponse: IDeviceLineResponse) => {
-            /*   debugger; */
+        ).subscribe((deviceLineResponse: IDeviceLineResponse) => { 
             this.processDeviceData(deviceLineResponse.Data);
         });
     }
@@ -1071,7 +1070,13 @@ export class ExamWrapperComponent {
         const nextExam$ = this.api.httpPost<INextExamParam>({ url: 'assessment/getNextExam', data: nextExamParam });
 
         forkJoin([catResult$, result$, nextExam$]).pipe(
-            switchMap(([categoryResult, result, nextExam]: [IResultPostParam, IResultPostParam, INextExamResult]) => {
+            switchMap(([categoryResult, result, nextExam]: [IExamCategoryResult, IExamResult, INextExamResult]) => {
+                this.examResultResponse = {
+                    categoryResult: categoryResult.Data,
+                    Data: result.Data,
+                    ExamDetails: result.ExamDetails,
+                    LineDetails: result.LineDetails,
+                }
                 if (nextExam.LineId > 0) {
                     const nextAssParam = {
                         Id: 24259, //this.verifiedUserData?.LINE_ID
@@ -1089,16 +1094,15 @@ export class ExamWrapperComponent {
 
 
     nextExamOrNewExam(response: INextExamPossibleResponse): void {
-        this.examResultResponse = response;
-        // if(response?.Data?.length) {
-        //     this.AssessmentScreenTimer();
-        // } else {
-        //     this.resetAllForNewUser().then(() => {
-        //         this.pingChecking();
-        //     }).catch((error) => {
-        //         console.error("Error resetting variables:", error);
-        //     });
-        // }
+        if(response?.Data?.length) {
+            this.AssessmentScreenTimer();
+        } else {
+            this.resetAllForNewUser().then(() => {
+                this.pingChecking();
+            }).catch((error) => {
+                console.error("Error resetting variables:", error);
+            });
+        }
     }
 
 

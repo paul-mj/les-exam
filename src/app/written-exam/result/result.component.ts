@@ -15,13 +15,8 @@ export class ResultComponent {
     resultData!: ResultData;
     @Output() toRetestOrRenew = new EventEmitter<INewExamOrRetest>();
     @Input() set examResultResponse(value: any) {
-        if (value) {
-            this.resultData = {
-                categoryResult: value.categoryResult.Data,
-                Data: value.result.Data,
-                ExamDetails: value.result.ExamDetails,
-                LineDetails: value.result.LineDetails,
-            };
+        if (value) { 
+            this.resultData = value;
         }
         console.log(this.resultData)
     }
