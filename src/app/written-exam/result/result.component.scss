@@ -1,13 +1,15 @@
 .result-wrapper {
     padding: 5rem;
+    padding-right: 0rem;
     // height: 100vh;
     // overflow: auto;
 
     .section {
         width: 100%;
-        height: calc(100vh - 200px);
+        height: calc(100vh - 230px);
         overflow-y: auto;
         margin-top: 4rem;
+        padding-right: 5rem;
 
         .result-sec {
             // background-color: white;
@@ -72,11 +74,11 @@
 
 
 .assessment-status .element:first-child {
-    width: 13%;
+    width: 14%;
 }
 
 .assessment-status .element:nth-child(2) {
-    width: 15%;
+    width: 12%;
 }
 
 .assessment-status .element:nth-child(3) {
@@ -84,7 +86,7 @@
 }
 
 .assessment-status .element:nth-child(4) {
-    width: 10%;
+    width: 12%;
 }
 
 .assessment-status .element:nth-child(5) {
@@ -96,16 +98,12 @@
 }
 
 .assessment-status .element:nth-child(7) {
-    width: 10%;
-}
-
-.assessment-status .element:nth-child(8) {
-    width: 10%;
+    width: 15%;
 }
 
 .assessment-status .element:last-child {
     border-right: none !important;
-    width: 10%;
+    width: 15%;
 }
 
 .permit-wrapper {
@@ -183,12 +181,14 @@
 }
 
 .heading-section {
-    color: #585893;
+    color: white;
     border: 1px solid black;
     padding: 16px;
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 500;
+    border-radius: 8px;
     margin-bottom: 1.25rem;
+    background-color: #003a5d;
 }
 
 .user-img-wrap {
@@ -288,10 +288,11 @@
 .success-icon {
     display: flex;
     flex-direction: column;
-    gap: 2.25em;
+    gap: 3em;
     align-items: center;
     justify-content: center;
     padding-bottom: 5rem;
+    padding-top: 5rem;
 }
 
 .success-img {
@@ -306,6 +307,12 @@
     color: forestgreen;
 }
 
+.text-failed {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #d1403f;
+}
+
 .failed-img {
     padding-top: 3rem;
     width: 12rem;
@@ -315,4 +322,20 @@
 .date-section {
     font-size: 1.75em;
     font-weight: 600;
+}
+
+.green-set {
+    padding: 1rem 3rem;
+    border-radius: 5px;
+    font-weight: 500;
+    color: white;
+    background-color: forestgreen;
+}
+
+.red-set {
+    padding: 1rem 3.35rem;
+    border-radius: 5px;
+    font-weight: 500;
+    color: white;
+    background-color: #d1403f;
 }

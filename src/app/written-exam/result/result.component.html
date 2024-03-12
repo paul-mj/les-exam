@@ -21,7 +21,8 @@
                                             <div> مهؤثىسث ىخ </div>
                                         </div>
                                         <div class="permit-no">
-                                            <div> License Expiry Date : {{resultData.Data.LICENSE_EXPIRY_DATE}} </div>
+                                            <div> License Expiry Date : {{resultData.Data.LICENSE_EXPIRY_DATE |
+                                                date:'MM/dd/yyyy'}} </div>
                                             <div>مهؤثىسث ثءحهقغ يشفث</div>
                                         </div>
                                     </div>
@@ -44,7 +45,7 @@
                                         <div class="col-md-12 text-start">
                                             <div class="row">
                                                 <div class="col-md-4 mb-4">
-                                                    <h5 class="label set-size m-0">User Name</h5>
+                                                    <h5 class="label set-size m-0">Profile Name</h5>
                                                     <h5 class="label set-size font-ar">رقم الجواز</h5>
                                                     <p class="field-value set-size">{{resultData.Data.DRIVER_NAME_EN}}
                                                     </p>
@@ -52,12 +53,14 @@
                                                 <div class="col-md-4 mb-4">
                                                     <h5 class="label set-size m-0">Date Of Birth</h5>
                                                     <h5 class="label set-size font-ar">نوع المركبة</h5>
-                                                    <p class="field-value set-size">{{resultData.Data.DRIVER_DOB}}</p>
+                                                    <p class="field-value set-size">{{resultData.Data.DRIVER_DOB |
+                                                        date:'MM/dd/yyyy'}}</p>
                                                 </div>
                                                 <div class="col-md-4 mb-4">
                                                     <h5 class="label set-size m-0">Profile Id</h5>
                                                     <h5 class="label set-size font-ar">نوع المركبة</h5>
-                                                    <p class="field-value set-size">{{resultData.Data.FRANCHISE_NAME}}
+                                                    <p class="field-value set-size">
+                                                        {{resultData.Data.DRIVER_PROFILE_ID}}
                                                     </p>
                                                 </div>
 
@@ -87,6 +90,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @if(resultData.Data.PERMIT_NO){
                                                 <div class="col-md-4">
                                                     <div class="sec-wrapper">
                                                         <div class="permit-wrapper ">
@@ -98,12 +102,14 @@
                                                                     {{resultData.Data.PERMIT_NO}}
                                                                 </div>
                                                                 <div class="expiry-date">
-                                                                    {{resultData.Data.PERMIT_EXPIRY_DATE}}
+                                                                    {{resultData.Data.PERMIT_EXPIRY_DATE |
+                                                                    date:'MM/dd/yyyy'}}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                }
                                             </div>
                                         </div>
 
@@ -120,17 +126,21 @@
 
 
                     <div class="table-section assessment-sec">
-                        <div class="heading-section">
+                        <!-- <div class="heading-section">
                             Results
-                        </div>
+                        </div> -->
                         <div class="success-icon">
                             @if(resultData.ExamDetails[0].IS_PASSED_) {
                             <img src="/assets/images/google-icons/success.svg" alt="" class="success-img">
                             } @else {
                             <img src="/assets/images/google-icons/failed.png" alt="" class="failed-img">
                             }
-
+                            @if(resultData.ExamDetails[0].IS_PASSED_) {
                             <div class="text-sucess">Passed</div>
+                            } @else {
+                            <div class="text-failed">Failed</div>
+                            }
+
                             <div class="date-section mt-2">Validity: 12/02/2027</div>
                             <div class="date-section">Retest Date: 12/02/2025</div>
                         </div>
@@ -139,7 +149,6 @@
                             <div class="table-outer assessment-status">
                                 <div class="table-header">
                                     <div class="element">Exam Type</div>
-                                    <div class="element">Attendance Status</div>
                                     <div class="element">Exam Status </div>
                                     <div class="element">Passed</div>
                                     <div class="element">Exam Mark</div>
@@ -149,16 +158,17 @@
                                     <div class="element">End Date</div>
                                 </div>
 
-                                <div class="table-body" *ngFor="let item of resultData.LineDetails">
-                                    <div class="element">{{item.Category}}</div>
-                                    <div class="element">{{item.Category}}</div>
-                                    <div class="element">{{item.Category}} </div>
-                                    <div class="element">{{item.Category}}</div>
-                                    <div class="element">{{item.Category}}</div>
-                                    <div class="element">{{item.Category}}</div>
-                                    <div class="element">{{item.Category}}</div>
-                                    <div class="element">{{item.Category}}</div>
-                                    <div class="element">{{item.Category}}</div>
+                                <div class="table-body">
+                                    <div class="element">{{resultData.ExamDetails[0]['Exam Type']}}</div>
+                                    <div class="element">{{resultData.ExamDetails[0].Status}} </div>
+                                    <div class="element">{{resultData.ExamDetails[0].Passed}}</div>
+                                    <div class="element">{{resultData.ExamDetails[0].Mark}}</div>
+                                    <div class="element">{{resultData.ExamDetails[0]['Pass Mark']}}</div>
+                                    <div class="element">{{resultData.ExamDetails[0].Weightage}}</div>
+                                    <div class="element">{{resultData.ExamDetails[0]['Start Time'] | date:'MM/dd/yyyy'}}
+                                    </div>
+                                    <div class="element">{{resultData.ExamDetails[0]['End Time'] | date:'MM/dd/yyyy'}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -167,8 +177,8 @@
             </div>
 
             <div class="mt-4 table-section">
-                <h5 class="labels mb-4">Oral Category Weightage</h5>
-                <div class="table-wrapper">
+                <h5 class="labels mb-4">Written Category Weightage</h5>
+                <div class="table-borderless-wrapper">
                     <div class="table-outer assessment-status">
                         <div class="table-header">
                             <div class="element">Category</div>
@@ -187,8 +197,10 @@
                             <div class="element">{{item['Pass Mark']}}</div>
                             <div class="element">{{item.Weightage}}</div>
                             <div class="element">{{item.Passed}}</div>
-                            <div class="element">{{item.Date}}</div>
-                            <div class="element">{{item.Category}}</div>
+                            <div class="element">{{item.Date | date:'MM/dd/yyyy'}}</div>
+                            <div class="element">
+                                <div [ngClass]="item.IS_PASS ? 'green-set' : 'red-set'"> {{item.IS_PASS ? 'Passed' : 'Failed'}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
