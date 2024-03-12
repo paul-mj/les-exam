@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { INewExamOrRetest } from '../../core/interfaces/exam-interface';
+import { INewExamOrRetest, ResultData } from '../../core/interfaces/exam-interface';
 
 @Component({
     selector: 'app-result',
@@ -12,19 +12,18 @@ import { INewExamOrRetest } from '../../core/interfaces/exam-interface';
 
 export class ResultComponent {
 
-    resultData = {};
+    resultData!: ResultData;
     @Output() toRetestOrRenew = new EventEmitter<INewExamOrRetest>();
-
-
     @Input() set examResultResponse(value: any) {
-        if (value) { 
+        if (value) {
             this.resultData = {
                 categoryResult: value.categoryResult.Data,
-                Data:  value.result.Data,
-                ExamDetails:  value.result.ExamDetails,
-                LineDetails:  value.result.LineDetails,
+                Data: value.result.Data,
+                ExamDetails: value.result.ExamDetails,
+                LineDetails: value.result.LineDetails,
             };
         }
+        console.log(this.resultData)
     }
 
     resetOrRenew(): void {

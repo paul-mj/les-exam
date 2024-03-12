@@ -1089,15 +1089,16 @@ export class ExamWrapperComponent {
 
 
     nextExamOrNewExam(response: INextExamPossibleResponse): void {
-        if(response.Data?.length) {
-            this.AssessmentScreenTimer();
-        } else {
-            this.resetAllForNewUser().then(() => {
-                this.pingChecking();
-            }).catch((error) => {
-                console.error("Error resetting variables:", error);
-            });
-        }
+        this.examResultResponse = response;
+        // if(response?.Data?.length) {
+        //     this.AssessmentScreenTimer();
+        // } else {
+        //     this.resetAllForNewUser().then(() => {
+        //         this.pingChecking();
+        //     }).catch((error) => {
+        //         console.error("Error resetting variables:", error);
+        //     });
+        // }
     }
 
 
