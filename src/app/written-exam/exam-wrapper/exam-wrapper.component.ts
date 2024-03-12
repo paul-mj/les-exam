@@ -345,7 +345,7 @@ export class ExamWrapperComponent {
     }
 
     AssessmentScreenTimer(): void {
-        const testConfig = {
+        /* const testConfig = {
             "ID": 1,
             "ORAL_WRITTEN_DELAY_MI": 2,
             "SCHEDULE_SELECT_DELAY_DAYS": 0,
@@ -397,7 +397,7 @@ export class ExamWrapperComponent {
             "UP_USER_ID": 2699,
             "UP_DATE": "2024-02-22T10:26:53.013"
         }
-        this.configuration = testConfig;
+        this.configuration = testConfig; */
         const seconds: number = this.configuration.ASSESSMENT_SCREEN_TIMER * 1000;
         const intervalAssessmentScreen$ = interval(seconds);
         this.assessmentTimesSubscription = intervalAssessmentScreen$.pipe(
