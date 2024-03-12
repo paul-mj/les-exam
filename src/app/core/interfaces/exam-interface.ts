@@ -391,3 +391,23 @@ export interface IResultCat {
     Passed: string
     IS_PASS: number
 }
+
+
+export interface INextExamResult {
+    LineId: number
+    UserType: number
+    Valid: boolean
+    Message: string
+  }
+  
+export interface INextAssessmentPossible {
+    Id: number
+    CultureId: number 
+  }
+  
+  export interface INextExamPossibleResponse {
+    Data: any
+    Valid: boolean
+    ResponseMessage: string
+  }
+  
