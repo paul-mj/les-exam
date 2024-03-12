@@ -1,15 +1,8 @@
 <div class="result-wrapper">
     <div class="section">
+        @if(resultData) {
         <div class="result-sec">
-            <!-- <div class="name">User Name</div> -->
-            <!-- <button (click)="resetOrRenew()">Retest or Renew</button> -->
             <div class="user-wrapper">
-
-                <!-- <pre>
-                    <code>
-                        {{ resultData | json }}
-                    </code>
-                </pre> -->
                 <div class="top-section">
 
                     <div class="first-half">
@@ -201,5 +194,6 @@
                 </div>
             </div>
         </div>
+        }
     </div>
 </div>
