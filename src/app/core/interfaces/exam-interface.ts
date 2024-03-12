@@ -191,6 +191,14 @@ export interface INewExamOrRetest {
     isRetest: boolean
 }
 
+export interface ResultData {
+    categoryResult: any;
+    Data: any;
+    ExamDetails: any;
+    LineDetails: any;
+}
+
+
 
 export interface IExamSaveResponse {
     categoryResult: IResultPostParam
@@ -202,7 +210,7 @@ export interface IResultPostParam {
     LineId: number,
     CultureId: number,
     Mode: number
-} 
+}
 
 export interface INextExamParam {
     LineId: number,

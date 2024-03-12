@@ -2,14 +2,14 @@
     <div class="section">
         <div class="result-sec">
             <!-- <div class="name">User Name</div> -->
-            <button (click)="resetOrRenew()">Retest or Renew</button>
+            <!-- <button (click)="resetOrRenew()">Retest or Renew</button> -->
             <div class="user-wrapper">
 
-                <pre>
+                <!-- <pre>
                     <code>
                         {{ resultData | json }}
                     </code>
-                </pre>
+                </pre> -->
                 <div class="top-section">
 
                     <div class="first-half">
@@ -24,11 +24,11 @@
                                     </div>
                                     <div class="permit-bottom">
                                         <div class="permit-no set-border">
-                                            <div> License No : 4234245 </div>
+                                            <div> License No : {{resultData.Data.LICENSE_NO}} </div>
                                             <div> مهؤثىسث ىخ </div>
                                         </div>
                                         <div class="permit-no">
-                                            <div> License Expiry Date : 15/03/2030 </div>
+                                            <div> License Expiry Date : {{resultData.Data.LICENSE_EXPIRY_DATE}} </div>
                                             <div>مهؤثىسث ثءحهقغ يشفث</div>
                                         </div>
                                     </div>
@@ -53,17 +53,19 @@
                                                 <div class="col-md-4 mb-4">
                                                     <h5 class="label set-size m-0">User Name</h5>
                                                     <h5 class="label set-size font-ar">رقم الجواز</h5>
-                                                    <p class="field-value set-size">Hameed</p>
+                                                    <p class="field-value set-size">{{resultData.Data.DRIVER_NAME_EN}}
+                                                    </p>
                                                 </div>
                                                 <div class="col-md-4 mb-4">
                                                     <h5 class="label set-size m-0">Date Of Birth</h5>
                                                     <h5 class="label set-size font-ar">نوع المركبة</h5>
-                                                    <p class="field-value set-size">18/01/1989</p>
+                                                    <p class="field-value set-size">{{resultData.Data.DRIVER_DOB}}</p>
                                                 </div>
                                                 <div class="col-md-4 mb-4">
                                                     <h5 class="label set-size m-0">Profile Id</h5>
                                                     <h5 class="label set-size font-ar">نوع المركبة</h5>
-                                                    <p class="field-value set-size">545498</p>
+                                                    <p class="field-value set-size">{{resultData.Data.FRANCHISE_NAME}}
+                                                    </p>
                                                 </div>
 
                                                 <div class="col-md-4">
@@ -74,7 +76,8 @@
                                                         <div class="">
                                                             <h5 class="label set-size m-0">Franchise</h5>
                                                             <h5 class="label set-size font-ar">نوع المركبة</h5>
-                                                            <p class="field-value set-size">Cars</p>
+                                                            <p class="field-value set-size">
+                                                                {{resultData.Data.FRANCHISE_NAME}}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -86,7 +89,8 @@
                                                         <div class="">
                                                             <h5 class="label set-size m-0">Service Type</h5>
                                                             <h5 class="label set-size font-ar">نوع المركبة</h5>
-                                                            <p class="field-value set-size">Renew</p>
+                                                            <p class="field-value set-size">
+                                                                {{resultData.Data.SERVICE_TYPE}}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -98,10 +102,10 @@
                                                             </div>
                                                             <div class="permit-bottom">
                                                                 <div class="permit-no">
-                                                                    88415
+                                                                    {{resultData.Data.PERMIT_NO}}
                                                                 </div>
                                                                 <div class="expiry-date">
-                                                                    18/01/4552
+                                                                    {{resultData.Data.PERMIT_EXPIRY_DATE}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -127,8 +131,12 @@
                             Results
                         </div>
                         <div class="success-icon">
+                            @if(resultData.ExamDetails[0].IS_PASSED_) {
                             <img src="/assets/images/google-icons/success.svg" alt="" class="success-img">
-                            <!-- <img src="/assets/images/google-icons/failed.png" alt="" class="failed-img"> -->
+                            } @else {
+                            <img src="/assets/images/google-icons/failed.png" alt="" class="failed-img">
+                            }
+
                             <div class="text-sucess">Passed</div>
                             <div class="date-section mt-2">Validity: 12/02/2027</div>
                             <div class="date-section">Retest Date: 12/02/2025</div>
@@ -147,16 +155,17 @@
                                     <div class="element">Start Date</div>
                                     <div class="element">End Date</div>
                                 </div>
-                                <div class="table-body">
-                                    <div class="element">sd</div>
-                                    <div class="element">sd</div>
-                                    <div class="element">sds </div>
-                                    <div class="element">sdsd</div>
-                                    <div class="element">sdsd</div>
-                                    <div class="element">sdsds</div>
-                                    <div class="element">sdsd</div>
-                                    <div class="element">sdsds</div>
-                                    <div class="element">sdsd</div>
+
+                                <div class="table-body" *ngFor="let item of resultData.LineDetails">
+                                    <div class="element">{{item.Category}}</div>
+                                    <div class="element">{{item.Category}}</div>
+                                    <div class="element">{{item.Category}} </div>
+                                    <div class="element">{{item.Category}}</div>
+                                    <div class="element">{{item.Category}}</div>
+                                    <div class="element">{{item.Category}}</div>
+                                    <div class="element">{{item.Category}}</div>
+                                    <div class="element">{{item.Category}}</div>
+                                    <div class="element">{{item.Category}}</div>
                                 </div>
                             </div>
                         </div>
@@ -178,15 +187,15 @@
                             <div class="element">Exam Date</div>
                             <div class="element"></div>
                         </div>
-                        <div class="table-body">
-                            <div class="element">sd</div>
-                            <div class="element">sd</div>
-                            <div class="element">sds </div>
-                            <div class="element">sdsd</div>
-                            <div class="element">sdsd</div>
-                            <div class="element">sdsds</div>
-                            <div class="element">sdsd</div>
-                            <div class="element">sdsd</div>
+                        <div class="table-body" *ngFor="let item of resultData.categoryResult">
+                            <div class="element">{{item.Category}}</div>
+                            <div class="element">{{item.Mark}}</div>
+                            <div class="element">{{item.Deviation}} </div>
+                            <div class="element">{{item['Pass Mark']}}</div>
+                            <div class="element">{{item.Weightage}}</div>
+                            <div class="element">{{item.Passed}}</div>
+                            <div class="element">{{item.Date}}</div>
+                            <div class="element">{{item.Category}}</div>
                         </div>
                     </div>
                 </div>
