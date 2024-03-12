@@ -54,11 +54,12 @@
 
 
 
+    <app-survey [surveyInput]="{survey: surveyQuestions, blockControl: responseControl}"
+        (onClickSubmitSurvey)="submitSurvey($event)"></app-survey>
 
 
 
-
-    <app-result [examResultResponse]="examResultResponse" (toRetestOrRenew)="toRetestOrRenew($event)" />
+    <!-- <app-result [examResultResponse]="examResultResponse" (toRetestOrRenew)="toRetestOrRenew($event)" /> -->
 
 
     <!-- <button (click)="test()">Test Dialog</button> -->
