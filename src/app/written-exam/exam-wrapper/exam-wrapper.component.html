@@ -17,8 +17,9 @@
         </div>
     </nav>
     }
+     
 
-    <!-- @if(pingErrorScreen) {
+    @if(pingErrorScreen) {
     <div class="d-flex align-items-center justify-content-center service-error">
         <p>Local service not Started Please check your connection</p>
     </div>
@@ -46,11 +47,11 @@
         (onClickOptionSave)="individualAnswerSave($event)" (onClickExamComplete)="onExamComplete($event)" />
     }
     @else if (screenControl.result) {
-        <app-result (toRetestOrRenew)="toRetestOrRenew($event)" />
+        <app-result [examResultResponse]="examResultResponse" (toRetestOrRenew)="toRetestOrRenew($event)" />
     }
     @else {
 
-    } -->
+    }
 
 
 
@@ -59,7 +60,7 @@
 
 
 
-    <app-result [examResultResponse]="examResultResponse" (toRetestOrRenew)="toRetestOrRenew($event)" />
+    <!-- <app-result [examResultResponse]="examResultResponse" (toRetestOrRenew)="toRetestOrRenew($event)" /> -->
 
 
     <!-- <button (click)="test()">Test Dialog</button> -->

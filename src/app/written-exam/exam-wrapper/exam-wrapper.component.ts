@@ -100,6 +100,7 @@ export class ExamWrapperComponent {
         result: false,
     };
 
+
     responseControl: IResponseControl = {
         scanner: {
             loader: false,
@@ -172,9 +173,9 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-        this.getExamResults();
+         /* this.getExamResults(); */
         /* this.loadQuestions__Test(); */
-        /* this.pingChecking(); */
+        this.pingChecking();
     }
 
     pingChecking(): void {
@@ -405,7 +406,7 @@ export class ExamWrapperComponent {
             map(deviceLineResponse => {
                 return deviceLineResponse;
             })
-        ).subscribe((deviceLineResponse: IDeviceLineResponse) => { 
+        ).subscribe((deviceLineResponse: IDeviceLineResponse) => {
             this.processDeviceData(deviceLineResponse.Data);
         });
     }
@@ -469,6 +470,64 @@ export class ExamWrapperComponent {
             });
     }
 
+    /* readImpressionsFromDB(): void {
+       const readImpressionSize = 2;
+       const readImpressionPayload = [];
+       for (let i = 0; i < this.enrolledList.length; i += readImpressionSize) {
+           readImpressionPayload.push({
+               Lines: this.enrolledList.slice(i, i + readImpressionSize),
+               CentreId: this.verifiedDeviceData.CENTRE_ID,
+           });
+       }
+       let index = 0;
+       this.responseControl.readAndVerifyFinger.loader = true;
+       this.processreadImpressionPayload(readImpressionPayload, index);
+   }
+
+   processreadImpressionPayload(readImpressionPayload: any[], index: number): void {
+       const payload: IReadImpressionPayload = readImpressionPayload[index];
+       if (!payload) {
+           this.responseControl.readAndVerifyFinger.loader = false;
+           return;
+       }
+       this.readImpression(payload).subscribe((response: IReadImpressionResponse) => {
+           if (response.Valid) {
+               const verifyPayload: IVerifyPayload = {
+                   Lines: response.Lines,
+                   Impression: this.captureResponse.Impression,
+                   Quality: this.captureResponse.Quality,
+                   Size: this.captureResponse.Size,
+               };
+               this.verifyImpression(verifyPayload).subscribe((res: IFingerVerifyResponse) => {
+                   if (res.Valid) {
+                       this.verifiedUserData = res.Data;
+                       this.assessmentStatusInfo = {
+                           ...this.assessmentStatusInfo,
+                           LineId: this.verifiedUserData?.LINE_ID,
+                           UserType: this.verifiedUserData.USER_TYPE,
+                           LineStatus: Number(deviceStatusEnum.Ready)
+                       };
+                       this.saveStatus().subscribe((saveSatatusResponse: any) => {
+                           if (saveSatatusResponse.Valid) {
+                               this.loadUserDetails(this.verifiedUserData?.LINE_ID);
+                           }
+                       });
+                       this.responseControl.readAndVerifyFinger.buttonText = 'Fetching Details';
+                       this.responseControl.readAndVerifyFinger.image = 3; 
+
+                   } else {
+                       this.responseControl.readAndVerifyFinger.loader = false;
+                       this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
+                       this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
+                       this.responseControl.readAndVerifyFinger.image = 0;
+
+                   }
+               });
+           }
+       })
+   } */
+
+
     readImpressionsFromDB(): void {
         const readImpressionSize = 2;
         const readImpressionPayload = [];
@@ -482,60 +541,50 @@ export class ExamWrapperComponent {
         this.responseControl.readAndVerifyFinger.loader = true;
         this.processreadImpressionPayload(readImpressionPayload, index);
     }
-
     processreadImpressionPayload(readImpressionPayload: any[], index: number): void {
         const payload: IReadImpressionPayload = readImpressionPayload[index];
         if (!payload) {
-            this.responseControl.readAndVerifyFinger.loader = false;
             return;
         }
-        this.readImpression(payload).subscribe((response: IReadImpressionResponse) => {
-            if (response.Valid) {
-                const verifyPayload: IVerifyPayload = {
-                    Lines: response.Lines,
-                    Impression: this.captureResponse.Impression,
-                    Quality: this.captureResponse.Quality,
-                    Size: this.captureResponse.Size,
-                };
-                this.verifyImpression(verifyPayload).subscribe((res: IFingerVerifyResponse) => {
-                    if (res.Valid) {
-                        this.verifiedUserData = res.Data;
-                        this.assessmentStatusInfo = {
-                            ...this.assessmentStatusInfo,
-                            LineId: this.verifiedUserData?.LINE_ID,
-                            UserType: this.verifiedUserData.USER_TYPE,
-                            LineStatus: Number(deviceStatusEnum.Ready)
-                        };
-                        this.saveStatus().subscribe((saveSatatusResponse: any) => {
-                            if (saveSatatusResponse.Valid) {
-                                this.loadUserDetails(this.verifiedUserData?.LINE_ID);
+        this.readImpression(payload).subscribe(
+            (response: IReadImpressionResponse) => {
+                if (response.Valid) {
+                    const verifyPayload: IVerifyPayload = {
+                        Lines: response.Lines,
+                        Impression: this.captureResponse.Impression,
+                        Quality: this.captureResponse.Quality,
+                        Size: this.captureResponse.Size,
+                    };
+                    this.verifyImpression(verifyPayload).subscribe(
+                        (res: IFingerVerifyResponse) => {
+                            if (res.Valid) {
+                                this.verifiedUserData = res.Data;
+                                this.assessmentStatusInfo = {
+                                    ...this.assessmentStatusInfo,
+                                    LineId: this.verifiedUserData?.LINE_ID,
+                                    UserType: this.verifiedUserData.USER_TYPE,
+                                    LineStatus: Number(deviceStatusEnum.Ready)
+                                };
+                                this.saveStatus().subscribe((saveSatatusResponse: any) => {
+                                    if (saveSatatusResponse.Valid) {
+                                        this.loadUserDetails(this.verifiedUserData?.LINE_ID)
+                                    }
+                                })
+                                this.responseControl.readAndVerifyFinger.buttonText = 'Fetching Details';
+                                this.responseControl.readAndVerifyFinger.image = 3;
+                            } else {
+                                index++;
+                                this.processreadImpressionPayload(readImpressionPayload, index);
+                                /*  this.responseControl.readAndVerifyFinger.loader = false;
+                                 this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
+                                 this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
+                                 this.responseControl.readAndVerifyFinger.image = 0; */
                             }
-                        });
-                        this.responseControl.readAndVerifyFinger.buttonText = 'Fetching Details';
-                        this.responseControl.readAndVerifyFinger.image = 3; //image with tick
-
-                    } else {
-                        this.responseControl.readAndVerifyFinger.loader = false;
-                        this.utils.openStatusDialog('Error', 'User Verification Failed, Scan Again', ConfirmDialog.error).subscribe();
-                        this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
-                        this.responseControl.readAndVerifyFinger.image = 0;
-
-                    }
-                }, (error: any) => {
-                    this.responseControl.readAndVerifyFinger.loader = false;
-                    this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
-                    this.responseControl.readAndVerifyFinger.image = 0;
-
-
-                });
+                        }
+                    );
+                }
             }
-        }, (error: any) => {
-            this.responseControl.readAndVerifyFinger.loader = false;
-            this.responseControl.readAndVerifyFinger.buttonText = 'Scan Finger'; this.responseControl.readAndVerifyFinger.loader = false
-            this.responseControl.readAndVerifyFinger.image = 0;
-
-
-        });
+        );
     }
 
 
@@ -590,8 +639,8 @@ export class ExamWrapperComponent {
                 this.saveStatus().subscribe((saveSatatusResponse: any) => {
                     if (saveSatatusResponse.Valid) {
                         this.iStatus = deviceStatusEnum.None;
-                        this.ResetAll();
-                        this.toggleScreen("verify");
+                        this.ResetAll('Exam has been stopped');
+                        /* this.toggleScreen("verify"); */
                     }
                 })
                 return;
@@ -672,7 +721,7 @@ export class ExamWrapperComponent {
                                 this.saveStatus().subscribe((saveSatatusResponse: ISaveStatusResponse) => {
                                     if (saveSatatusResponse.Id > 0) {
                                         this.iStatus = deviceStatusEnum.None;
-                                        this.ResetAll();
+                                        this.ResetAll('Exam has been stopped');
                                     }
                                 })
                             }
@@ -694,7 +743,10 @@ export class ExamWrapperComponent {
 
     UpdateDeviceStatus(): void { }
 
-    ResetAll(): void { }
+    ResetAll(msg: string): void { 
+        this.utils.openStatusDialog('Error', msg, ConfirmDialog.error).subscribe();
+        this.newUserExam();
+    }
 
     ResetDuration(): void {
         if (this.userTransData.LINE_ID > 0) {
@@ -867,7 +919,7 @@ export class ExamWrapperComponent {
                 (screenName === 'exam') && this.isExamScreen();
             }
         }
-    }
+    }  
 
     isExamScreen(): void {
         this.examStartTime = this.formatDateToenUS(new Date(), 'dd-MMM-yyyy HH:mm:ss')
@@ -1043,24 +1095,22 @@ export class ExamWrapperComponent {
         this.api.httpPost<IExamSave>({ url, data }).subscribe((res: any) => {
             if (res.Id > 0) {
                 this.getExamResults();
-                this.toggleScreen('result');
                 this.iStatus = deviceStatusEnum.Ended;
             }
-            console.log(res, 'complete exam final call');
         })
     }
 
 
 
     // Inside your method
-    getExamResults() {
+    getExamResults() {  
         const data = {
-            LineId: 24259, //this.verifiedUserData?.LINE_ID
-            CultureId: 0, //this.verifiedUserData?.LINE_ID
+            LineId: this.verifiedUserData?.LINE_ID,
+            CultureId: 0,  
             Mode: examTypeEnum.Written
         };
         const nextExamParam = {
-            LineId: 24259,
+            LineId: this.verifiedUserData?.LINE_ID, 
             CentreId: this.verifiedDeviceData?.CENTRE_ID,
             CultureId: 0,
         };
@@ -1068,54 +1118,56 @@ export class ExamWrapperComponent {
         const catResult$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getAssessmentCategoryResult', data });
         const result$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getResult', data });
         const nextExam$ = this.api.httpPost<INextExamParam>({ url: 'assessment/getNextExam', data: nextExamParam });
+        forkJoin([catResult$, result$, nextExam$]).subscribe(([categoryResult, result, nextExam]: [IExamCategoryResult, IExamResult, INextExamResult]) => {
+            
+            this.examResultResponse = {
+                categoryResult: categoryResult.Data,
+                Data: result.Data,
+                ExamDetails: result.ExamDetails,
+                LineDetails: result.LineDetails,
+            }
+            if(result.Data) {
+                this.toggleScreen('result');
+            }
+            if (nextExam.LineId > 0) {
+                const nextAssParam = {
+                    Id: this.verifiedUserData?.LINE_ID, 
+                    CultureId: 0,
+                }
+                this.nextExamOrNewExam(nextAssParam);
+            } else {
+                this.newUserExam();
+            }
+        })
+    }
 
-        forkJoin([catResult$, result$, nextExam$]).pipe(
-            switchMap(([categoryResult, result, nextExam]: [IExamCategoryResult, IExamResult, INextExamResult]) => {
-                this.examResultResponse = {
-                    categoryResult: categoryResult.Data,
-                    Data: result.Data,
-                    ExamDetails: result.ExamDetails,
-                    LineDetails: result.LineDetails,
-                }
-                if (nextExam.LineId > 0) {
-                    const nextAssParam = {
-                        Id: 24259, //this.verifiedUserData?.LINE_ID
-                        CultureId: 0,
-                    }
-                    return this.api.httpPost<INextAssessmentPossible>({ url: 'assessment/nextExamPossible', data: nextAssParam });
-                } else {
-                    return of(null);
-                }
-            })
-        ).subscribe((additionalResponse: INextExamPossibleResponse) => { 
-            this.nextExamOrNewExam(additionalResponse)
-        });
+    nextExamOrNewExam(nextAssParam: any): void {
+        this.api.httpPost<INextAssessmentPossible>({ url: 'assessment/nextExamPossible', data: nextAssParam }).subscribe((response: any) => {
+            if (response && response.Data && response.Data.length) {
+                setTimeout(() => {
+                    this.AssessmentScreenTimer();
+                }, 10000);
+            } else {
+                this.newUserExam();
+            }
+        })
     }
 
 
-    nextExamOrNewExam(response: INextExamPossibleResponse): void {
-        if(response?.Data?.length) {
-            this.AssessmentScreenTimer();
-        } else {
+    newUserExam(): void {
+        setTimeout(() => {
             this.resetAllForNewUser().then(() => {
-                this.pingChecking();
-            }).catch((error) => {
-                console.error("Error resetting variables:", error);
-            });
+                    this.pingChecking();
+                }).catch((error) => {
+                    console.error("Error resetting variables:", error);
+                });
+            }, 10000);
         }
-    }
-
 
 
     toRetestOrRenew(event: INewExamOrRetest) {
-        if (event.isRetest) {
-             
-        } else {
-            
-        }
+       
     }
-
-
 
     resetAllForNewUser(): Promise<void> {
         return new Promise<void>((resolve, reject) => {

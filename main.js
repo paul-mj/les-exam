@@ -24,10 +24,10 @@ function createWindow() {
     })
 
     mainWindow.loadURL(path.join(__dirname, 'dist', 'exam', 'browser', 'index.html'));
-    /* 
-        mainWindow.webContents.openDevTools() 
-        mainWindow.setMenu(null);
-    */
+    
+        /* mainWindow.webContents.openDevTools() 
+        mainWindow.setMenu(null); */
+   
     mainWindow.removeMenu();
 
     mainWindow.on('closed', function () {
