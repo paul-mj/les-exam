@@ -254,16 +254,16 @@ export class ExamWrapperComponent {
             });
     }
 
-    registerDevice($event: IRegisterDevice) {
+    registerDevice($event: IRegisterDevice) { 
         this.api
             .httpPost<IRegisterDevice>({
                 url: API.Assessment.registerDevice,
                 data: $event,
             })
             .subscribe((response: any) => {
+                debugger;
                 if (response.Id > 0) {
                     this.verifyAfterNewDeviceRegister();
-                    this.callDeviceCommonDatas()
                     this.initScanner();
                     this.toggleScreen("verify"); //Show User Verify Screen
                 }
@@ -302,6 +302,7 @@ export class ExamWrapperComponent {
             .subscribe((response: IVerifyDeviceResponse) => {
                 if (response.Valid) {
                     this.verifiedDeviceData = response.Data;
+                    this.callDeviceCommonDatas();
                 }
             });
     }
