@@ -34,17 +34,17 @@
                     </mat-radio-group> -->
 
 
-                    <div class="yes-btn">
+                    <div class="yes-btn" [class.active]="item.OPT_1 === 1" (click)="toogelOption(item, 1)">
                         Yes
                     </div>
-                    <div class="cancel-btn">
+                    <div class="cancel-btn" [class.active]="item.OPT_1 === 0" (click)="toogelOption(item, 0)">
                         No
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="content-section">
+        <!-- <div class="content-section">
             <div class="dot">
                 <img src="/assets/images/google-icons/tick.svg" />
             </div>
@@ -58,14 +58,7 @@
                     </p>
                 </div>
                 <div class="option-section">
-                    <!-- <mat-radio-group>
-                        <mat-radio-button (change)="1">
-                            <p class="font-en">Yes</p>
-                        </mat-radio-button>
-                        <mat-radio-button (change)="0" class="mx-3">
-                            <p class="font-en">No</p>
-                        </mat-radio-button>
-                    </mat-radio-group> -->
+
 
                     <div class="yes-btn">
                         Yes
@@ -77,7 +70,7 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
 
     </div>
     <div class="button-section text-end">
@@ -87,3 +80,13 @@
         </button>
     </div>
 </div>
+
+
+<!-- <mat-radio-group>
+                        <mat-radio-button (change)="1">
+                            <p class="font-en">Yes</p>
+                        </mat-radio-button>
+                        <mat-radio-button (change)="0" class="mx-3">
+                            <p class="font-en">No</p>
+                        </mat-radio-button>
+                    </mat-radio-group> -->

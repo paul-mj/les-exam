@@ -66,16 +66,15 @@
         align-items: center;
 
         .yes-btn {
-            background: #003a5d;
+            color: black;
+            border: 1px solid grey;
             padding: 1rem 5rem;
             font-weight: 400;
             font-size: 1.75rem;
-            color: white;
             border-radius: 10px;
         }
 
         .cancel-btn {
-            // background: #003a5d;
             padding: 1rem 5rem;
             font-weight: 400;
             font-size: 1.75rem;
@@ -136,4 +135,9 @@
     display: flex;
     flex-direction: column;
     gap: 1em;
+}
+
+.active {
+    background: #003a5d;
+    color: white !important;
 }
