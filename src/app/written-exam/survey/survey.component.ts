@@ -15,26 +15,7 @@ import { ISurvey } from '../../core/interfaces/exam-wrap.interface';
 
 export class SurveyComponent {
 	displayCount: any = 6;
-	survey = [
-		{
-			QST_ID: 3676,
-			OPT_1: 0,
-			OPT_2: 0,
-			OPT_3: 0,
-			OPT_4: 0,
-			OBJECT_NAME: "What is your evaluation for your company management ?",
-			OBJECT_NAME_ARABIC: "ما هو تقييمك لادارة الشركة التي تعمل بها ؟"
-		},
-		{
-			QST_ID: 3677,
-			OPT_1: 0,
-			OPT_2: 0,
-			OPT_3: 0,
-			OPT_4: 0,
-			OBJECT_NAME: "Your evaluation for your accommodation",
-			OBJECT_NAME_ARABIC: "تقييمك للسكن"
-		}
-	];
+	survey!:ISurvey[];
 
 	@Output() onClickSubmitSurvey = new EventEmitter<ISurvey[]>();
 
@@ -42,6 +23,10 @@ export class SurveyComponent {
 		if (value) {
 			this.survey = value.survey;
 		}
+	}
+
+	toogelOption(item: any, action: number) {
+		item.OPT_1 = action
 	}
 
 	emitData() {
