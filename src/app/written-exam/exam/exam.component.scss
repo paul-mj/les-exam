@@ -419,9 +419,28 @@
     border: 4px solid forestgreen !important;
 }
 
+.ques-img,
 .map-section {
     width: 50%;
+
+    .img-question {
+        height: 50vh;
+        width: 60vh;
+        border: 2px solid white;
+        border-radius: 20px;
+        background: #000000e3;
+        padding: 2rem;
+
+        .imgggg {
+            height: 100%;
+            width: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+    }
 }
+
 
 .map-section-grid {
     grid-template-columns: repeat(1, 1fr);

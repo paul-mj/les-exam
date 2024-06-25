@@ -223,7 +223,7 @@
         </div>
         <div class="categories-section">
             @for(item of categoryList; let i = $index; track i) {
-            <div class="each-catgory">
+            <div class="each-catgory"> 
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="topic">
                         <div class="arrow">
@@ -305,10 +305,14 @@
                     <div class="map-section">
                         <app-esri-map [answers]="question.Answers" />
                     </div>
-                    } @else {
-                    <div class="ques-img" [style.background-image]="'url(' + question.image + ')'"> </div>
+                    } @else if(question.HAS_IMAGE) {
+                        <div class="ques-img"> 
+                            <div class="img-question">
+                                <div [style.background-image]="'url(' + question.image + ')'" class="imgggg"></div>
+                            </div>
+                        </div>
                     }
-
+                     
                     <div class="question-section"
                         [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section' : 'w-100'">
                         <p class="quest-count">

@@ -101,7 +101,7 @@ export class ExamComponent {
 
 
     @Input() set examInputs(value: IExamChildInput) {
-        if (value) {
+        if (value) { 
             this.questions = value.questions.map((qstn: IQuestion) => {
                 return {
                     ...qstn, Answers: qstn.Answers.map((ans: IAnswer, i: number) => {
@@ -224,8 +224,8 @@ export class ExamComponent {
     }
 
     toggleReview($event: any, question: any): void {
-        console.log($event, 'event')
-        console.log(question, 'question')
+       /*  console.log($event, 'event')
+        console.log(question, 'question') */
     }
 
     reviewMyAnswers(): void {
@@ -290,7 +290,7 @@ export class ExamComponent {
     completionPercentage(): any {
         const ansLength = this.questions.filter((x: IQuestion) => x.isAnswered)?.length;
         this.completeQuesPercentage = Math.round(((100 * (ansLength)) / this.questionMaxCount)) + '%';
-        console.log(this.completeQuesPercentage)
+        /* console.log(this.completeQuesPercentage) */
     }
 
     onClickToReviewExam(): void {
@@ -376,7 +376,7 @@ export class ExamComponent {
 
 
     getcategoriesList() {
-        console.log(this.questions)
+        /* console.log(this.questions) */
         const groupedDataMap: any = {};
         this.questions?.forEach((item: any) => {
             const categoryId = item.category.CATEGORY_ID;
@@ -386,22 +386,22 @@ export class ExamComponent {
             groupedDataMap[categoryId].push(item);
         });
         this.categoryList = Object.values(groupedDataMap);
-        console.log(this.categoryList)
+        /* console.log(this.categoryList) */
 
         this.categoryList.forEach((category: any[]) => {
             // Count the number of objects where 'isAnswered' is true
             const answeredCount = category.filter(item => item.isAnswered).length;
             // Append the count to the list
-            console.log(answeredCount)
+            /* console.log(answeredCount) */
             category.forEach(item => item.answeredCount = answeredCount);
         });
-        console.log(this.categoryList)
+        /* console.log(this.categoryList) */
     }
 
 
     clickLanguage(code: any) {
         this.displayLanguage = this.toggleLanguage[code].language;
-        console.log(this.displayLanguage)
+        /* console.log(this.displayLanguage) */
         this.toggleLanguage = this.toggleLanguage.map((item: any, index: any) => {
             if (code === index) {
                 return {
