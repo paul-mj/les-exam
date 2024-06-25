@@ -173,9 +173,9 @@ export class ExamWrapperComponent {
     ) { }
 
     ngOnInit(): void {
-         /* this.getExamResults(); */
-        /* this.loadQuestions__Test(); */
-        this.pingChecking();
+        /* this.getExamResults(); */
+        this.loadQuestions__Test();
+        /* this.pingChecking(); */
     }
 
     pingChecking(): void {
@@ -254,7 +254,7 @@ export class ExamWrapperComponent {
             });
     }
 
-    registerDevice($event: IRegisterDevice) { 
+    registerDevice($event: IRegisterDevice) {
         this.api
             .httpPost<IRegisterDevice>({
                 url: API.Assessment.registerDevice,
@@ -744,7 +744,7 @@ export class ExamWrapperComponent {
 
     UpdateDeviceStatus(): void { }
 
-    ResetAll(msg: string): void { 
+    ResetAll(msg: string): void {
         this.utils.openStatusDialog('Error', msg, ConfirmDialog.error).subscribe();
         this.newUserExam();
     }
@@ -801,87 +801,34 @@ export class ExamWrapperComponent {
                     ExamType: examTypeEnum.Written,
                 };
 
-                this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).pipe(
-                    switchMap((response: IExamResponse) => {
-                        if (response.Valid && response.Categories && response.Questions) {
-                            this.examQuestionApiResponse = response;
-                            const fileArray: any[] = [];
-                            const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
-                                return {
-                                    ...question,
-                                    isShow: index === 0 ? true : false,
-                                    isPrevious: index === 0 ? false : true,
-                                    isNext: index === response.Questions?.length ? false : true,
-                                    isAnswered: false,
-                                    isReview: false,
-                                    category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
-                                };
-                            });
-
-                            questionsWithCategory.forEach((question: any) => {
-                                if (!!question.HAS_IMAGE) {
-                                    fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, blob: null });
-                                }
-                                question.Answers.forEach((answer: IAnswer) => {
-                                    if (!!answer.HAS_IMAGE) {
-                                        fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, blob: null });
-                                    }
-                                    answer.selected = false;
-                                });
-                            });
-
-                            const requests = fileArray.map((file: any) => {
-                                return this.api.httpGetBlob({ url: file.url }).pipe(
-                                    catchError((error: any) => {
-                                        return of(null);
-                                    })
-                                );
-                            });
-
-                            if (requests.length) {
-                                return forkJoin(requests).pipe(
-                                    map((imgResponse: BlobResponse[]) => {
-                                        imgResponse.forEach((res: any, i) => {
-                                            if (res) {
-                                                const reader = new FileReader();
-                                                reader.readAsDataURL(res);
-                                                reader.onloadend = () => {
-                                                    const base64Image = reader.result as string;
-                                                    const foundQuestion = questionsWithCategory.find((question: any) => question.QUESTION_ID === fileArray[i].id);
-                                                    if (foundQuestion) {
-                                                        foundQuestion.image = base64Image;
-                                                    } else {
-                                                        const foundAnswer = questionsWithCategory.find((question: any) => {
-                                                            return question.Answers.some((ans: any) => ans.ID === fileArray[i].id);
-                                                        });
-                                                        if (foundAnswer) {
-                                                            const ansIndex = foundAnswer.Answers.findIndex((ans: any) => ans.ID === fileArray[i].id);
-                                                            foundAnswer.Answers[ansIndex].image = base64Image;
-                                                        }
-                                                    }
-                                                };
-                                            }
-                                        });
-                                        return questionsWithCategory;
-                                    }));
-                            } else {
-                                return of(questionsWithCategory);
+                this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).subscribe((response: any) => {
+                    if (response.Valid && response.Categories && response.Questions) {
+                        this.examQuestionApiResponse = response;
+                        const fileArray: any[] = [];
+                        const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => ({
+                            ...question,
+                            isShow: index === 0,
+                            isPrevious: index !== 0,
+                            isNext: index !== response.Questions?.length,
+                            isAnswered: false,
+                            isReview: false,
+                            category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
+                        }));
+        
+                        questionsWithCategory.forEach((question: any) => {
+                            if (question.HAS_IMAGE) {
+                                fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, type: 'question' });
                             }
-
-
-                        } else {
-                            return of([]);
-                        }
-                    })
-                ).subscribe((examQuestion: any) => {
-
-                    if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
-                        this.gotoDriverView();
-                    } else {
-                        this.toggleScreen('exam');
+                            question.Answers.forEach((answer: IAnswer) => {
+                                if (answer.HAS_IMAGE) {
+                                    fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, type: 'answer' });
+                                }
+                                answer.selected = false;
+                            });
+                        });
+        
+                        this.loadImages(fileArray, questionsWithCategory);
                     }
-                    this.examQuestions = examQuestion;
-                    this.responseControl.examStart.loader = false;
                 });
 
             }
@@ -920,36 +867,35 @@ export class ExamWrapperComponent {
                 (screenName === 'exam') && this.isExamScreen();
             }
         }
-    }  
+    }
 
     isExamScreen(): void {
         this.examStartTime = this.formatDateToenUS(new Date(), 'dd-MMM-yyyy HH:mm:ss')
     }
 
-    loadQuestions__Test() {
+    /* loadQuestions__Test() {
         const payload: IQuesSettingsPayload = {
-            Id: 24252, //todays Enroll 05-03-2024
+            Id: 24291, //todays Enroll 05-03-2024
             CultureId: 0,
             UserType: 42602,
             ExamType: examTypeEnum.Written,
         };
+        
         this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).pipe(
             switchMap((response: IExamResponse) => {
                 if (response.Valid && response.Categories && response.Questions) {
                     this.examQuestionApiResponse = response;
                     const fileArray: any[] = [];
-                    const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => {
-                        return {
-                            ...question,
-                            isShow: index === 0 ? true : false,
-                            isPrevious: index === 0 ? false : true,
-                            isNext: index === response.Questions?.length ? false : true,
-                            isAnswered: false,
-                            isReview: false,
-                            category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
-                        };
-                    });
-
+                    const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => ({
+                        ...question,
+                        isShow: index === 0,
+                        isPrevious: index !== 0,
+                        isNext: index !== response.Questions?.length,
+                        isAnswered: false,
+                        isReview: false,
+                        category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
+                    }));
+    
                     questionsWithCategory.forEach((question: any) => {
                         if (!!question.HAS_IMAGE) {
                             fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, blob: null });
@@ -961,52 +907,14 @@ export class ExamWrapperComponent {
                             answer.selected = false;
                         });
                     });
-
-                    const requests = fileArray.map((file: any) => {
-                        return this.api.httpGetBlob({ url: file.url }).pipe(
-                            catchError((error: any) => {
-                                return of(null);
-                            })
-                        );
-                    });
-
-                    if (requests.length) {
-                        return forkJoin(requests).pipe(
-                            map((imgResponse: BlobResponse[]) => {
-                                imgResponse.forEach((res: any, i) => {
-                                    if (res) {
-                                        const reader = new FileReader();
-                                        reader.readAsDataURL(res);
-                                        reader.onloadend = () => {
-                                            const base64Image = reader.result as string;
-                                            const foundQuestion = questionsWithCategory.find((question: any) => question.QUESTION_ID === fileArray[i].id);
-                                            if (foundQuestion) {
-                                                foundQuestion.image = base64Image;
-                                            } else {
-                                                const foundAnswer = questionsWithCategory.find((question: any) => {
-                                                    return question.Answers.some((ans: any) => ans.ID === fileArray[i].id);
-                                                });
-                                                if (foundAnswer) {
-                                                    const ansIndex = foundAnswer.Answers.findIndex((ans: any) => ans.ID === fileArray[i].id);
-                                                    foundAnswer.Answers[ansIndex].image = base64Image;
-                                                }
-                                            }
-                                        };
-                                    }
-                                });
-                                return questionsWithCategory;
-                            }));
-                    } else {
-                        return of(questionsWithCategory);
-                    }
-
-
+    
+                    return this.loadImages(fileArray, questionsWithCategory);
+    
                 } else {
                     return of([]);
                 }
             })
-        ).subscribe((examQuestion: any) => {
-
+        ).subscribe((examQuestion: any) => { 
             if ((this.assessmentStatusInfo.UserType === userTypeEnum.Driver) && (this.configuration.IS_SURVEY)) {
                 this.gotoDriverView();
             } else {
@@ -1015,7 +923,103 @@ export class ExamWrapperComponent {
             this.examQuestions = examQuestion;
             console.log(this.examQuestions);
         });
+    } */
+
+
+    loadQuestions__Test() {
+        const payload: IQuesSettingsPayload = {
+            Id: 24291,
+            CultureId: 0,
+            UserType: 42602,
+            ExamType: examTypeEnum.Written,
+        };
+
+        this.api.httpPost<IQuesSettingsPayload>({ url: API.Assessment.readData, data: payload }).subscribe((response: any) => {
+            if (response.Valid && response.Categories && response.Questions) {
+                this.examQuestionApiResponse = response;
+                const fileArray: any[] = [];
+                const questionsWithCategory = response.Questions.map((question: IQuestion, index: number) => ({
+                    ...question,
+                    isShow: index === 0,
+                    isPrevious: index !== 0,
+                    isNext: index !== response.Questions?.length,
+                    isAnswered: false,
+                    isReview: false,
+                    category: response.Categories.find((category: ICategory) => question.QUESTION_CAT_ID === category.CATEGORY_ID)
+                }));
+
+                questionsWithCategory.forEach((question: any) => {
+                    if (question.HAS_IMAGE) {
+                        fileArray.push({ id: question.QUESTION_ID, url: `${API.assessment.getQuestionImage}?questionid=${question.QUESTION_ID}`, type: 'question' });
+                    }
+                    question.Answers.forEach((answer: IAnswer) => {
+                        if (answer.HAS_IMAGE) {
+                            fileArray.push({ id: answer.ID, url: `${API.assessment.getAnswerImage}?answerid=${answer.ID}`, type: 'answer' });
+                        }
+                        answer.selected = false;
+                    });
+                });
+
+                this.loadImages(fileArray, questionsWithCategory);
+            }
+        });
     }
+
+    loadImages(fileArray: any[], questionsWithCategory: any[]) {
+        const requests = fileArray.map((file: any) =>
+            this.api.httpGetBlob({ url: file.url }).pipe(
+                catchError((error: any) => of(null))
+            )
+        );
+
+        if (requests.length) {
+            forkJoin(requests).subscribe((imgResponse: BlobResponse[]) => {
+                const images = imgResponse.map((res: any, i) => this.processImage(res, questionsWithCategory, fileArray, i));
+                Promise.all(images).then(() => {
+                    this.updateQuestionsWithImages(questionsWithCategory);
+                    this.handleUserTypeAndScreenToggle();
+                }).catch((error) => {
+                    console.error('Image processing error:', error);
+                });
+            });
+        } else {
+            // No image requests, directly update questions
+            this.updateQuestionsWithImages(questionsWithCategory);
+            this.handleUserTypeAndScreenToggle();
+        }
+    }
+
+    processImage(res: any, questionsWithCategory: any[], fileArray: any[], i: number): Promise<void> {
+        return new Promise((resolve: any, reject: any) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(res);
+            reader.onloadend = () => {
+                const base64Image = reader.result as string;
+                const foundItem = fileArray[i].type === 'question'
+                    ? questionsWithCategory.find((question: any) => question.QUESTION_ID === fileArray[i].id)
+                    : questionsWithCategory.find((question: any) => question.Answers.some((ans: any) => ans.ID === fileArray[i].id));
+
+                if (foundItem) {
+                    foundItem.image = base64Image;
+                }
+                resolve();
+            };
+            reader.onerror = (error) => reject(error);
+        });
+    }
+
+    updateQuestionsWithImages(questionsWithCategory: any[]) { 
+        this.examQuestions = questionsWithCategory;
+    }
+
+    handleUserTypeAndScreenToggle() { 
+        if (this.assessmentStatusInfo.UserType === userTypeEnum.Driver && this.configuration.IS_SURVEY) {
+            this.gotoDriverView();
+        } else {
+            this.toggleScreen('exam');
+        }
+    }
+
 
 
 
@@ -1104,14 +1108,14 @@ export class ExamWrapperComponent {
 
 
     // Inside your method
-    getExamResults() {  
+    getExamResults() {
         const data = {
             LineId: this.verifiedUserData?.LINE_ID,
-            CultureId: 0,  
+            CultureId: 0,
             Mode: examTypeEnum.Written
         };
         const nextExamParam = {
-            LineId: this.verifiedUserData?.LINE_ID, 
+            LineId: this.verifiedUserData?.LINE_ID,
             CentreId: this.verifiedDeviceData?.CENTRE_ID,
             CultureId: 0,
         };
@@ -1120,19 +1124,19 @@ export class ExamWrapperComponent {
         const result$ = this.api.httpPost<IResultPostParam>({ url: 'assessment/getResult', data });
         const nextExam$ = this.api.httpPost<INextExamParam>({ url: 'assessment/getNextExam', data: nextExamParam });
         forkJoin([catResult$, result$, nextExam$]).subscribe(([categoryResult, result, nextExam]: [IExamCategoryResult, IExamResult, INextExamResult]) => {
-            
+
             this.examResultResponse = {
                 categoryResult: categoryResult.Data,
                 Data: result.Data,
                 ExamDetails: result.ExamDetails,
                 LineDetails: result.LineDetails,
             }
-            if(result.Data) {
+            if (result.Data) {
                 this.toggleScreen('result');
             }
             if (nextExam.LineId > 0) {
                 const nextAssParam = {
-                    Id: this.verifiedUserData?.LINE_ID, 
+                    Id: this.verifiedUserData?.LINE_ID,
                     CultureId: 0,
                 }
                 this.nextExamOrNewExam(nextAssParam);
@@ -1158,16 +1162,16 @@ export class ExamWrapperComponent {
     newUserExam(): void {
         setTimeout(() => {
             this.resetAllForNewUser().then(() => {
-                    this.pingChecking();
-                }).catch((error) => {
-                    console.error("Error resetting variables:", error);
-                });
-            }, 10000);
-        }
+                this.pingChecking();
+            }).catch((error) => {
+                console.error("Error resetting variables:", error);
+            });
+        }, 10000);
+    }
 
 
     toRetestOrRenew(event: INewExamOrRetest) {
-       
+
     }
 
     resetAllForNewUser(): Promise<void> {
