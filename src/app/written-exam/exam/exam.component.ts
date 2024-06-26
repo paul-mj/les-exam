@@ -300,6 +300,7 @@ export class ExamComponent {
         });
 
         dialogRef.afterClosed().subscribe((result: ISummaryDialogResponse) => {
+             
             if (result.toQuestion) {
                 this.switchToEditAnswer(result.question);
             } else if (result.isComplete) {
@@ -308,8 +309,10 @@ export class ExamComponent {
         });
     }
 
-    completeAlert() { 
-        this.utils.openStatusDialog('Confirmation', 'Are you sure you want to complete your exam', ConfirmDialog.confirm).subscribe((result) => {
+    completeAlert() {   
+        const reviewExist = this.questions.some(x => x.isReview);
+        const msg = reviewExist ? 'Some Questions are in Review mode. Are you sure you want to complete your exam' : 'Are you sure you want to complete your exam';
+        this.utils.openStatusDialog('Confirmation', msg, ConfirmDialog.confirm).subscribe((result) => {
             this.completeExam();
         });
     }

@@ -158,6 +158,12 @@
 
                 .selected {
                     background-color: #a2ffc2;
+                    border: 1px solid #a2ffc2; 
+                }
+
+                .visited {
+                    background: #daefff;
+                    border: 1px solid #daefff;
                 }
             }
         }
@@ -316,11 +322,23 @@
                             min-height: 6rem;
                             border-radius: 10px;
 
+                            &.activeOption {
+                                background-color: #a2ffc2;
+                                border: 1px solid #85d2a0;
+                            }
+
                             .answer {
                                 font-size: 1.25rem;
                                 font-weight: 500;
                                 line-height: 1.75;
                                 margin-bottom: 0rem;
+                            }
+
+                            .checkbox {
+                                img {
+                                    height: auto;
+                                    width: 37px;
+                                }
                             }
                         }
                     }

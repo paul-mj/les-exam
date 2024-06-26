@@ -22,7 +22,7 @@ export class UtilityService {
         if (ui !== ConfirmDialog.error) {
             setTimeout(() => {
                 this.closeDialogSubject.next();
-            }, 3000);
+            }, 5000);
         }
 
         const dialogRef = this.dialog.open(ConfirmComponent, {

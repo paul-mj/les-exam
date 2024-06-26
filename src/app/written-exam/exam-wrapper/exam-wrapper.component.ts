@@ -261,7 +261,7 @@ export class ExamWrapperComponent {
                 data: $event,
             })
             .subscribe((response: any) => {
-                debugger;
+                
                 if (response.Id > 0) {
                     this.verifyAfterNewDeviceRegister();
                     this.initScanner();

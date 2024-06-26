@@ -223,7 +223,7 @@
         </div>
         <div class="categories-section">
             @for(item of categoryList; let i = $index; track i) {
-            <div class="each-catgory"> 
+            <div class="each-catgory">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="topic">
                         <div class="arrow">
@@ -246,9 +246,9 @@
         </div>
         <div class="number-section">
             <div class="number-wrap">
-                @for (question of questions; track question.ID; let i = $index) {
+                @for (question of questions; track question.ID; let i = $index) { 
                 <div class="card" (click)="switchToEditAnswer(question)"
-                    [ngClass]="question.isAnswered ? 'selected' : ''">
+                    [ngClass]="question.isAnswered ? 'selected' : question.isShow ? 'visited' : ''">
                     @if (question.isReview) {
                     <img src="assets/images/star-active.png" class="review-star" />
                     }
@@ -306,13 +306,13 @@
                         <app-esri-map [answers]="question.Answers" />
                     </div>
                     } @else if(question.HAS_IMAGE) {
-                        <div class="ques-img"> 
-                            <div class="img-question">
-                                <div [style.background-image]="'url(' + question.image + ')'" class="imgggg"></div>
-                            </div>
+                    <div class="ques-img">
+                        <div class="img-question">
+                            <div [style.background-image]="'url(' + question.image + ')'" class="imgggg"></div>
                         </div>
+                    </div>
                     }
-                     
+
                     <div class="question-section"
                         [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section' : 'w-100'">
                         <p class="quest-count">
@@ -329,14 +329,14 @@
                         <div class="options"
                             [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section-grid' : 'normal-grid'">
                             @for (options of question.Answers; track options.ID; let j = $index) {
-                            <div class="each-option" (click)="optionSelect(question.Answers, options, question)">
+                            <div class="each-option" [class.activeOption]="options.selected" (click)="optionSelect(question.Answers, options, question)">
                                 <div class="checkbox">
                                     @if(options.selected) {
                                     <img src="assets/images/google-icons/square-box-tick.svg" />
                                     } @else {
                                     <img src="assets/images/google-icons/square-box.svg" />
                                     }
-                                </div>
+                                </div> 
                                 <p class="answer">
                                     {{ options.GRADE_NAME }}
                                 </p>
@@ -359,13 +359,8 @@
                 </div>
                 <div class="arrow-section">
                     @if(questionMaxCount > currentQuestionIndex) {
-                    <div class="arrow-next-wrap" (click)="nextQuesButton()">
+                    <div class="arrow-prev-wrap" (click)="nextQuesButton()">
                         <img src="assets/images/google-icons/arrow-next.svg" alt="">
-                    </div>
-                    }
-                    @if(currentQuestionIndex > 1) {
-                    <div class="arrow-prev-wrap" (click)="prevQuesButton()">
-                        <img src="assets/images/google-icons/arrow-prev.svg" alt="">
                     </div>
                     }
                     @if(questionMaxCount === currentQuestionIndex) {
@@ -373,6 +368,12 @@
                         Complete Exam
                     </button>
                     }
+                    @if(currentQuestionIndex > 1) {
+                    <div class="arrow-next-wrap" (click)="prevQuesButton()">
+                        <img src="assets/images/google-icons/arrow-prev.svg" alt="">
+                    </div>
+                    }
+
                 </div>
             </div>
         </div>
