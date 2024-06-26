@@ -303,56 +303,58 @@
                     </div>
                 </div>
 
-                <div class="d-flex w-100 align-items-center justify-content-center section-setting">
 
-                    @if(question.IS_MAP) {
-                    <div class="map-section">
-                        <app-esri-map [answers]="question.Answers" />
-                    </div>
-                    } @else if(question.HAS_IMAGE) {
-                    <div class="ques-img">
-                        <div class="img-question">
-                            <div [style.background-image]="'url(' + question.image + ')'" class="imgggg"></div>
-                        </div>
-                    </div>
-                    }
-
-                    <div class="question-section"
-                        [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section' : 'w-100'">
+                <div class="section-setting"> 
+                     
+                    <div class="d-flex w-100 align-items-center justify-content-center question-section q_row"> 
+                        <p class="question">
+                            @if(displayLanguage === 'En') { {{ question.QUESTION_NAME }} } @else {  {{ question.QUESTION_NAME_AR }} }
+                        </p>  
                         <p class="quest-count">
                             {{i+1}} of {{ questions.length }}
                         </p>
-                        @if(displayLanguage === 'En') {
-                        <p class="question">
-                            {{ question.QUESTION_NAME }}
-                        </p>} @else {
-                        <p class="question">
-                            {{ question.QUESTION_NAME_AR }}
-                        </p>}
+                    </div> 
+                    <div class="d-flex w-100 align-items-center justify-content-center ">
 
-                        <div class="options"
-                            [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section-grid' : 'normal-grid'">
-                            <div *ngFor="let options of question.Answers; trackBy: trackById; let j = index"
-                                [class.activeOption]="options.selected"
-                                [ngClass]="{'en': displayLanguage === 'En', 'ar': displayLanguage === 'Ar'}"
-                                (click)="optionSelect(question.Answers, options, question)">
-                                <div class="checkbox">
-                                    <img *ngIf="options.selected"
-                                        src="assets/images/google-icons/square-box-tick.svg" />
-                                    <img *ngIf="!options.selected" src="assets/images/google-icons/square-box.svg" />
-                                </div>
-                                <p class="answer">
-                                    {{ displayLanguage === 'En' ? options.GRADE_NAME : options.GRADE_NAME_AR }}
-                                </p>
+                        @if(question.IS_MAP) {
+                        <div class="map-section">
+                            <app-esri-map [answers]="question.Answers" />
+                        </div>
+                        } @else if(question.HAS_IMAGE) {
+                        <div class="ques-img">
+                            <div class="img-question">
+                                <div [style.background-image]="'url(' + question.image + ')'" class="imgggg"></div>
                             </div>
+                        </div>
+                        }
+
+                        <div class="question-section"
+                            [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section' : 'w-100'">
+                            <div class="options"
+                                [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section-grid' : 'normal-grid'">
+                                <div *ngFor="let options of question.Answers; trackBy: trackById; let j = index"
+                                    class="each-option"
+                                    [class.activeOption]="options.selected"
+                                    [ngClass]="{'en': displayLanguage === 'En', 'ar': displayLanguage === 'Ar'}"
+                                    (click)="optionSelect(question.Answers, options, question)">
+                                    <div class="checkbox">
+                                        <img *ngIf="options.selected"
+                                            src="assets/images/google-icons/square-box-tick.svg" />
+                                        <img *ngIf="!options.selected"
+                                            src="assets/images/google-icons/square-box.svg" />
+                                    </div>
+                                    <p class="answer">
+                                        {{ displayLanguage === 'En' ? options.GRADE_NAME : options.GRADE_NAME_AR }}
+                                    </p>
+                                </div>
+                            </div>
+
+
                         </div>
 
 
-                    </div>
-
-
+                    </div> 
                 </div>
-
             </div>
             }
             }

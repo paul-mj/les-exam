@@ -158,7 +158,7 @@
 
                 .selected {
                     background-color: #a2ffc2;
-                    border: 1px solid #a2ffc2; 
+                    border: 1px solid #a2ffc2;
                 }
 
                 .visited {
@@ -332,6 +332,7 @@
                                 font-weight: 500;
                                 line-height: 1.75;
                                 margin-bottom: 0rem;
+
                                 &.ar {
                                     direction: rtl;
                                     text-align: right;
@@ -345,6 +346,10 @@
                                 }
                             }
                         }
+                    }
+
+                    &.q_row {
+                        padding: 2rem 0;
                     }
                 }
             }
@@ -447,10 +452,9 @@
 
     .img-question {
         height: 50vh;
-        width: 60vh;
-        border: 2px solid white;
+        width: 100%;
+        border: 2px solid #dddddd;
         border-radius: 20px;
-        background: #000000e3;
         padding: 2rem;
 
         .imgggg {
