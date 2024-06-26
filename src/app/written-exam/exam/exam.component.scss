@@ -332,6 +332,10 @@
                                 font-weight: 500;
                                 line-height: 1.75;
                                 margin-bottom: 0rem;
+                                &.ar {
+                                    direction: rtl;
+                                    text-align: right;
+                                }
                             }
 
                             .checkbox {

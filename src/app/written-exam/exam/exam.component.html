@@ -246,7 +246,7 @@
         </div>
         <div class="number-section">
             <div class="number-wrap">
-                @for (question of questions; track question.ID; let i = $index) { 
+                @for (question of questions; track question.ID; let i = $index) {
                 <div class="card" (click)="switchToEditAnswer(question)"
                     [ngClass]="question.isAnswered ? 'selected' : question.isShow ? 'visited' : ''">
                     @if (question.isReview) {
@@ -275,7 +275,11 @@
             <div class="question-section">
                 <div class="question-heading">
                     <h5 class="cat-tab">
-                        {{ question.category.OBJECT_NAME }}
+
+
+                        @if(displayLanguage === 'En') { {{ question.category.OBJECT_NAME }} } @else { {{
+                        question.category.OBJECT_NAME_ARABIC }} }
+
                     </h5>
                     <div class="language">
                         @for (item of toggleLanguage; let j = $index; track j) {
@@ -286,7 +290,7 @@
                     </div>
                     <div class="add-review" (click)="add_remove_Review(question)">
                         <p class="review-txt">
-                            Add to Review
+                            @if(displayLanguage === 'En') { Add to Review } @else { أضف للمراجعة }
                         </p>
                         <div class="star">
                             <!-- <img src="assets/images/google-icons/star.svg" /> -->
@@ -328,20 +332,21 @@
 
                         <div class="options"
                             [ngClass]="(question.IS_MAP || question.HAS_IMAGE) ? 'map-section-grid' : 'normal-grid'">
-                            @for (options of question.Answers; track options.ID; let j = $index) {
-                            <div class="each-option" [class.activeOption]="options.selected" (click)="optionSelect(question.Answers, options, question)">
+                            <div *ngFor="let options of question.Answers; trackBy: trackById; let j = index"
+                                [class.activeOption]="options.selected"
+                                [ngClass]="{'en': displayLanguage === 'En', 'ar': displayLanguage === 'Ar'}"
+                                (click)="optionSelect(question.Answers, options, question)">
                                 <div class="checkbox">
-                                    @if(options.selected) {
-                                    <img src="assets/images/google-icons/square-box-tick.svg" />
-                                    } @else {
-                                    <img src="assets/images/google-icons/square-box.svg" />
-                                    }
-                                </div> 
+                                    <img *ngIf="options.selected"
+                                        src="assets/images/google-icons/square-box-tick.svg" />
+                                    <img *ngIf="!options.selected" src="assets/images/google-icons/square-box.svg" />
+                                </div>
                                 <p class="answer">
-                                    {{ options.GRADE_NAME }}
+                                    {{ displayLanguage === 'En' ? options.GRADE_NAME : options.GRADE_NAME_AR }}
                                 </p>
-                            </div>}
+                            </div>
                         </div>
+
 
                     </div>
 

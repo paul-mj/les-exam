@@ -293,6 +293,10 @@ export class ExamComponent {
         /* console.log(this.completeQuesPercentage) */
     }
 
+    trackById(index: number, item: any): number {
+        return item.ID;
+      }
+
     onClickToReviewExam(): void {
         const dialogRef = this.dialog.open(SummaryComponent, {
             data: this.questions,
