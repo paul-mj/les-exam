@@ -136,6 +136,7 @@
                     width: 6em;
                     height: 6em;
                     border-radius: 10px;
+                    border: 1px solid transparent;
                     box-shadow: 0px 11px 15px -3px rgba(0, 0, 0, 0.1);
                     position: relative;
 
@@ -157,13 +158,12 @@
                 }
 
                 .selected {
-                    background-color: #a2ffc2;
-                    border: 1px solid #a2ffc2;
+                    background-color: #a2ffc2; 
                 }
 
                 .visited {
                     background: #daefff;
-                    border: 1px solid #daefff;
+                    border: 1px solid #003a5d !important;
                 }
             }
         }
@@ -321,6 +321,11 @@
                             width: 32rem;
                             min-height: 6rem;
                             border-radius: 10px;
+
+                            &.ar {
+                                direction: rtl;
+                                text-align: right;
+                            }
 
                             &.activeOption {
                                 background-color: #a2ffc2;
